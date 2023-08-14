@@ -4,7 +4,8 @@
 #include "window.hpp"
 
 #define WINDOW_TITLE "Asagao"
-#define VSYNC 1
+#define WINDOW_ICON_PATH "resources\\icons\\logo.png"
+#define WINDOW_VSYNC 1
 
 Window::Window()
 {
@@ -20,7 +21,7 @@ Window::Window()
 
     glfwMaximizeWindow(m_handle);
     glfwMakeContextCurrent(m_handle);
-    glfwSwapInterval(VSYNC);
+    glfwSwapInterval(WINDOW_VSYNC);
 
     m_interface = new Gui(m_handle);
 
