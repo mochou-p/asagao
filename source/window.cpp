@@ -3,10 +3,6 @@
 
 #include "window.hpp"
 
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
-
 #define VSYNC 1
 
 Window::Window(std::string t_title, const int t_width, const int t_height)
@@ -22,18 +18,12 @@ Window::Window(std::string t_title, const int t_width, const int t_height)
     glfwMakeContextCurrent(m_handle);
     glfwSwapInterval(VSYNC);
 
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGui::StyleColorsDark();
-    ImGui_ImplGlfw_InitForOpenGL(m_handle, true);
-    ImGui_ImplOpenGL3_Init();
+    m_interface = new Gui(m_handle);
 }
 
 Window::~Window()
 {
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
+    delete m_interface;
 
     glfwTerminate();
 }
@@ -45,15 +35,7 @@ void Window::run()
         glfwPollEvents();
         glClear(GL_COLOR_BUFFER_BIT);
 
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-
-        ImGui::Begin("hi", nullptr);
-        ImGui::End();
-
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        m_interface->draw();
 
         glfwSwapBuffers(m_handle);
     }

@@ -5,7 +5,7 @@
 
 #include <string>
 
-#include "glfw3.h"
+#include "gui.hpp"
 
 class Window
 {
@@ -16,4 +16,5 @@ public:
     void run();
 private:
     GLFWwindow* m_handle;
+    Gui*        m_interface;
 };
