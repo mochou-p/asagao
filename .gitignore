@@ -1,0 +1,13 @@
+# asagao/.gitignore
+
+
+# Visual Studio Code
+.vscode/
+
+# project build
+bin/
+
+# project tests
+tests/
+
+# 
