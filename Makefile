@@ -1,6 +1,8 @@
 # asagao/Makefile
 
 
+APP       := Asagao
+
 BIN       := build
 INC       := includes
 LIB       := libraries
@@ -16,13 +18,13 @@ HEADERS   := -I$(INC) -I$(GLFW)\inc -I$(IMGUI)\inc
 LIBRARIES := -L$(GLFW)\lib -L$(IMGUI)\lib
 LINKS     := -lopengl32 -lglfw3 -lgdi32 -limgui
 
-asagao:
+$(APP):
 	-@ mkdir $(BIN) 2>nul ||:
 # c++23 doesnt exist yet, but g++ allows it for some reason
 	$(CXX) $(CXXFLAGS) $(SRC)\\*.cpp -o $(BIN)\$@.exe $(HEADERS) $(LIBRARIES) $(LINKS)
 
 run:
-	.\build\asagao.exe
+	.\build\$(APP).exe
 
 clean:
 	rmdir /S /Q $(BIN)

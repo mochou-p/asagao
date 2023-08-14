@@ -7,8 +7,7 @@
 
 int main()
 {
-    Window window("asagao", 800, 600);
-    window.run();
+    Window window;
 
     return EXIT_SUCCESS;
 }

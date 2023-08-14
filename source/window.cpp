@@ -3,22 +3,28 @@
 
 #include "window.hpp"
 
+#define WINDOW_TITLE "Asagao"
 #define VSYNC 1
 
-Window::Window(std::string t_title, const int t_width, const int t_height)
+Window::Window()
 {
     if (!glfwInit())
         exit(EXIT_FAILURE);
 
-    m_handle = glfwCreateWindow(t_width, t_height, t_title.c_str(), nullptr, nullptr);
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+
+    m_handle = glfwCreateWindow(1, 1, WINDOW_TITLE, nullptr, nullptr);
 
     if (!m_handle)
         exit(EXIT_FAILURE);
 
+    glfwMaximizeWindow(m_handle);
     glfwMakeContextCurrent(m_handle);
     glfwSwapInterval(VSYNC);
 
     m_interface = new Gui(m_handle);
+
+    run();
 }
 
 Window::~Window()

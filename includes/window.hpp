@@ -10,7 +10,7 @@
 class Window
 {
 public:
-    Window(std::string, const int, const int);
+    Window();
     ~Window();
 
     void run();
