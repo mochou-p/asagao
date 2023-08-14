@@ -1,13 +1,12 @@
 # asagao/.gitignore
 
 
-# Visual Studio Code
+# IDE configuration
 .vscode/
 
-# project build
-bin/
+# project executable
+build/
 
-# project tests
+# non-public files
 tests/
-
-# 
+private/
