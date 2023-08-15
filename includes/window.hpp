@@ -3,16 +3,16 @@
 
 #pragma once
 
-#include "gui.hpp"
+#include "glfw3.h"
 
 class Window
 {
 public:
-    Window();
+    Window(const char*);
     ~Window();
 
-    void run();
-private:
+    bool is_open();
+    void swap_buffers();
+
     GLFWwindow* m_handle;
-    Gui*        m_interface;
 };

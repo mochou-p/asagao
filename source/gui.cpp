@@ -1,6 +1,8 @@
 // asagao/source/gui.cpp
 
 
+#include <iostream>
+
 #include "gui.hpp"
 
 using namespace ImGui;
@@ -14,6 +16,8 @@ Gui::Gui(GLFWwindow* t_window_handle)
     ImGui_ImplOpenGL3_Init();
 
     m_context = t_window_handle;
+    
+    std::cout << "ImGui\t" << IMGUI_VERSION << std::endl;
 }
 
 Gui::~Gui()
@@ -40,7 +44,7 @@ ImVec2 Gui::get_window_size()
 
 void Gui::hierarchy()
 {
-    static const char             title[]     = "Object Hierarchy";
+    static const char             title[]     = "Hierarchy";
     static const ImGuiWindowFlags flags       = ImGuiWindowFlags_NoCollapse |
         ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize;
     static const ImVec2           window_size = get_window_size();
@@ -74,7 +78,7 @@ void Gui::scene()
 
 void Gui::inspector()
 {
-    static const char             title[]     = "Object Inspector";
+    static const char             title[]     = "Inspector";
     static const ImGuiWindowFlags flags       = ImGuiWindowFlags_NoCollapse |
         ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize;
     static const ImVec2           window_size = get_window_size();

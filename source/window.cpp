@@ -5,52 +5,45 @@
 
 #include "window.hpp"
 
-#define WINDOW_TITLE "Asagao"
-#define WINDOW_ICON_PATH "resources\\icons\\logo.png"
-#define WINDOW_VSYNC 1
+#define VSYNC 1
 
-
-Window::Window()
+Window::Window(const char* t_title)
 {
     if (!glfwInit())
         exit(EXIT_FAILURE);
 
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-    m_handle = glfwCreateWindow(1, 1, WINDOW_TITLE, nullptr, nullptr);
+    m_handle = glfwCreateWindow(1, 1, t_title, nullptr, nullptr);
 
     if (!m_handle)
         exit(EXIT_FAILURE);
 
     glfwMaximizeWindow(m_handle);
     glfwMakeContextCurrent(m_handle);
-    glfwSwapInterval(WINDOW_VSYNC);
-
-    m_interface = new Gui(m_handle);
+    glfwSwapInterval(VSYNC);
 
     std::cout << "OpenGL\t" << glGetString(GL_VERSION) << std::endl;
     std::cout << "GLFW\t"   << glfwGetVersionString()  << std::endl;
-    std::cout << "ImGui\t"  << IMGUI_VERSION           << std::endl;
-
-    run();
 }
 
 Window::~Window()
 {
-    delete m_interface;
-
     glfwTerminate();
 }
 
-void Window::run()
+bool Window::is_open()
 {
-    while (!glfwWindowShouldClose(m_handle))
-    {
-        glfwPollEvents();
-        glClear(GL_COLOR_BUFFER_BIT);
+    if (glfwWindowShouldClose(m_handle))
+        return false;
 
-        m_interface->draw();
+    glfwPollEvents();
+    glClear(GL_COLOR_BUFFER_BIT);
 
-        glfwSwapBuffers(m_handle);
-    }
+    return true;
+}
+
+void Window::swap_buffers()
+{
+    glfwSwapBuffers(m_handle);
 }
