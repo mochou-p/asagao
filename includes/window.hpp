@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include <string>
-
 #include "gui.hpp"
 
 class Window

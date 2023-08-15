@@ -1,11 +1,14 @@
 // asagao/source/window.cpp
 
 
+#include <iostream>
+
 #include "window.hpp"
 
 #define WINDOW_TITLE "Asagao"
 #define WINDOW_ICON_PATH "resources\\icons\\logo.png"
 #define WINDOW_VSYNC 1
+
 
 Window::Window()
 {
@@ -24,6 +27,10 @@ Window::Window()
     glfwSwapInterval(WINDOW_VSYNC);
 
     m_interface = new Gui(m_handle);
+
+    std::cout << "OpenGL\t" << glGetString(GL_VERSION) << std::endl;
+    std::cout << "GLFW\t"   << glfwGetVersionString()  << std::endl;
+    std::cout << "ImGui\t"  << IMGUI_VERSION           << std::endl;
 
     run();
 }
