@@ -41,9 +41,11 @@ ImVec2 Gui::get_window_size()
 void Gui::hierarchy()
 {
     static const char             title[]     = "Object Hierarchy";
-    static const ImGuiWindowFlags flags       = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize;
+    static const ImGuiWindowFlags flags       = ImGuiWindowFlags_NoCollapse |
+        ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize;
     static const ImVec2           window_size = get_window_size();
-    static const ImVec2           size        = {window_size.x * 0.2f, window_size.y};
+    static const ImVec2           size        = {window_size.x * 0.2f,
+        window_size.y};
     static const ImVec2           pos         = {0.0f, 0.0f};
 
     SetNextWindowSize(size);
@@ -55,9 +57,13 @@ void Gui::hierarchy()
 void Gui::scene()
 {
     static const char             title[]     = "Scene";
-    static const ImGuiWindowFlags flags       = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBackground;
+    static const ImGuiWindowFlags flags       = ImGuiWindowFlags_NoCollapse
+        | ImGuiWindowFlags_NoMove
+        | ImGuiWindowFlags_NoResize
+        | ImGuiWindowFlags_NoBackground;
     static const ImVec2           window_size = get_window_size();
-    static const ImVec2           size        = {window_size.x * 0.6f, window_size.y};
+    static const ImVec2           size        = {window_size.x * 0.6f,
+        window_size.y};
     static const ImVec2           pos         = {window_size.x * 0.2f, 0.0f};
 
     SetNextWindowSize(size);
@@ -69,9 +75,11 @@ void Gui::scene()
 void Gui::inspector()
 {
     static const char             title[]     = "Object Inspector";
-    static const ImGuiWindowFlags flags       = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize;
+    static const ImGuiWindowFlags flags       = ImGuiWindowFlags_NoCollapse |
+        ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize;
     static const ImVec2           window_size = get_window_size();
-    static const ImVec2           size = {window_size.x * 0.2f, window_size.y};
+    static const ImVec2           size = {window_size.x * 0.2f,
+        window_size.y};
     static const ImVec2           pos  = {window_size.x - size.x, 0.0f};
 
     SetNextWindowSize(size);
