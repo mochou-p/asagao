@@ -15,6 +15,6 @@ public:
 
     void run();
 private:
-    std::unique_ptr<Window> m_window;
+    std::unique_ptr<Window> m_win;
     std::unique_ptr<Gui>    m_gui;
 };
