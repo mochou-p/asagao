@@ -5,21 +5,15 @@
 
 App::App(const char* t_name)
 {
-    m_window    = new Window(t_name);
-    m_interface = new Gui(m_window->m_handle);
-}
-
-App::~App()
-{
-    delete m_interface;
-    delete m_window;
+    m_window = std::make_unique<Window>(t_name);
+    m_gui    = std::make_unique<Gui>(m_window->m_handle);
 }
 
 void App::run()
 {
     while (m_window->is_open())
     {
-        m_interface->draw();
+        m_gui->draw();
         m_window->swap_buffers();
     }
 }

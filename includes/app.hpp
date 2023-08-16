@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include <memory>
 #include "window.hpp"
 #include "gui.hpp"
 
@@ -10,10 +11,10 @@ class App
 {
 public:
     App(const char*);
-    ~App();
+    ~App() {};
 
     void run();
 private:
-    Window* m_window;
-    Gui*    m_interface;
+    std::unique_ptr<Window> m_window;
+    std::unique_ptr<Gui>    m_gui;
 };
