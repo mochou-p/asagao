@@ -1,6 +1,7 @@
 // asagao/source/app.cpp
 
 
+#include <cmath>
 #include "app.hpp"
 
 App::App(const char* t_name)
@@ -11,8 +12,13 @@ App::App(const char* t_name)
 
 void App::run()
 {
+    double time;
+
     while (m_win->is_open())
     {
+        time = glfwGetTime();
+        glClearColor(1.0f, sinf(time), -sinf(time), 1.0f);
+
         m_gui->draw();
         m_win->swap_buffers();
     }

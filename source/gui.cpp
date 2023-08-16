@@ -14,9 +14,9 @@ Gui::Gui(GLFWwindow* t_window_handle)
     ImGui_ImplGlfw_InitForOpenGL(t_window_handle, true);
     ImGui_ImplOpenGL3_Init();
 
-    m_context = t_window_handle;
-    
     std::cout << "ImGui\t" << IMGUI_VERSION << std::endl;
+
+    m_context = t_window_handle;
 }
 
 Gui::~Gui()
