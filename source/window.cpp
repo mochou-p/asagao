@@ -2,7 +2,6 @@
 
 
 #include <iostream>
-
 #include "window.hpp"
 
 #define VSYNC 1

@@ -1,8 +1,8 @@
 // asagao/source/main.cpp
 
 
-#include "app.hpp"
 #include <iostream>
+#include "app.hpp"
 
 #define APP_NAME "Asagao"
 

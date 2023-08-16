@@ -2,7 +2,6 @@
 
 
 #include <iostream>
-
 #include "gui.hpp"
 
 using namespace ImGui;
