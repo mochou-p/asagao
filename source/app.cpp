@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cmath>
 #include "app.hpp"
+#include "shader.hpp"
 
 App::App(const char* t_name)
 {
@@ -13,9 +14,6 @@ App::App(const char* t_name)
 
 void App::run()
 {
-    GLint success;
-    char  error[512];
-
     const char* vert_shader_code =
         "#version 460 core\n"
         "layout (location = 0) in vec3 aPos;\n"
@@ -23,18 +21,6 @@ void App::run()
         "{\n"
         "    gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0f);\n"
         "}\0";
-
-    GLuint vert_shader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vert_shader, 1, &vert_shader_code, nullptr);
-    glCompileShader(vert_shader);
-
-    glGetShaderiv(vert_shader, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        glGetShaderInfoLog(vert_shader, 512, NULL, error);
-        std::cerr << "glCompileShader(vert_shader) failed: " << error
-            << std::endl;
-    }
 
     const char* frag_shader_code =
         "#version 460 core\n"
@@ -44,23 +30,16 @@ void App::run()
         "    FragColor = vec4(0.92f, 0.2f, 0.58f, 1.0f);\n"
         "}\0";
 
-    GLuint frag_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(frag_shader, 1, &frag_shader_code, nullptr);
-    glCompileShader(frag_shader);
-
-    glGetShaderiv(frag_shader, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        glGetShaderInfoLog(frag_shader, 512, nullptr, error);
-        std::cerr << "glCompileShader(frag_shader) failed: " << error
-            << std::endl;
-    }
+    Shader vert_shader(vert_shader_code, GL_VERTEX_SHADER);
+    Shader frag_shader(frag_shader_code, GL_FRAGMENT_SHADER);
 
     GLuint shader_program = glCreateProgram();
-    glAttachShader(shader_program, vert_shader);
-    glAttachShader(shader_program, frag_shader);
+    glAttachShader(shader_program, vert_shader.m_id);
+    glAttachShader(shader_program, frag_shader.m_id);
     glLinkProgram(shader_program);
 
+    GLint success;
+    char  error[512];
     glGetProgramiv(shader_program, GL_LINK_STATUS, &success);
     if (!success) {
         glGetProgramInfoLog(shader_program, 512, nullptr, error);
@@ -68,8 +47,8 @@ void App::run()
             << std::endl;
     }
 
-    glDeleteShader(vert_shader);
-    glDeleteShader(frag_shader);
+    glDeleteShader(vert_shader.m_id);
+    glDeleteShader(frag_shader.m_id);
 
     ////////////////////////////////////////////////////////////////////////////
 

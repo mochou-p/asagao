@@ -3,6 +3,7 @@
 
 #pragma once
 
+#define GLFW_INCLUDE_NONE
 #include "glfw3.h"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"

@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "window.hpp"
+#include "glad/glad.h"
 
 #define VSYNC 1
 
@@ -45,9 +46,8 @@ Window::Window(const char* t_title)
         exit(EXIT_FAILURE);
     }
 
-    // glfwSetFramebufferSizeCallback(m_handle, framebuffer_size_callback);
+    glfwSetFramebufferSizeCallback(m_handle, framebuffer_size_callback);
 
-    // glfwMaximizeWindow(m_handle);
     glfwMakeContextCurrent(m_handle);
     glfwSwapInterval(VSYNC);
 
