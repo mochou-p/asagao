@@ -13,11 +13,9 @@ App::App(const char* t_name)
 
 void App::run()
 {
-    // for checks
     GLint success;
     char  error[512];
 
-    // vertex shader
     const char* vert_shader_code =
         "#version 460 core\n"
         "layout (location = 0) in vec3 aPos;\n"
@@ -38,13 +36,12 @@ void App::run()
             << std::endl;
     }
 
-    // fragment shader
     const char* frag_shader_code =
         "#version 460 core\n"
         "out vec4 FragColor;\n"
         "void main()\n"
         "{\n"
-        "    FragColor = vec4(1.0f, 0.0f, 0.1f, 1.0f);\n"
+        "    FragColor = vec4(0.92f, 0.2f, 0.58f, 1.0f);\n"
         "}\0";
 
     GLuint frag_shader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -59,7 +56,6 @@ void App::run()
             << std::endl;
     }
 
-    // shader program
     GLuint shader_program = glCreateProgram();
     glAttachShader(shader_program, vert_shader);
     glAttachShader(shader_program, frag_shader);
@@ -72,44 +68,49 @@ void App::run()
             << std::endl;
     }
 
-    // shader cleanup
     glDeleteShader(vert_shader);
     glDeleteShader(frag_shader);
 
-    // triangle geometry
-    const float verts[]
+    ////////////////////////////////////////////////////////////////////////////
+
+    const float vertices[]
     {
         -1.0f, -1.0f, 0.0f,
          1.0f, -1.0f, 0.0f,
-        -1.0f,  1.0f, 0.0f
+        -1.0f,  1.0f, 0.0f,
+         1.0f,  1.0f, 0.0f
     };
 
-    GLsizei vert_count = sizeof(verts) / sizeof(float) / 3;
+    GLuint indices[]
+    {
+        0, 1, 2,
+        2, 3, 1
+    };
 
-    // vertex array object
-    GLuint vao;
-    glGenVertexArrays(1, &vao);
+    GLsizei count = sizeof(indices) / sizeof(GLuint);
 
-    // vertex buffer object
-    GLuint vbo;
+    GLuint vbo, vao, ebo;
     glGenBuffers(1, &vbo);
+    glGenVertexArrays(1, &vao);
+    glGenBuffers(1, &ebo);
+
     glBindVertexArray(vao);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);  
-    glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices,
+        GL_STATIC_DRAW);
 
-    // tell opengl how to understand the geometry in memory
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float),
         nullptr);
     glEnableVertexAttribArray(0);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
 
     while (m_win->is_open())
     {
         glUseProgram(shader_program);
         glBindVertexArray(vao);
-        glDrawArrays(GL_TRIANGLES, 0, vert_count);
+        glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
 
         m_gui->draw();
         m_win->swap_buffers();
