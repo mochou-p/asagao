@@ -15,26 +15,10 @@ App::App(const char* t_name)
 
 void App::run()
 {
-    const char* vert_shader_code =
-        "#version 460 core\n"
-        "layout (location = 0) in vec3 aPos;\n"
-        "void main()\n"
-        "{\n"
-        "    gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-        "}\0";
-
-    const char* frag_shader_code =
-        "#version 460 core\n"
-        "out vec4 FragColor;\n"
-        "void main()\n"
-        "{\n"
-        "    FragColor = vec4(0.0, 1.0, 0.0, 1.0);\n"
-        "}\0";
-
     Program program
     ({
-        Shader(vert_shader_code, GL_VERTEX_SHADER).m_id,
-        Shader(frag_shader_code, GL_FRAGMENT_SHADER).m_id
+        Shader("test.vert", GL_VERTEX_SHADER).m_id,
+        Shader("test.frag", GL_FRAGMENT_SHADER).m_id
     });
 
     ////////////////////////////////////////////////////////////////////////////

@@ -2,12 +2,26 @@
 
 
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include "shader.hpp"
 
-Shader::Shader(const char* t_code, int t_stage)
+std::string read_file(const char* t_filepath)
+{
+    std::ifstream ifs(std::string("resources/shaders/") + t_filepath);
+    std::stringstream ss;
+    ss << ifs.rdbuf();
+
+    return ss.str();
+}
+
+Shader::Shader(const char* t_filepath, int t_stage)
 {
     m_id = glCreateShader(t_stage);
-    glShaderSource(m_id, 1, &t_code, nullptr);
+
+    const char* code = read_file(t_filepath).c_str();
+
+    glShaderSource(m_id, 1, &code, nullptr);
     glCompileShader(m_id);
 
     GLint success;
