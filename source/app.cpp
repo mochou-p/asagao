@@ -27,7 +27,7 @@ void App::run()
         "}\0";
 
     GLuint vert_shader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vert_shader, 1, &vert_shader_code, NULL);
+    glShaderSource(vert_shader, 1, &vert_shader_code, nullptr);
     glCompileShader(vert_shader);
 
     glGetShaderiv(vert_shader, GL_COMPILE_STATUS, &success);
@@ -48,13 +48,13 @@ void App::run()
         "}\0";
 
     GLuint frag_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(frag_shader, 1, &frag_shader_code, NULL);
+    glShaderSource(frag_shader, 1, &frag_shader_code, nullptr);
     glCompileShader(frag_shader);
 
     glGetShaderiv(frag_shader, GL_COMPILE_STATUS, &success);
     if (!success)
     {
-        glGetShaderInfoLog(frag_shader, 512, NULL, error);
+        glGetShaderInfoLog(frag_shader, 512, nullptr, error);
         std::cerr << "glCompileShader(frag_shader) failed: " << error
             << std::endl;
     }
@@ -67,7 +67,7 @@ void App::run()
 
     glGetProgramiv(shader_program, GL_LINK_STATUS, &success);
     if (!success) {
-        glGetProgramInfoLog(shader_program, 512, NULL, error);
+        glGetProgramInfoLog(shader_program, 512, nullptr, error);
         std::cerr << "glLinkProgram(shader_program) failed: " << error
             << std::endl;
     }
@@ -84,7 +84,7 @@ void App::run()
         -1.0f,  1.0f, 0.0f
     };
 
-    //GLsizei vert_count = sizeof(verts) / sizeof(float) / 3;
+    GLsizei vert_count = sizeof(verts) / sizeof(float) / 3;
 
     // vertex array object
     GLuint vao;
@@ -99,7 +99,7 @@ void App::run()
 
     // tell opengl how to understand the geometry in memory
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float),
-        (void*)0);
+        nullptr);
     glEnableVertexAttribArray(0);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -109,7 +109,7 @@ void App::run()
     {
         glUseProgram(shader_program);
         glBindVertexArray(vao);
-        glDrawArrays(GL_TRIANGLES, 0, 3);//vert_count);
+        glDrawArrays(GL_TRIANGLES, 0, vert_count);
 
         m_gui->draw();
         m_win->swap_buffers();
