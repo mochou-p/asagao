@@ -6,6 +6,12 @@
 
 #define VSYNC 1
 
+void framebuffer_size_callback
+([[maybe_unused]] GLFWwindow* t_window, int t_width, int t_height)
+{
+    glViewport(0, 0, t_width, t_height);
+}
+
 void load_opengl_functions()
 {
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
@@ -31,9 +37,7 @@ Window::Window(const char* t_title)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-
-    m_handle = glfwCreateWindow(1, 1, t_title, nullptr, nullptr);
+    m_handle = glfwCreateWindow(1600, 900, t_title, nullptr, nullptr);
 
     if (!m_handle)
     {
@@ -41,7 +45,9 @@ Window::Window(const char* t_title)
         exit(EXIT_FAILURE);
     }
 
-    glfwMaximizeWindow(m_handle);
+    // glfwSetFramebufferSizeCallback(m_handle, framebuffer_size_callback);
+
+    // glfwMaximizeWindow(m_handle);
     glfwMakeContextCurrent(m_handle);
     glfwSwapInterval(VSYNC);
 
@@ -59,6 +65,8 @@ bool Window::is_open()
         return false;
 
     glfwPollEvents();
+
+    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     return true;
