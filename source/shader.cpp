@@ -6,13 +6,12 @@
 
 Shader::Shader(const char* t_code, int t_stage)
 {
-    GLint success;
-    char  error[512];
-
     m_id = glCreateShader(t_stage);
     glShaderSource(m_id, 1, &t_code, nullptr);
     glCompileShader(m_id);
 
+    GLint success;
+    char  error[512];
     glGetShaderiv(m_id, GL_COMPILE_STATUS, &success);
     if (!success)
     {

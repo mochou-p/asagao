@@ -5,6 +5,7 @@
 #include <cmath>
 #include "app.hpp"
 #include "shader.hpp"
+#include "program.hpp"
 
 App::App(const char* t_name)
 {
@@ -19,7 +20,7 @@ void App::run()
         "layout (location = 0) in vec3 aPos;\n"
         "void main()\n"
         "{\n"
-        "    gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0f);\n"
+        "    gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
         "}\0";
 
     const char* frag_shader_code =
@@ -27,37 +28,23 @@ void App::run()
         "out vec4 FragColor;\n"
         "void main()\n"
         "{\n"
-        "    FragColor = vec4(0.92f, 0.2f, 0.58f, 1.0f);\n"
+        "    FragColor = vec4(0.0, 1.0, 0.0, 1.0);\n"
         "}\0";
 
-    Shader vert_shader(vert_shader_code, GL_VERTEX_SHADER);
-    Shader frag_shader(frag_shader_code, GL_FRAGMENT_SHADER);
-
-    GLuint shader_program = glCreateProgram();
-    glAttachShader(shader_program, vert_shader.m_id);
-    glAttachShader(shader_program, frag_shader.m_id);
-    glLinkProgram(shader_program);
-
-    GLint success;
-    char  error[512];
-    glGetProgramiv(shader_program, GL_LINK_STATUS, &success);
-    if (!success) {
-        glGetProgramInfoLog(shader_program, 512, nullptr, error);
-        std::cerr << "glLinkProgram(shader_program) failed: " << error
-            << std::endl;
-    }
-
-    glDeleteShader(vert_shader.m_id);
-    glDeleteShader(frag_shader.m_id);
+    Program program
+    ({
+        Shader(vert_shader_code, GL_VERTEX_SHADER).m_id,
+        Shader(frag_shader_code, GL_FRAGMENT_SHADER).m_id
+    });
 
     ////////////////////////////////////////////////////////////////////////////
 
     const float vertices[]
     {
-        -1.0f, -1.0f, 0.0f,
-         1.0f, -1.0f, 0.0f,
-        -1.0f,  1.0f, 0.0f,
-         1.0f,  1.0f, 0.0f
+        -0.5f, -0.5f, 0.0f,
+         0.5f, -0.5f, 0.0f,
+        -0.5f,  0.5f, 0.0f,
+         0.5f,  0.5f, 0.0f
     };
 
     GLuint indices[]
@@ -86,7 +73,7 @@ void App::run()
 
     while (m_win->is_open())
     {
-        glUseProgram(shader_program);
+        program.use();
         glBindVertexArray(vao);
         glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
@@ -97,5 +84,4 @@ void App::run()
 
     glDeleteVertexArrays(1, &vao);
     glDeleteBuffers(1, &vbo);
-    glDeleteProgram(shader_program);
 }
