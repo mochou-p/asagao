@@ -10,8 +10,8 @@
 class App
 {
 public:
-    App(const char*);
-    ~App() {};
+    App(const char*, int, int);
+    ~App() {}
 
     void run();
 private:

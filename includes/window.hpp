@@ -9,11 +9,13 @@
 class Window
 {
 public:
-    Window(const char*);
+    Window(const char*, int, int);
     ~Window();
 
     bool is_open();
     void swap_buffers();
 
-    GLFWwindow* m_handle;
+    static inline GLFWwindow* handle;
+private:
+    void init(const char*, int, int);
 };

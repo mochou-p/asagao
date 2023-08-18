@@ -24,8 +24,25 @@ void load_opengl_functions()
     std::cout << "OpenGL\t" << glGetString(GL_VERSION) << std::endl;
 }
 
-Window::Window(const char* t_title)
+Window::Window(const char* t_title, int t_width, int t_height)
 {
+    init(t_title, t_width, t_height);
+    load_opengl_functions();
+}
+
+Window::~Window()
+{
+    glfwTerminate();
+}
+
+void Window::init(const char* t_title, int t_width, int t_height)
+{
+    if (handle)
+    {
+        std::cerr << "only one instance of window is allowed" << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
     if (!glfwInit())
     {
         std::cerr << "glfwInit failed" << std::endl;
@@ -38,30 +55,36 @@ Window::Window(const char* t_title)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    m_handle = glfwCreateWindow(1600, 900, t_title, nullptr, nullptr);
+    handle = glfwCreateWindow(t_width, t_height, t_title, nullptr, nullptr);
 
-    if (!m_handle)
+    if (!handle)
     {
         std::cerr << "glfwCreateWindow failed" << std::endl;
         exit(EXIT_FAILURE);
     }
 
-    glfwSetFramebufferSizeCallback(m_handle, framebuffer_size_callback);
+    glfwSetFramebufferSizeCallback(handle, framebuffer_size_callback);
 
-    glfwMakeContextCurrent(m_handle);
+    const GLFWvidmode* screen = glfwGetVideoMode(glfwGetPrimaryMonitor());
+    
+    if (!screen)
+    {
+        std::cerr << "glfwGetVideoMode failed" << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    int x = (screen->width  - t_width)  * 0.5f;
+    int y = (screen->height - t_height) * 0.5f;
+
+    glfwSetWindowPos(handle, x, y);
+
+    glfwMakeContextCurrent(handle);
     glfwSwapInterval(VSYNC);
-
-    load_opengl_functions();
-}
-
-Window::~Window()
-{
-    glfwTerminate();
 }
 
 bool Window::is_open()
 {
-    if (glfwWindowShouldClose(m_handle))
+    if (glfwWindowShouldClose(handle))
         return false;
 
     glfwPollEvents();
@@ -72,5 +95,5 @@ bool Window::is_open()
 
 void Window::swap_buffers()
 {
-    glfwSwapBuffers(m_handle);
+    glfwSwapBuffers(handle);
 }
