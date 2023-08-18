@@ -16,6 +16,7 @@ Program::Program(const std::list<GLuint>& t_shaders)
     GLint success;
     char  error[512];
     glGetProgramiv(m_id, GL_LINK_STATUS, &success);
+
     if (!success)
     {
         glGetProgramInfoLog(m_id, 512, nullptr, error);

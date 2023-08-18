@@ -7,9 +7,6 @@
 # project executable
 build/
 
-# temporarily untracked
-imgui.ini
-
 # non-public files
 tests/
 private/

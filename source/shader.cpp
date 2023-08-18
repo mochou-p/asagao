@@ -27,6 +27,7 @@ Shader::Shader(const char* t_filepath, int t_stage)
     GLint success;
     char  error[512];
     glGetShaderiv(m_id, GL_COMPILE_STATUS, &success);
+
     if (!success)
     {
         glGetShaderInfoLog(m_id, 512, NULL, error);

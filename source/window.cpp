@@ -4,13 +4,18 @@
 #include <iostream>
 #include "window.hpp"
 #include "glad/glad.h"
+#include "style.hpp"
 
 #define VSYNC 1
 
 void framebuffer_size_callback
 ([[maybe_unused]] GLFWwindow* t_window, int t_width, int t_height)
 {
-    glViewport(0, 0, t_width, t_height);
+    Window::width  = t_width;
+    Window::height = t_height;
+
+    glViewport(t_width * Layout::scene.pos.x, t_height * Layout::scene.pos.y,
+        t_width * Layout::scene.size.x, t_height * Layout::scene.size.y);
 }
 
 void load_opengl_functions()
@@ -28,6 +33,7 @@ Window::Window(const char* t_title, int t_width, int t_height)
 {
     init(t_title, t_width, t_height);
     load_opengl_functions();
+    framebuffer_size_callback(handle, t_width, t_height);
 }
 
 Window::~Window()
@@ -66,7 +72,7 @@ void Window::init(const char* t_title, int t_width, int t_height)
     glfwSetFramebufferSizeCallback(handle, framebuffer_size_callback);
 
     const GLFWvidmode* screen = glfwGetVideoMode(glfwGetPrimaryMonitor());
-    
+
     if (!screen)
     {
         std::cerr << "glfwGetVideoMode failed" << std::endl;

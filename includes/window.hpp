@@ -16,6 +16,8 @@ public:
     void swap_buffers();
 
     static inline GLFWwindow* handle;
+    static inline int         width;
+    static inline int         height;
 private:
     void init(const char*, int, int);
 };
