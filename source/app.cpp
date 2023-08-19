@@ -59,12 +59,16 @@ void App::run()
 
     while (m_win->is_open())
     {
+        m_win->events();
+        m_win->clear();
+
         program.use();
         glBindVertexArray(vao);
         glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
 
         m_gui->draw();
+
         m_win->swap_buffers();
     }
 

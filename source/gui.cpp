@@ -30,22 +30,14 @@ Gui::~Gui()
     DestroyContext();
 }
 
-void new_frame()
+inline static void new_frame()
 {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     NewFrame();
 }
 
-ImVec2 get_window_size()
-{
-    int width, height;
-    glfwGetFramebufferSize(Window::handle, &width, &height);
-
-    return {(float) width, (float) height};
-}
-
-void hierarchy()
+static void hierarchy()
 {
     static const char*            title = "Hierarchy";
     static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove
@@ -66,7 +58,7 @@ void hierarchy()
     End();
 }
 
-void scene()
+static void scene()
 {
     static const char*            title = "Scene";
     static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove
@@ -88,7 +80,7 @@ void scene()
     End();
 }
 
-void inspector()
+static void inspector()
 {
     static const char*            title = "Inspector";
     static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove
@@ -109,14 +101,14 @@ void inspector()
     End();
 }
 
-void update_widgets()
+static void update_widgets()
 {
     hierarchy();
     scene();
     inspector();
 }
 
-void render_gui()
+inline static void render_gui()
 {
     Render();
     ImGui_ImplOpenGL3_RenderDrawData(GetDrawData());

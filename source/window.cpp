@@ -3,12 +3,11 @@
 
 #include <iostream>
 #include "window.hpp"
-#include "glad/glad.h"
 #include "style.hpp"
 
 #define VSYNC 1
 
-void framebuffer_size_callback
+static void framebuffer_size_callback
 ([[maybe_unused]] GLFWwindow* t_window, int t_width, int t_height)
 {
     Window::width  = t_width;
@@ -18,7 +17,7 @@ void framebuffer_size_callback
         t_width * Layout::scene.size.x, t_height * Layout::scene.size.y);
 }
 
-void load_opengl_functions()
+static void load_opengl_functions()
 {
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
     {
@@ -86,20 +85,4 @@ void Window::init(const char* t_title, int t_width, int t_height)
 
     glfwMakeContextCurrent(handle);
     glfwSwapInterval(VSYNC);
-}
-
-bool Window::is_open()
-{
-    if (glfwWindowShouldClose(handle))
-        return false;
-
-    glfwPollEvents();
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    return true;
-}
-
-void Window::swap_buffers()
-{
-    glfwSwapBuffers(handle);
 }

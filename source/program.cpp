@@ -33,8 +33,3 @@ Program::~Program()
 {
     glDeleteProgram(m_id);
 }
-
-void Program::use()
-{
-    glUseProgram(m_id);
-}

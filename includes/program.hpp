@@ -13,7 +13,7 @@ public:
     Program(const std::list<GLuint>&);
     ~Program();
 
-    void use();
+    void use() { glUseProgram(m_id); }
 
     GLuint m_id;
 };

@@ -6,7 +6,7 @@
 #include <sstream>
 #include "shader.hpp"
 
-std::string read_file(const char* t_filepath)
+static std::string read_file(const char* t_filepath)
 {
     std::ifstream ifs(std::string("resources/shaders/") + t_filepath);
     std::stringstream ss;
