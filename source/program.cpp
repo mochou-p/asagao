@@ -4,6 +4,8 @@
 #include <iostream>
 #include "program.hpp"
 
+#define OPENGL_ERROR_LEN 512
+
 Program::Program(const std::list<GLuint>& t_shaders)
 {
     m_id = glCreateProgram();
@@ -14,12 +16,12 @@ Program::Program(const std::list<GLuint>& t_shaders)
     glLinkProgram(m_id);
 
     GLint success;
-    char  error[512];
+    char  error[OPENGL_ERROR_LEN];
     glGetProgramiv(m_id, GL_LINK_STATUS, &success);
 
     if (!success)
     {
-        glGetProgramInfoLog(m_id, 512, nullptr, error);
+        glGetProgramInfoLog(m_id, OPENGL_ERROR_LEN, nullptr, error);
         std::cerr << "glLinkProgram failed" << std::endl << error
             << std::endl;
         exit(EXIT_FAILURE);

@@ -6,6 +6,8 @@
 #include "style.hpp"
 
 #define VSYNC 1
+#define OPENGL_VER_MAJOR 4
+#define OPENGL_VER_MINOR 6
 
 static void framebuffer_size_callback
 ([[maybe_unused]] GLFWwindow* t_window, int t_width, int t_height)
@@ -28,7 +30,7 @@ static void load_opengl_functions()
     std::cout << "OpenGL\t" << glGetString(GL_VERSION) << std::endl;
 }
 
-Window::Window(const char* t_title, int t_width, int t_height)
+Window::Window(const std::string& t_title, int t_width, int t_height)
 {
     init(t_title, t_width, t_height);
     load_opengl_functions();
@@ -40,7 +42,7 @@ Window::~Window()
     glfwTerminate();
 }
 
-void Window::init(const char* t_title, int t_width, int t_height)
+void Window::init(const std::string& t_title, int t_width, int t_height)
 {
     if (handle)
     {
@@ -56,11 +58,12 @@ void Window::init(const char* t_title, int t_width, int t_height)
 
     std::cout << "GLFW\t" << glfwGetVersionString() << std::endl;
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_VER_MAJOR);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_VER_MINOR);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    handle = glfwCreateWindow(t_width, t_height, t_title, nullptr, nullptr);
+    handle = glfwCreateWindow(t_width, t_height, t_title.c_str(), nullptr,
+        nullptr);
 
     if (!handle)
     {

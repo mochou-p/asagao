@@ -8,7 +8,7 @@
 class Shader
 {
 public:
-    Shader(const char*, int);
+    Shader(const std::string&, int);
     ~Shader() {}
 
     GLuint m_id;

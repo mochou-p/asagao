@@ -10,7 +10,7 @@
 class App
 {
 public:
-    App(const char*, int, int);
+    App(const std::string&, int, int);
     ~App() {}
 
     void run();

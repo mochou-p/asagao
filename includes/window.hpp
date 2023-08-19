@@ -10,7 +10,7 @@
 class Window
 {
 public:
-    Window(const char*, int, int);
+    Window(const std::string&, int, int);
     ~Window();
 
     bool is_open()      { return !glfwWindowShouldClose(handle); }
@@ -22,5 +22,5 @@ public:
     static inline int         width;
     static inline int         height;
 private:
-    void init(const char*, int, int);
+    void init(const std::string&, int, int);
 };

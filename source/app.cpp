@@ -7,7 +7,7 @@
 #include "shader.hpp"
 #include "program.hpp"
 
-App::App(const char* t_name, int t_width, int t_height)
+App::App(const std::string& t_name, int t_width, int t_height)
 {
     m_win = std::make_unique<Window>(t_name, t_width, t_height);
     m_gui = std::make_unique<Gui>();
