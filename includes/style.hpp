@@ -11,10 +11,9 @@ struct layout
     ImVec2 size;
 
     layout(float x, float y, float w, float h)
-    {
-        pos  = {x, y};
-        size = {w, h};
-    }
+    :  pos(x, y)
+    , size(w, h)
+    {}
 };
 
 class Layout
