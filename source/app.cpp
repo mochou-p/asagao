@@ -5,7 +5,6 @@
 #include <cmath>
 #include "app.hpp"
 #include "shader.hpp"
-#include "program.hpp"
 
 App::App(const std::string& t_name, int t_width, int t_height)
 {
@@ -15,11 +14,7 @@ App::App(const std::string& t_name, int t_width, int t_height)
 
 void App::run()
 {
-    Program program
-    ({
-        Shader("test.vert", GL_VERTEX_SHADER).m_id,
-        Shader("test.frag", GL_FRAGMENT_SHADER).m_id
-    });
+    Shader test_shader("test.glsl");
 
     ////////////////////////////////////////////////////////////////////////////
 
@@ -62,7 +57,7 @@ void App::run()
         m_win->events();
         m_win->clear();
 
-        program.use();
+        test_shader.use();
         glBindVertexArray(vao);
         glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);

@@ -8,8 +8,10 @@
 class Shader
 {
 public:
-    Shader(const std::string&, int);
-    ~Shader() {}
+    Shader(const std::string&);
+    ~Shader();
+
+    void use() { glUseProgram(m_id); }
 
     GLuint m_id;
 };
