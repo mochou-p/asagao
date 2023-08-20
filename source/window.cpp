@@ -4,6 +4,7 @@
 #include <iostream>
 #include "window.hpp"
 #include "style.hpp"
+#include "utils.hpp"
 
 #define VSYNC 1
 #define OPENGL_VER_MAJOR 4
@@ -22,10 +23,7 @@ static void framebuffer_size_callback
 static void load_opengl_functions()
 {
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
-    {
-        std::cerr << "gladLoadGLLoader failed" << std::endl;
-        exit(EXIT_FAILURE);
-    }
+        quit("gladLoadGLLoader failed");
 
     std::cout << "OpenGL\t" << glGetString(GL_VERSION) << std::endl;
 }
@@ -44,17 +42,8 @@ Window::~Window()
 
 void Window::init(const std::string& t_title, int t_width, int t_height)
 {
-    if (handle)
-    {
-        std::cerr << "only one instance of window is allowed" << std::endl;
-        exit(EXIT_FAILURE);
-    }
-
-    if (!glfwInit())
-    {
-        std::cerr << "glfwInit failed" << std::endl;
-        exit(EXIT_FAILURE);
-    }
+    if (handle)      quit("only one instance of window is allowed");
+    if (!glfwInit()) quit("glfwInit failed");
 
     std::cout << "GLFW\t" << glfwGetVersionString() << std::endl;
 
@@ -65,21 +54,13 @@ void Window::init(const std::string& t_title, int t_width, int t_height)
     handle = glfwCreateWindow(t_width, t_height, t_title.c_str(), nullptr,
         nullptr);
 
-    if (!handle)
-    {
-        std::cerr << "glfwCreateWindow failed" << std::endl;
-        exit(EXIT_FAILURE);
-    }
+    if (!handle) quit("glfwCreateWindow failed");
 
     glfwSetFramebufferSizeCallback(handle, framebuffer_size_callback);
 
     const GLFWvidmode* screen = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
-    if (!screen)
-    {
-        std::cerr << "glfwGetVideoMode failed" << std::endl;
-        exit(EXIT_FAILURE);
-    }
+    if (!screen) quit("glfwGetVideoMode failed");
 
     int x = (screen->width  - t_width)  * 0.5f;
     int y = (screen->height - t_height) * 0.5f;

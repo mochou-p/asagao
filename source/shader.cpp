@@ -1,13 +1,12 @@
 // asagao/source/shader.cpp
 
 
-#include <iostream>
 #include <vector>
 #include <fstream>
 #include <sstream>
 #include "shader.hpp"
+#include "utils.hpp"
 
-#define OPENGL_ERROR_LEN 512
 #define SHADER_PATH "resources/shaders/"
 #define SHADER_STAGE_TAG_START "#stage "
 #define SHADER_STAGE_TAG_END "#endstage"
@@ -15,23 +14,13 @@
 static GLuint create_shader(const std::string& t_code, int t_stage)
 {
     GLuint id = glCreateShader(t_stage);
-
     const char* code_cstr = t_code.c_str();
 
     glShaderSource(id, 1, &code_cstr, nullptr);
     glCompileShader(id);
 
-    GLint success;
-    char  error[OPENGL_ERROR_LEN];
-    glGetShaderiv(id, GL_COMPILE_STATUS, &success);
-
-    if (!success)
-    {
-        glGetShaderInfoLog(id, OPENGL_ERROR_LEN, NULL, error);
-        std::cerr << "glCompileShader failed" << std::endl << error
-            << std::endl;
-        exit(EXIT_FAILURE);
-    }
+    opengl_check_error(id, GL_COMPILE_STATUS, "glCompileShader", &glGetShaderiv,
+        &glGetShaderInfoLog);
 
     return id;
 }
@@ -92,17 +81,8 @@ Shader::Shader(const std::string& t_filepath)
     parse_shader(t_filepath, m_id);
     glLinkProgram(m_id);
 
-    GLint success;
-    char  error[OPENGL_ERROR_LEN];
-    glGetProgramiv(m_id, GL_LINK_STATUS, &success);
-
-    if (!success)
-    {
-        glGetProgramInfoLog(m_id, OPENGL_ERROR_LEN, nullptr, error);
-        std::cerr << "glLinkProgram failed" << std::endl << error
-            << std::endl;
-        exit(EXIT_FAILURE);
-    }
+    opengl_check_error(m_id, GL_LINK_STATUS, "glLinkProgram", &glGetProgramiv,
+        &glGetProgramInfoLog);
 }
 
 Shader::~Shader()
