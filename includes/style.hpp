@@ -2,6 +2,8 @@
 
 
 #pragma once
+#ifndef __style_hpp_
+#define __style_hpp_
 
 #include "imgui.h"
 
@@ -26,3 +28,5 @@ public:
 private:
     Layout();
 };
+
+#endif  // __style_hpp_

@@ -2,6 +2,8 @@
 
 
 #pragma once
+#ifndef __window_hpp_
+#define __window_hpp_
 
 #define GLFW_INCLUDE_NONE
 #include "glfw3.h"
@@ -24,3 +26,5 @@ public:
 private:
     void init(const std::string&, int, int);
 };
+
+#endif  // __window_hpp_

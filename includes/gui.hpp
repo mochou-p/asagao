@@ -2,6 +2,8 @@
 
 
 #pragma once
+#ifndef __gui_hpp_
+#define __gui_hpp_
 
 #include "imgui.h"
 
@@ -13,3 +15,5 @@ public:
 
     void draw();
 };
+
+#endif  // __gui_hpp_

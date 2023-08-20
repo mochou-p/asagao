@@ -2,6 +2,8 @@
 
 
 #pragma once
+#ifndef __app_hpp_
+#define __app_hpp_
 
 #include <memory>
 #include "window.hpp"
@@ -18,3 +20,5 @@ private:
     std::unique_ptr<Window> m_win;
     std::unique_ptr<Gui>    m_gui;
 };
+
+#endif  // __app_hpp_
