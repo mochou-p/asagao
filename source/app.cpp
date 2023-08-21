@@ -6,8 +6,7 @@
 #include "app.hpp"
 #include "shader.hpp"
 #include "utils.hpp"
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include "texture.hpp"
 
 App::App(const std::string& t_name, int t_width, int t_height)
 {
@@ -17,34 +16,11 @@ App::App(const std::string& t_name, int t_width, int t_height)
 
 void App::run()
 {
-    int width, height, channels;
-    stbi_set_flip_vertically_on_load(true);
-    stbi_uc* tex_data = stbi_load("resources/textures/saber.png", &width,
-        &height, &channels, 4);
-
-    if (!tex_data) quit("stbi_load failed");
-
-    GLuint tex;
-    glGenTextures(1, &tex);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, tex);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,     GL_CLAMP_TO_BORDER);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,     GL_CLAMP_TO_BORDER);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
-        GL_UNSIGNED_BYTE, tex_data);
-    glGenerateMipmap(GL_TEXTURE_2D);
-
-    stbi_image_free(tex_data);
-
-    ////////////////////////////////////////////////////////////////////////////
-
     Shader test_shader("test.glsl");
     test_shader.use();
-    test_shader.set_int("u_texture", 0);
+
+    Texture saber_tex("saber.png");
+    test_shader.set_int("u_texture", saber_tex.m_order);
 
     ////////////////////////////////////////////////////////////////////////////
 
@@ -102,5 +78,4 @@ void App::run()
     glDeleteBuffers(1, &vbo);
     glDeleteVertexArrays(1, &vao);
     glDeleteBuffers(1, &ebo);
-    glDeleteTextures(1, &tex);
 }
