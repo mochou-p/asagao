@@ -19,6 +19,8 @@ Texture::Texture(const std::string& t_filepath)
 
     if (!data) quit("stbi_load failed");
 
+    m_order = count;
+
     glGenTextures(1, &m_id);
     glActiveTexture(GL_TEXTURE0 + (count++));
     glBindTexture(GL_TEXTURE_2D, m_id);
@@ -33,9 +35,4 @@ Texture::Texture(const std::string& t_filepath)
     glGenerateMipmap(GL_TEXTURE_2D);
 
     stbi_image_free(data);
-}
-
-Texture::~Texture()
-{
-    glDeleteTextures(1, &m_id);
 }

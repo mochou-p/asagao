@@ -12,7 +12,7 @@ class Shader
 {
 public:
     Shader(const std::string&);
-    ~Shader();
+    ~Shader() { glDeleteProgram(m_id); }
 
     void use() { glUseProgram(m_id); }
     void set_int(const std::string& t_location, int t_val)

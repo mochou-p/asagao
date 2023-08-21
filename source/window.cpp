@@ -35,11 +35,6 @@ Window::Window(const std::string& t_title, int t_width, int t_height)
     framebuffer_size_callback(handle, t_width, t_height);
 }
 
-Window::~Window()
-{
-    glfwTerminate();
-}
-
 void Window::init(const std::string& t_title, int t_width, int t_height)
 {
     if (handle)      quit("only one instance of window is allowed");

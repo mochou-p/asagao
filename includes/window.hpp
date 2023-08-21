@@ -13,7 +13,7 @@ class Window
 {
 public:
     Window(const std::string&, int, int);
-    ~Window();
+    ~Window() { glfwTerminate(); }
 
     bool is_open()      { return !glfwWindowShouldClose(handle); }
     void events()       { glfwPollEvents();                      }

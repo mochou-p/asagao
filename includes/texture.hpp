@@ -12,7 +12,7 @@ class Texture
 {
 public:
     Texture(const std::string&);
-    ~Texture();
+    ~Texture() { glDeleteTextures(1, &m_id); }
 
     static inline unsigned int count = 0;
 

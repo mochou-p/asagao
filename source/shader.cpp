@@ -84,8 +84,3 @@ Shader::Shader(const std::string& t_filepath)
     opengl_check_error(m_id, GL_LINK_STATUS, "glLinkProgram", &glGetProgramiv,
         &glGetProgramInfoLog);
 }
-
-Shader::~Shader()
-{
-    glDeleteProgram(m_id);
-}
