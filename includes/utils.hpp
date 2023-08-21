@@ -10,6 +10,21 @@
 
 #define OPENGL_ERROR_LEN 512
 
+struct vec4
+{
+    float x;
+    float y;
+    float z;
+    float w;
+
+    vec4(float t_x, float t_y, float t_z, float t_w)
+    : x(t_x)
+    , y(t_y)
+    , z(t_z)
+    , w(t_w)
+    {}
+};
+
 using opengl_iv_func       = void (*)(GLuint, GLenum, GLint*);
 using opengl_info_log_func = void (*)(GLuint, GLsizei, GLsizei*, GLchar*);
 
