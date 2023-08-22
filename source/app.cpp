@@ -7,6 +7,7 @@
 #include "shader.hpp"
 #include "utils.hpp"
 #include "texture.hpp"
+#include "objects.hpp"
 
 App::App(const std::string& t_name, int t_width, int t_height)
 {
@@ -14,19 +15,29 @@ App::App(const std::string& t_name, int t_width, int t_height)
     m_gui = std::make_unique<Gui>();
 }
 
+void GLAPIENTRY
+MessageCallback( GLenum source,
+                 GLenum type,
+                 [[maybe_unused]] GLuint id,
+                 GLenum severity,
+                 [[maybe_unused]] GLsizei length,
+                 const GLchar* message,
+                 [[maybe_unused]] const void* userParam )
+{
+  fprintf( stderr,
+    "GL LOG: %s source=0x%x, type=0x%x, severity=0x%x, message=%s\n",
+           ( type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "" ),
+            source, type, severity, message );
+}
+
 void App::run()
 {
-    Shader test_shader("test.glsl");
-    test_shader.use();
-
-    Texture saber_tex("saber.png");
-    test_shader.set_int("u_texture", saber_tex.m_order);
-
-    ////////////////////////////////////////////////////////////////////////////
+    glEnable(GL_DEBUG_OUTPUT);
+    glDebugMessageCallback(MessageCallback, 0);
 
     const float vertices[]
     {
-    //  position     | tex coords
+    //  position     | texcoords
     //  x      y     | u    v
        -0.2f, -0.2f,   0,   0,
         0.2f, -0.2f,   1,   0,
@@ -40,28 +51,23 @@ void App::run()
         2, 3, 0
     };
 
+    VAP  position(2, 4 * sizeof(float), 0);
+    VAP texcoords(2, 4 * sizeof(float), 2 * sizeof(float));
+    VAO vao({position, texcoords});
+
+
+    BO vbo((void*) vertices, sizeof(vertices), GL_ARRAY_BUFFER);
+    BO ebo((void*) indices,  sizeof(indices),  GL_ELEMENT_ARRAY_BUFFER);
+
+
+    Shader test_shader("test.glsl");
+    Texture saber_tex("saber.png");
+    test_shader.set_int("u_texture", saber_tex.m_order);
+
+    vao.enable();
+    test_shader.use();
+
     const GLsizei count = sizeof(indices) / sizeof(GLuint);
-
-    GLuint vbo, vao, ebo;
-    glGenBuffers(1, &vbo);
-    glGenVertexArrays(1, &vao);
-    glGenBuffers(1, &ebo);
-
-    glBindVertexArray(vao);
-
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);  
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices,
-        GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
-    glEnableVertexAttribArray(0);
-
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float),
-        (void*) (2 * sizeof(float)));
-    glEnableVertexAttribArray(1);
 
     while (m_win->is_open())
     {
@@ -74,8 +80,4 @@ void App::run()
 
         m_win->swap_buffers();
     }
-
-    glDeleteBuffers(1, &vbo);
-    glDeleteVertexArrays(1, &vao);
-    glDeleteBuffers(1, &ebo);
 }
