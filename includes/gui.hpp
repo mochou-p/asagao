@@ -5,8 +5,6 @@
 #ifndef __gui_hpp_
 #define __gui_hpp_
 
-#include "imgui.h"
-
 class Gui
 {
 public:

@@ -16,8 +16,9 @@ public:
 
     static inline unsigned int count = 0;
 
-    unsigned char m_order;
+    GLuint get_order() { return m_order; }
 private:
+    GLuint m_order;
     GLuint m_id;
 };
 

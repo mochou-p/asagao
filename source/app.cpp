@@ -55,14 +55,12 @@ void App::run()
     VAP texcoords(2, 4 * sizeof(float), 2 * sizeof(float));
     VAO vao({position, texcoords});
 
-
     BO vbo((void*) vertices, sizeof(vertices), GL_ARRAY_BUFFER);
     BO ebo((void*) indices,  sizeof(indices),  GL_ELEMENT_ARRAY_BUFFER);
 
-
     Shader test_shader("test.glsl");
     Texture saber_tex("saber.png");
-    test_shader.set_int("u_texture", saber_tex.m_order);
+    test_shader.set_int("u_texture", saber_tex.get_order());
 
     vao.enable();
     test_shader.use();

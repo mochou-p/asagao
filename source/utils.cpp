@@ -1,7 +1,10 @@
 // asagao/source/utils.cpp
 
 
+#include <iostream>
 #include "utils.hpp"
+
+#define OPENGL_ERROR_LEN 512
 
 void quit(const std::string& t_message)
 {
@@ -18,7 +21,7 @@ void opengl_check_error
 
     if (!success)
     {
-        char  error[OPENGL_ERROR_LEN];
+        char error[OPENGL_ERROR_LEN];
         (*t_info_func)(t_id, OPENGL_ERROR_LEN, nullptr, error);
         std::cerr << t_message << " failed" << std::endl << error
             << std::endl;
