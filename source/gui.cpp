@@ -14,8 +14,10 @@ using namespace ImGui;
 Gui::Gui()
 {
     IMGUI_CHECKVERSION();
+
     CreateContext();
     StyleColorsDark();
+
     ImGui_ImplGlfw_InitForOpenGL(Window::handle, true);
     ImGui_ImplOpenGL3_Init();
 
@@ -31,14 +33,16 @@ Gui::~Gui()
     DestroyContext();
 }
 
-inline static void new_frame()
+static void
+new_frame()
 {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     NewFrame();
 }
 
-static void hierarchy()
+static void
+hierarchy()
 {
     static const char*            title = "Hierarchy";
     static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove
@@ -59,7 +63,8 @@ static void hierarchy()
     End();
 }
 
-static void scene()
+static void
+scene()
 {
     static const char*            title = "Scene";
     static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove
@@ -81,7 +86,8 @@ static void scene()
     End();
 }
 
-static void inspector()
+static void
+inspector()
 {
     static const char*            title = "Inspector";
     static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove
@@ -102,20 +108,23 @@ static void inspector()
     End();
 }
 
-static void update_widgets()
+static void
+update_widgets()
 {
     hierarchy();
     scene();
     inspector();
 }
 
-inline static void render_gui()
+static void
+render_gui()
 {
     Render();
     ImGui_ImplOpenGL3_RenderDrawData(GetDrawData());
 }
 
-void Gui::draw()
+void
+Gui::draw()
 {
     new_frame();
     update_widgets();

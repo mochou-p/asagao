@@ -5,17 +5,18 @@
 #ifndef __shader_hpp_
 #define __shader_hpp_
 
+#include <string>
 #include "glad/glad.h"
 
 class Shader
 {
 public:
-    Shader(const std::string&);
+    Shader(const std::string& filepath);
     ~Shader() { glDeleteProgram(m_id); }
 
     void use() { glUseProgram(m_id); }
-    void set_int(const std::string& t_location, int t_val)
-    { glUniform1i(glGetUniformLocation(m_id, t_location.c_str()), t_val); }
+    void set_int(const std::string& location, int val)
+    { glUniform1i(glGetUniformLocation(m_id, location.c_str()), val); }
 private:
     GLuint m_id;
 };

@@ -10,17 +10,20 @@
 #define OPENGL_VER_MAJOR 4
 #define OPENGL_VER_MINOR 6
 
-static void framebuffer_size_callback
-([[maybe_unused]] GLFWwindow* t_window, int t_width, int t_height)
+static void
+framebuffer_size_callback([[maybe_unused]] GLFWwindow* window,
+                                           int         width,
+                                           int         height)
 {
-    Window::width  = t_width;
-    Window::height = t_height;
+    Window::width  = width;
+    Window::height = height;
 
-    glViewport(t_width * Layout::scene.pos.x, t_height * Layout::scene.pos.y,
-        t_width * Layout::scene.size.x, t_height * Layout::scene.size.y);
+    glViewport(width * Layout::scene.pos.x, height * Layout::scene.pos.y,
+        width * Layout::scene.size.x, height * Layout::scene.size.y);
 }
 
-static void load_opengl_functions()
+static void
+load_opengl_functions()
 {
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
         quit("gladLoadGLLoader failed");
@@ -28,14 +31,19 @@ static void load_opengl_functions()
     std::cout << "OpenGL\t" << glGetString(GL_VERSION) << std::endl;
 }
 
-Window::Window(const std::string& t_title, int t_width, int t_height)
+Window::Window(const std::string& title,
+                     int          width,
+                     int          height)
 {
-    init(t_title, t_width, t_height);
+    init(title, width, height);
     load_opengl_functions();
-    framebuffer_size_callback(handle, t_width, t_height);
+    framebuffer_size_callback(handle, width, height);
 }
 
-void Window::init(const std::string& t_title, int t_width, int t_height)
+void
+Window::init(const std::string& title,
+                   int          width,
+                   int          height)
 {
     if (handle)      quit("only one instance of window is allowed");
     if (!glfwInit()) quit("glfwInit failed");
@@ -46,7 +54,7 @@ void Window::init(const std::string& t_title, int t_width, int t_height)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_VER_MINOR);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    handle = glfwCreateWindow(t_width, t_height, t_title.c_str(), nullptr,
+    handle = glfwCreateWindow(width, height, title.c_str(), nullptr,
         nullptr);
 
     if (!handle) quit("glfwCreateWindow failed");
@@ -57,8 +65,8 @@ void Window::init(const std::string& t_title, int t_width, int t_height)
 
     if (!screen) quit("glfwGetVideoMode failed");
 
-    int x = (screen->width  - t_width)  * 0.5f;
-    int y = (screen->height - t_height) * 0.5f;
+    int x = (screen->width  - width)  * 0.5f;
+    int y = (screen->height - height) * 0.5f;
 
     glfwSetWindowPos(handle, x, y);
 

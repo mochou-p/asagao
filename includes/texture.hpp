@@ -11,10 +11,10 @@
 class Texture
 {
 public:
-    Texture(const std::string&);
+    Texture(const std::string& filepath);
     ~Texture() { glDeleteTextures(1, &m_id); }
 
-    static inline unsigned int count = 0;
+    static inline GLuint count = 0;
 
     GLuint get_order() { return m_order; }
 private:

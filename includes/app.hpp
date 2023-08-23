@@ -12,13 +12,15 @@
 class App
 {
 public:
-    App(const std::string&, int, int);
+    App(const std::string& name, int width, int height);
     ~App() {}
 
     void run();
 private:
-    std::unique_ptr<Window> m_win;
-    std::unique_ptr<Gui>    m_gui;
+    void loop();
+
+    std::unique_ptr<Window> m_window;
+    std::unique_ptr<Gui>    m_interface;
 };
 
 #endif  // __app_hpp_

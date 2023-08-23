@@ -2,47 +2,50 @@
 
 
 #include <iostream>
-#include <cmath>
 #include "app.hpp"
 #include "shader.hpp"
 #include "utils.hpp"
 #include "texture.hpp"
 #include "objects.hpp"
 
-App::App(const std::string& t_name, int t_width, int t_height)
+App::App(const std::string& name,
+               int          width,
+               int          height)
 {
-    m_win = std::make_unique<Window>(t_name, t_width, t_height);
-    m_gui = std::make_unique<Gui>();
+    m_window    = std::make_unique<Window>(name, width, height);
+    m_interface = std::make_unique<Gui>();
 }
 
-void GLAPIENTRY
-MessageCallback( GLenum source,
-                 GLenum type,
-                 [[maybe_unused]] GLuint id,
-                 GLenum severity,
-                 [[maybe_unused]] GLsizei length,
-                 const GLchar* message,
-                 [[maybe_unused]] const void* userParam )
+static void GLAPIENTRY
+debug_message_callback([[maybe_unused]]       GLenum  source,
+                                              GLenum  type,
+                       [[maybe_unused]]       GLuint  id,
+                                              GLenum  severity,
+                       [[maybe_unused]]       GLsizei length,
+                                        const GLchar* message,
+                       [[maybe_unused]] const void*   param)
 {
-  fprintf( stderr,
-    "GL LOG: %s source=0x%x, type=0x%x, severity=0x%x, message=%s\n",
-           ( type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "" ),
-            source, type, severity, message );
+    std::cout
+        << '('   << "type     = 0x" << std::hex << type
+        << "\n " << "severity = 0x" << std::hex << severity
+        << "\n " << "message  = "   <<             message
+        << ')'   << std::endl;
 }
 
-void App::run()
+void
+App::run()
 {
     glEnable(GL_DEBUG_OUTPUT);
-    glDebugMessageCallback(MessageCallback, 0);
+    glDebugMessageCallback(debug_message_callback, nullptr);
 
     const float vertices[]
     {
     //  position     | texcoords
-    //  x      y     | u    v
-       -0.2f, -0.2f,   0,   0,
-        0.2f, -0.2f,   1,   0,
-        0.2f,  0.2f,   1,   1,
-       -0.2f,  0.2f,   0,   1
+    //  x      y     | u     v
+       -0.2f, -0.2f,   0.0f, 0.0f,
+        0.2f, -0.2f,   1.0f, 0.0f,
+        0.2f,  0.2f,   1.0f, 1.0f,
+       -0.2f,  0.2f,   0.0f, 1.0f
     };
 
     const GLuint indices[]
@@ -59,23 +62,30 @@ void App::run()
     BO ebo((void*) indices,  sizeof(indices),  GL_ELEMENT_ARRAY_BUFFER);
 
     Shader test_shader("test.glsl");
+
     Texture saber_tex("saber.png");
     test_shader.set_int("u_texture", saber_tex.get_order());
 
     vao.enable();
     test_shader.use();
 
-    const GLsizei count = sizeof(indices) / sizeof(GLuint);
+    loop();
+}
 
-    while (m_win->is_open())
+void
+App::loop()
+{
+    while (m_window->is_open())
     {
-        m_win->events();
-        m_win->clear();
+        m_window->events();
+        m_window->clear();
 
-        glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0);
+        //                           |
+        // count of indices (temp)   V
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-        m_gui->draw();
+        m_interface->draw();
 
-        m_win->swap_buffers();
+        m_window->swap_buffers();
     }
 }

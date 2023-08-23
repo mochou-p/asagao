@@ -8,13 +8,13 @@
 
 #define TEXTURE_PATH "resources/textures/"
 
-Texture::Texture(const std::string& t_filepath)
+Texture::Texture(const std::string& filepath)
 {
     if (count >= 32) quit("maximum number of textures exceeded (32)");
 
     int width, height, channels;
     stbi_set_flip_vertically_on_load(true);
-    stbi_uc* data = stbi_load((TEXTURE_PATH + t_filepath).c_str(), &width,
+    stbi_uc* data = stbi_load((TEXTURE_PATH + filepath).c_str(), &width,
         &height, &channels, 4);
 
     if (!data) quit("stbi_load failed");

@@ -8,7 +8,8 @@
 #define WINDOW_WIDTH 1600
 #define WINDOW_HEIGHT 900
 
-int main()
+int
+main()
 {
     App app(APP_NAME, WINDOW_WIDTH, WINDOW_HEIGHT);
 

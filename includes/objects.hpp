@@ -10,26 +10,29 @@
 
 struct VAP
 {
-    GLint       size;
-    GLsizei     stride;
-    size_t      pointer;
-    GLenum      type;
-    GLboolean   normalized;
+    GLint     size;
+    GLsizei   stride;
+    size_t    pointer;
+    GLenum    type;
+    GLboolean normalized;
 
-    VAP(GLint t_size, GLsizei t_stride, size_t t_pointer,
-        GLenum t_type = GL_FLOAT, GLboolean t_normalized = GL_FALSE)
-    :       size(t_size)
-    ,     stride(t_stride)
-    ,    pointer(t_pointer)
-    ,       type(t_type)
-    , normalized(t_normalized)
+    VAP(GLint     size,
+        GLsizei   stride,
+        size_t    pointer,
+        GLenum    type       = GL_FLOAT,
+        GLboolean normalized = GL_FALSE)
+    :       size{size}
+    ,     stride{stride}
+    ,    pointer{pointer}
+    ,       type{type}
+    , normalized{normalized}
     {}
 };
 
 class BO
 {
 public:
-    BO(const void*, GLsizeiptr, GLenum);
+    BO(const void* data, GLsizeiptr size, GLenum target);
     ~BO() { glDeleteBuffers(1, &m_id); }
 private:
     GLuint m_id;
@@ -38,12 +41,12 @@ private:
 class VAO
 {
 public:
-    VAO(const std::vector<VAP>&);
+    VAO(const std::vector<VAP>& attribs);
     ~VAO() { glDeleteVertexArrays(1, &m_id); }
 
     void enable();
 private:
-    GLuint m_id;
+    GLuint           m_id;
     std::vector<VAP> m_attribs;
 };
 

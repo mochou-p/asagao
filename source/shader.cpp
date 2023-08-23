@@ -11,10 +11,12 @@
 #define SHADER_STAGE_TAG_START "#stage "
 #define SHADER_STAGE_TAG_END "#endstage"
 
-static GLuint create_shader(const std::string& t_code, int t_stage)
+static GLuint
+create_shader(const std::string& code,
+                    int          stage)
 {
-    GLuint id = glCreateShader(t_stage);
-    const char* code_cstr = t_code.c_str();
+    GLuint id = glCreateShader(stage);
+    const char* code_cstr = code.c_str();
 
     glShaderSource(id, 1, &code_cstr, nullptr);
     glCompileShader(id);
@@ -30,13 +32,16 @@ struct stage
     std::string tag;
     GLint       type;
 
-    stage(const std::string& t_tag, GLint t_type)
-    :  tag(t_tag)
-    , type(t_type)
+    stage(const std::string& tag,
+                GLint        type)
+    :  tag{tag}
+    , type{type}
     {}
 };
 
-static void parse_shader(const std::string& t_filepath, GLuint t_shader)
+static void
+parse_shader(const std::string& filepath,
+                   GLuint       shader)
 {
     static const std::vector<stage> stages
     {
@@ -44,7 +49,7 @@ static void parse_shader(const std::string& t_filepath, GLuint t_shader)
         {"fragment", GL_FRAGMENT_SHADER}
     };
 
-    std::ifstream ifs(SHADER_PATH + t_filepath);
+    std::ifstream ifs(SHADER_PATH + filepath);
     std::string   code, line;
 
     while (std::getline(ifs, line))
@@ -66,7 +71,7 @@ static void parse_shader(const std::string& t_filepath, GLuint t_shader)
             }
 
             GLuint shader_stage = create_shader(code, s.type);
-            glAttachShader(t_shader, shader_stage);
+            glAttachShader(shader, shader_stage);
             glDeleteShader(shader_stage);
 
             code.clear();
@@ -75,10 +80,10 @@ static void parse_shader(const std::string& t_filepath, GLuint t_shader)
     }
 }
 
-Shader::Shader(const std::string& t_filepath)
+Shader::Shader(const std::string& filepath)
 {
     m_id = glCreateProgram();
-    parse_shader(t_filepath, m_id);
+    parse_shader(filepath, m_id);
     glLinkProgram(m_id);
 
     opengl_check_error(m_id, GL_LINK_STATUS, "glLinkProgram", &glGetProgramiv,
