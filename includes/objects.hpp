@@ -7,47 +7,77 @@
 
 #include <vector>
 #include "glad/glad.h"
+#include "utils.hpp"
 
-struct VAP
+struct VertexAttribute
 {
-    GLint     size;
-    GLsizei   stride;
-    size_t    pointer;
+    GLuint    count;
     GLenum    type;
     GLboolean normalized;
 
-    VAP(GLint     size,
-        GLsizei   stride,
-        size_t    pointer,
-        GLenum    type       = GL_FLOAT,
-        GLboolean normalized = GL_FALSE)
-    :       size{size}
-    ,     stride{stride}
-    ,    pointer{pointer}
-    ,       type{type}
-    , normalized{normalized}
-    {}
+    static GLuint
+    get_size_of_type(GLenum type)
+    {
+        switch (type)
+        {
+            case GL_FLOAT: return 4;
+        }
+
+        quit("unsupported VertexAttribute type");
+        return 0;
+    }
 };
 
-class BO
+class VertexBufferLayout
 {
 public:
-    BO(const void* data, GLsizeiptr size, GLenum target);
-    ~BO() { glDeleteBuffers(1, &m_id); }
+    VertexBufferLayout()
+    : m_stride{0}
+    {}
+
+    void push(GLuint count, GLenum type);
+    GLuint get_stride() { return m_stride; }
+    const std::vector<VertexAttribute>& get_attributes()
+    { return m_attributes; }
+private:
+    std::vector<VertexAttribute> m_attributes;
+    GLuint m_stride;
+};
+
+class VertexBuffer
+{
+public:
+    VertexBuffer(const void* data, GLsizeiptr size);
+    ~VertexBuffer() { glDeleteBuffers(1, &m_id); }
+
+    void bind() { glBindBuffer(GL_ARRAY_BUFFER, m_id); }
 private:
     GLuint m_id;
 };
 
-class VAO
+class IndexBuffer
 {
 public:
-    VAO(const std::vector<VAP>& attribs);
-    ~VAO() { glDeleteVertexArrays(1, &m_id); }
+    IndexBuffer(const GLuint* data, GLuint count);
+    ~IndexBuffer() { glDeleteBuffers(1, &m_id); }
 
-    void enable();
+    void bind() { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_id); }
+    GLuint get_count() { return m_count; }
 private:
-    GLuint           m_id;
-    std::vector<VAP> m_attribs;
+    GLuint m_id;
+    GLuint m_count;
+};
+
+class VertexArray
+{
+public:
+    VertexArray()  { glGenVertexArrays(1, &m_id); }
+    ~VertexArray() { glDeleteVertexArrays(1, &m_id); }
+
+    void bind() { glBindVertexArray(m_id); }
+    void add_vertex_buffer(VertexBuffer& vb, VertexBufferLayout& layout);
+private:
+    GLuint m_id;
 };
 
 #endif  // __objects_hpp_

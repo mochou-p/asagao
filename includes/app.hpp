@@ -17,8 +17,6 @@ public:
 
     void run();
 private:
-    void loop();
-
     std::unique_ptr<Window> m_window;
     std::unique_ptr<Gui>    m_interface;
 };

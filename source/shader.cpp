@@ -21,8 +21,8 @@ create_shader(const std::string& code,
     glShaderSource(id, 1, &code_cstr, nullptr);
     glCompileShader(id);
 
-    opengl_check_error(id, GL_COMPILE_STATUS, "glCompileShader", &glGetShaderiv,
-        &glGetShaderInfoLog);
+    opengl_check_error(id, GL_COMPILE_STATUS, "glCompileShader",
+        &glGetShaderiv, &glGetShaderInfoLog);
 
     return id;
 }

@@ -1,36 +1,62 @@
 // asagao/source/objects.cpp
 
 
-#include <algorithm>
 #include "objects.hpp"
 
-BO::BO(const void*      data,
-             GLsizeiptr size,
-             GLenum     target)
+VertexBuffer::VertexBuffer(const void*      data,
+                                 GLsizeiptr size)
 {
     glGenBuffers(1, &m_id);
-    glBindBuffer(target, m_id);
-    glBufferData(target, size, data, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, m_id);
+    glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
 }
 
-VAO::VAO(const std::vector<VAP>& attribs)
+IndexBuffer::IndexBuffer(const GLuint* data,
+                               GLuint  count)
+: m_count(count)
 {
-    glGenVertexArrays(1, &m_id);
-    glBindVertexArray(m_id);
-
-    std::copy(attribs.begin(), attribs.end(),
-        std::back_inserter(m_attribs));
+    glGenBuffers(1, &m_id);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_id);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(GLuint), data,
+        GL_STATIC_DRAW);
 }
 
 void
-VAO::enable()
+VertexArray::add_vertex_buffer([[maybe_unused]] VertexBuffer&       vb,
+                                                VertexBufferLayout& layout)
 {
-    GLuint i = 0;
+    bind();
 
-    for (const VAP& a : m_attribs)
+    const auto& attributes = layout.get_attributes();
+    GLuint pointer = 0;
+
+    for (GLuint i = 0; i < attributes.size(); ++i)
     {
-        glVertexAttribPointer(i, a.size, a.type, a.normalized,
-            a.stride, (const void*) a.pointer);
-        glEnableVertexAttribArray(i++);
+        const auto& attrib = attributes[i];
+        glEnableVertexAttribArray(i);
+        glVertexAttribPointer(i, attrib.count, attrib.type, attrib.normalized,
+            layout.get_stride(), (const void*) (unsigned long long) pointer);
+        pointer +=
+            attrib.count * VertexAttribute::get_size_of_type(attrib.type);
     }
+}
+
+static GLboolean
+get_type_normalisation(GLenum type)
+{
+    switch (type)
+    {
+        case GL_FLOAT: return GL_FALSE;
+    }
+
+    quit("unsupported VertexAttribute type");
+    return false;
+}
+
+void
+VertexBufferLayout::push(GLuint count,
+                         GLenum type)
+{
+    m_attributes.push_back({count, type, get_type_normalisation(type)});
+    m_stride += count * VertexAttribute::get_size_of_type(type);
 }

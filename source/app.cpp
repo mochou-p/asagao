@@ -54,35 +54,30 @@ App::run()
         2, 3, 0
     };
 
-    VAP  position(2, 4 * sizeof(float), 0);
-    VAP texcoords(2, 4 * sizeof(float), 2 * sizeof(float));
-    VAO vao({position, texcoords});
+    VertexArray va;
+    VertexBuffer vb(vertices, sizeof(vertices));
 
-    BO vbo((void*) vertices, sizeof(vertices), GL_ARRAY_BUFFER);
-    BO ebo((void*) indices,  sizeof(indices),  GL_ELEMENT_ARRAY_BUFFER);
+    VertexBufferLayout layout;
+    layout.push(2, GL_FLOAT);  // position
+    layout.push(2, GL_FLOAT);  // texcoords
+    va.add_vertex_buffer(vb, layout);
 
-    Shader test_shader("test.glsl");
+    IndexBuffer ib(indices,  sizeof(indices) / sizeof(GLuint));
+
+    Shader shader("test.glsl");
 
     Texture saber_tex("saber.png");
-    test_shader.set_int("u_texture", saber_tex.get_order());
+    shader.set_int("u_texture", saber_tex.get_order());
 
-    vao.enable();
-    test_shader.use();
+    shader.use();
 
-    loop();
-}
-
-void
-App::loop()
-{
     while (m_window->is_open())
     {
         m_window->events();
         m_window->clear();
 
-        //                           |
-        // count of indices (temp)   V
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, ib.get_count(), GL_UNSIGNED_INT,
+            nullptr);
 
         m_interface->draw();
 
