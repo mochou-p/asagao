@@ -13,11 +13,15 @@
 class Renderer
 {
 public:
-    Renderer() {}
+    Renderer();
     ~Renderer() {}
+
+    static void init();
 
     void clear() { glClear(GL_COLOR_BUFFER_BIT); }
     void draw(VertexArray& va, IndexBuffer& ib, Shader& shader);
+
+    static inline Renderer* instance;
 private:
     GLuint m_id;
 };

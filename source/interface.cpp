@@ -1,8 +1,8 @@
-// asagao/source/gui.cpp
+// asagao/source/interface.cpp
 
 
 #include <iostream>
-#include "gui.hpp"
+#include "interface.hpp"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
@@ -11,7 +11,7 @@
 
 using namespace ImGui;
 
-Gui::Gui()
+Interface::Interface()
 {
     IMGUI_CHECKVERSION();
 
@@ -26,7 +26,7 @@ Gui::Gui()
     GetIO().IniFilename = nullptr;
 }
 
-Gui::~Gui()
+Interface::~Interface()
 {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
@@ -64,29 +64,6 @@ hierarchy()
 }
 
 static void
-scene()
-{
-    static const char*            title = "Scene";
-    static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove
-        | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse
-        | ImGuiWindowFlags_NoBackground;
-
-    SetNextWindowPos
-    ({
-        Layout::scene.pos.x * Window::width,
-        Layout::scene.pos.y * Window::height
-    });
-    SetNextWindowSize
-    ({
-        Layout::scene.size.x * Window::width,
-        Layout::scene.size.y * Window::height
-    });
-
-    Begin(title, nullptr, flags);
-    End();
-}
-
-static void
 inspector()
 {
     static const char*            title = "Inspector";
@@ -112,21 +89,20 @@ static void
 update_widgets()
 {
     hierarchy();
-    scene();
     inspector();
 }
 
 static void
-render_gui()
+render_draw_data()
 {
     Render();
     ImGui_ImplOpenGL3_RenderDrawData(GetDrawData());
 }
 
 void
-Gui::draw()
+Interface::draw()
 {
     new_frame();
     update_widgets();
-    render_gui();
+    render_draw_data();
 }

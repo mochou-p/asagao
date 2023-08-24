@@ -5,6 +5,7 @@
 #include "window.hpp"
 #include "style.hpp"
 #include "utils.hpp"
+#include "renderer.hpp"
 
 #define VSYNC 1
 #define OPENGL_VER_MAJOR 4
@@ -22,21 +23,12 @@ framebuffer_size_callback([[maybe_unused]] GLFWwindow* window,
         width * Layout::scene.size.x, height * Layout::scene.size.y);
 }
 
-static void
-load_opengl_functions()
-{
-    if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
-        quit("gladLoadGLLoader failed");
-
-    std::cout << "OpenGL\t" << glGetString(GL_VERSION) << std::endl;
-}
-
 Window::Window(const std::string& title,
                      int          width,
                      int          height)
 {
     init(title, width, height);
-    load_opengl_functions();
+    Renderer::init();
     framebuffer_size_callback(handle, width, height);
 }
 
