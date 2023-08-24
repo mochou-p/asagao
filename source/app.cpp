@@ -7,6 +7,7 @@
 #include "utils.hpp"
 #include "texture.hpp"
 #include "objects.hpp"
+#include "renderer.hpp"
 
 App::App(const std::string& name,
                int          width,
@@ -71,13 +72,14 @@ App::run()
 
     shader.use();
 
+    Renderer renderer;
+
     while (m_window->is_open())
     {
         m_window->events();
-        m_window->clear();
 
-        glDrawElements(GL_TRIANGLES, ib.get_count(), GL_UNSIGNED_INT,
-            nullptr);
+        renderer.clear();
+        renderer.draw(va, ib, shader);
 
         m_interface->draw();
 

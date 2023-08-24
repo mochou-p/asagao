@@ -17,7 +17,6 @@ public:
 
     bool is_open()      { return !glfwWindowShouldClose(handle); }
     void events()       { glfwPollEvents();                      }
-    void clear()        { glClear(GL_COLOR_BUFFER_BIT);          }
     void swap_buffers() { glfwSwapBuffers(handle);               }
 
     static inline GLFWwindow* handle;
