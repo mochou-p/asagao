@@ -6,7 +6,8 @@
 #define __renderer_hpp_
 
 #include "glad/glad.h"
-#include "objects.hpp"
+#include "vertex_array.hpp"
+#include "index_buffer.hpp"
 #include "shader.hpp"
 
 class Renderer
