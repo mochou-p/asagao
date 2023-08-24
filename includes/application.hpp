@@ -9,9 +9,8 @@ class Application
 {
 public:
     Application() {};
-    ~Application() {}
 
-    void run();
+    void run() const;
 };
 
 #endif  // __application_hpp_

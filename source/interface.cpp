@@ -100,7 +100,7 @@ render_draw_data()
 }
 
 void
-Interface::draw()
+Interface::draw() const
 {
     new_frame();
     update_widgets();

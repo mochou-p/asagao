@@ -3,6 +3,10 @@
 
 #include "vertex_buffer_layout.hpp"
 
+VertexBufferLayout::VertexBufferLayout()
+: m_stride(0)
+{}
+
 static GLboolean
 get_type_normalisation(GLenum type)
 {

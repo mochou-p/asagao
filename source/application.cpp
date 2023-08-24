@@ -13,7 +13,7 @@
 #define WINDOW_HEIGHT 900
 
 void
-Application::run()
+Application::run() const
 {
     const float vertices[]
     {
@@ -70,13 +70,13 @@ Application::run()
 
     while (window.is_open())
     {
-        window.events();
+        window.poll_events();
 
         renderer.clear();
 
-        shader.set_int("u_texture", saber_tex.get_order());
+        shader.set_int("u_texture", saber_tex.get_slot());
         renderer.draw(va, saber_ib, shader);
-        shader.set_int("u_texture", gudako_tex.get_order());
+        shader.set_int("u_texture", gudako_tex.get_slot());
         renderer.draw(va, gudako_ib, shader);
 
         ui.draw();

@@ -3,22 +3,39 @@
 
 #include "vertex_array.hpp"
 
+VertexArray::VertexArray()
+{
+    glGenVertexArrays(1, &m_id);
+}
+
+VertexArray::~VertexArray()
+{
+    glDeleteVertexArrays(1, &m_id);
+}
+
 void
-VertexArray::add_vertex_buffer([[maybe_unused]] VertexBuffer&       vb,
-                                                VertexBufferLayout& layout)
+VertexArray::bind() const
+{
+    glBindVertexArray(m_id);
+}
+
+void
+VertexArray::add_vertex_buffer(const VertexBuffer&       vb,
+                               const VertexBufferLayout& layout) const
 {
     bind();
+    vb.bind();
 
     const auto& attributes = layout.get_attributes();
-    GLuint pointer = 0;
+    GLuint offset = 0;
 
     for (GLuint i = 0; i < attributes.size(); ++i)
     {
         const auto& attrib = attributes[i];
         glEnableVertexAttribArray(i);
         glVertexAttribPointer(i, attrib.count, attrib.type, attrib.normalized,
-            layout.get_stride(), (const void*) (unsigned long long) pointer);
-        pointer +=
+            layout.get_stride(), (const void*) (unsigned long long) offset);
+        offset +=
             attrib.count * VertexAttribute::get_size_of_type(attrib.type);
     }
 }

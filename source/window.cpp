@@ -32,6 +32,29 @@ Window::Window(const std::string& title,
     framebuffer_size_callback(handle, width, height);
 }
 
+Window::~Window()
+{
+    glfwTerminate();
+}
+
+bool
+Window::is_open() const
+{
+    return !glfwWindowShouldClose(handle);
+}
+
+void
+Window::poll_events() const
+{
+    glfwPollEvents();
+}
+
+void
+Window::swap_buffers() const
+{
+    glfwSwapBuffers(handle);
+}
+
 void
 Window::init(const std::string& title,
                    int          width,

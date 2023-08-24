@@ -13,11 +13,11 @@ class Window
 {
 public:
     Window(const std::string& title, int width, int height);
-    ~Window() { glfwTerminate(); }
+    ~Window();
 
-    bool is_open()      { return !glfwWindowShouldClose(handle); }
-    void events()       { glfwPollEvents();                      }
-    void swap_buffers() { glfwSwapBuffers(handle);               }
+    bool is_open()      const;
+    void poll_events()  const;
+    void swap_buffers() const;
 
     static inline GLFWwindow* handle;
     static inline int         width;

@@ -11,7 +11,7 @@ public:
     Interface();
     ~Interface();
 
-    void draw();
+    void draw() const;
 };
 
 #endif  // __interface_hpp_

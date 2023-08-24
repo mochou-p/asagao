@@ -11,10 +11,10 @@ class IndexBuffer
 {
 public:
     IndexBuffer(const GLuint* data, GLuint count);
-    ~IndexBuffer() { glDeleteBuffers(1, &m_id); }
+    ~IndexBuffer();
 
-    void bind() { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_id); }
-    GLuint get_count() { return m_count; }
+    void bind() const;
+    inline GLuint get_count() const { return m_count; }
 private:
     GLuint m_id;
     GLuint m_count;

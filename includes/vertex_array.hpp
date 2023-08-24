@@ -12,11 +12,12 @@
 class VertexArray
 {
 public:
-    VertexArray()  { glGenVertexArrays(1, &m_id); }
-    ~VertexArray() { glDeleteVertexArrays(1, &m_id); }
+    VertexArray();
+    ~VertexArray();
 
-    void bind() { glBindVertexArray(m_id); }
-    void add_vertex_buffer(VertexBuffer& vb, VertexBufferLayout& layout);
+    void bind() const;
+    void add_vertex_buffer(const VertexBuffer& vb,
+        const VertexBufferLayout& layout) const;
 private:
     GLuint m_id;
 };

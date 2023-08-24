@@ -12,13 +12,13 @@ class Texture
 {
 public:
     Texture(const std::string& filepath);
-    ~Texture() { glDeleteTextures(1, &m_id); }
+    ~Texture();
 
     static inline GLuint count = 0;
 
-    GLuint get_order() { return m_order; }
+    inline GLuint get_slot() const { return m_slot; }
 private:
-    GLuint m_order;
+    GLuint m_slot;
     GLuint m_id;
 };
 

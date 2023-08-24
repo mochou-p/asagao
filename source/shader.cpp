@@ -89,3 +89,21 @@ Shader::Shader(const std::string& filepath)
     opengl_check_error(m_id, GL_LINK_STATUS, "glLinkProgram", &glGetProgramiv,
         &glGetProgramInfoLog);
 }
+
+Shader::~Shader()
+{
+    glDeleteProgram(m_id);
+}
+
+void
+Shader::use() const
+{
+    glUseProgram(m_id);
+}
+
+void
+Shader::set_int(const std::string& location,
+                      int          value) const
+{
+    glUniform1i(glGetUniformLocation(m_id, location.c_str()), value);
+}

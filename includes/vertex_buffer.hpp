@@ -11,9 +11,9 @@ class VertexBuffer
 {
 public:
     VertexBuffer(const void* data, GLsizeiptr size);
-    ~VertexBuffer() { glDeleteBuffers(1, &m_id); }
+    ~VertexBuffer();
 
-    void bind() { glBindBuffer(GL_ARRAY_BUFFER, m_id); }
+    void bind() const;
 private:
     GLuint m_id;
 };

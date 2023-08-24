@@ -30,13 +30,6 @@ debug_message_callback([[maybe_unused]]       GLenum  source,
         << ')'   << std::endl;
 }
 
-Renderer::Renderer()
-{
-    if (instance) quit("only one instance of renderer is allowed");
-
-    instance = this;
-}
-
 void
 Renderer::init()
 {
@@ -45,13 +38,20 @@ Renderer::init()
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 
     glEnable(GL_DEBUG_OUTPUT);
+    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
     glDebugMessageCallback(debug_message_callback, nullptr);
 }
 
 void
-Renderer::draw(VertexArray& va,
-               IndexBuffer& ib,
-               Shader&      shader)
+Renderer::clear() const
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+}
+
+void
+Renderer::draw(const VertexArray& va,
+               const IndexBuffer& ib,
+               const Shader&      shader) const
 {
     shader.use();
     va.bind();

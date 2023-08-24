@@ -12,11 +12,10 @@ class Shader
 {
 public:
     Shader(const std::string& filepath);
-    ~Shader() { glDeleteProgram(m_id); }
+    ~Shader();
 
-    void use() { glUseProgram(m_id); }
-    void set_int(const std::string& location, int val)
-    { glUniform1i(glGetUniformLocation(m_id, location.c_str()), val); }
+    void use() const;
+    void set_int(const std::string& location, int value) const;
 private:
     GLuint m_id;
 };

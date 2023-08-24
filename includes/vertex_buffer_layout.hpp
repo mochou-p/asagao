@@ -31,13 +31,11 @@ struct VertexAttribute
 class VertexBufferLayout
 {
 public:
-    VertexBufferLayout()
-    : m_stride{0}
-    {}
+    VertexBufferLayout();
 
     void push(GLuint count, GLenum type);
-    GLuint get_stride() { return m_stride; }
-    const std::vector<VertexAttribute>& get_attributes()
+    inline GLuint get_stride() const { return m_stride; }
+    inline const std::vector<VertexAttribute>& get_attributes() const
     { return m_attributes; }
 private:
     std::vector<VertexAttribute> m_attributes;
