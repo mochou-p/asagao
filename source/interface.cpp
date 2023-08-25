@@ -8,8 +8,31 @@
 #include "imgui_impl_opengl3.h"
 #include "window.hpp"
 #include "style.hpp"
+#include "application.hpp"
 
 using namespace ImGui;
+
+static void
+set_theme()
+{
+    ImGuiStyle& style = GetStyle();
+    style.WindowBorderSize = 0.0f;
+
+    ImVec4* colors = style.Colors;
+    colors[ImGuiCol_TitleBg]        = {0.3f, 0.3f, 0.3f, 1.0f};
+    colors[ImGuiCol_TitleBgActive]  = {0.3f, 0.3f, 0.3f, 1.0f};
+    colors[ImGuiCol_WindowBg]       = {0.2f, 0.2f, 0.2f, 1.0f};
+
+    colors[ImGuiCol_FrameBg]        = {0.3f, 0.3f, 0.3f, 1.0f};
+    colors[ImGuiCol_FrameBgHovered] = {0.4f, 0.4f, 0.4f, 1.0f};
+    colors[ImGuiCol_FrameBgActive]  = {0.5f, 0.5f, 0.5f, 1.0f};
+
+    colors[ImGuiCol_CheckMark]      = {1.0f, 1.0f, 1.0f, 1.0f};
+
+    colors[ImGuiCol_Button]         = {0.3f, 0.3f, 0.3f, 1.0f};
+    colors[ImGuiCol_ButtonHovered]  = {0.4f, 0.4f, 0.4f, 1.0f};
+    colors[ImGuiCol_ButtonActive]   = {0.5f, 0.5f, 0.5f, 1.0f};
+}
 
 Interface::Interface()
 {
@@ -24,6 +47,7 @@ Interface::Interface()
     std::cout << "ImGui\t" << IMGUI_VERSION << std::endl;
 
     GetIO().IniFilename = nullptr;
+    set_theme();
 }
 
 Interface::~Interface()
@@ -42,43 +66,53 @@ new_frame()
 }
 
 static void
-hierarchy()
+objects()
 {
-    static const char*            title = "Hierarchy";
+    static const char*            title = "Objects";
     static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove
         | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
+    static GLuint i;
+    static bool _ = true;
 
     SetNextWindowPos
     ({
-        Layout::hierarchy.pos.x * Window::width,
-        Layout::hierarchy.pos.y * Window::height
+        Layout::objects.pos.x * Window::width,
+        Layout::objects.pos.y * Window::height
     });
     SetNextWindowSize
     ({
-        Layout::hierarchy.size.x * Window::width,
-        Layout::hierarchy.size.y * Window::height
+        Layout::objects.size.x * Window::width,
+        Layout::objects.size.y * Window::height
     });
 
     Begin(title, nullptr, flags);
+
+    for (i = 0; i < Application::objects.size(); ++i)
+    {
+        Checkbox("##_", &_);
+        SameLine();
+        Button(Application::objects[i]);
+    }
+
     End();
 }
 
 static void
-inspector()
+components()
 {
-    static const char*            title = "Inspector";
+    static const char*            title = "Components";
     static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove
         | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
 
     SetNextWindowPos
     ({
-        Layout::inspector.pos.x * Window::width,
-        Layout::inspector.pos.y * Window::height
+        Layout::components.pos.x * Window::width,
+        Layout::components.pos.y * Window::height
     });
     SetNextWindowSize
     ({
-        Layout::inspector.size.x * Window::width,
-        Layout::inspector.size.y * Window::height
+        Layout::components.size.x * Window::width,
+        Layout::components.size.y * Window::height
     });
 
     Begin(title, nullptr, flags);
@@ -88,8 +122,8 @@ inspector()
 static void
 update_widgets()
 {
-    hierarchy();
-    inspector();
+    objects();
+    components();
 }
 
 static void

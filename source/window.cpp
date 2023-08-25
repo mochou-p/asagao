@@ -69,6 +69,9 @@ Window::init(const std::string& title,
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_VER_MINOR);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+    // temp
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+
     handle = glfwCreateWindow(width, height, title.c_str(), nullptr,
         nullptr);
 
