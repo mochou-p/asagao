@@ -71,7 +71,7 @@ objects()
     static const char*            title = "Objects";
     static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove
         | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
-    static GLuint i;
+    static unsigned int i;
     static bool _ = true;
 
     SetNextWindowPos

@@ -9,6 +9,7 @@
 #include "interface.hpp"
 #include "glm.hpp"
 #include "gtc/matrix_transform.hpp"
+#include "style.hpp"
 
 #define APP_NAME "Asagao"
 #define WINDOW_WIDTH 1600
@@ -23,15 +24,15 @@ Application::run() const
     //  x      y     | u     v
 
     // saber
-       -2.0f, -0.5f,   0.0f, 0.0f,
-       -1.0f, -0.5f,   1.0f, 0.0f,
-       -1.0f,  0.5f,   1.0f, 1.0f,
-       -2.0f,  0.5f,   0.0f, 1.0f,
+       -4.0f, -1.0f,   0.0f, 0.0f,
+       -2.0f, -1.0f,   1.0f, 0.0f,
+       -2.0f,  1.0f,   1.0f, 1.0f,
+       -4.0f,  1.0f,   0.0f, 1.0f,
     // gudako
-        1.0f, -0.5f,   0.0f, 0.0f,
-        2.0f, -0.5f,   1.0f, 0.0f,
-        2.0f,  0.5f,   1.0f, 1.0f,
-        1.0f,  0.5f,   0.0f, 1.0f
+        2.0f, -1.0f,   0.0f, 0.0f,
+        4.0f, -1.0f,   1.0f, 0.0f,
+        4.0f,  1.0f,   1.0f, 1.0f,
+        2.0f,  1.0f,   0.0f, 1.0f
     };
 
     const GLuint saber_indices[]
@@ -63,7 +64,6 @@ Application::run() const
     Shader shader("test.glsl");
     shader.use();
 
-    //                                temp
     glm::mat4 projection = glm::ortho(-4.8f, 4.8f, -4.5f, 4.5f);
     shader.set_mat4("u_mvp", projection);
 
@@ -77,11 +77,24 @@ Application::run() const
     Texture gudako_tex("gudako.png");
     objects.push_back("gudako");
 
+    float proj_w, proj_h;
+
     while (window.is_open())
     {
         window.poll_events();
 
         renderer.clear();
+
+        if (window.was_resized)
+        {
+            proj_w = Window::width  * Layout::scene.size.x * 0.01f;
+            proj_h = Window::height * Layout::scene.size.y * 0.01f;
+
+            projection = glm::ortho(-proj_w, proj_w, -proj_h, proj_h);
+            shader.set_mat4("u_mvp", projection);
+
+            window.was_resized = false;
+        }
 
         shader.set_int("u_texture", saber_tex.get_slot());
         renderer.draw(va, saber_ib, shader);

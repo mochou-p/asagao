@@ -18,6 +18,7 @@ framebuffer_size_callback([[maybe_unused]] GLFWwindow* window,
 {
     Window::width  = width;
     Window::height = height;
+    Window::was_resized = true;
 
     glViewport(width * Layout::scene.pos.x, height * Layout::scene.pos.y,
         width * Layout::scene.size.x, height * Layout::scene.size.y);
@@ -68,9 +69,6 @@ Window::init(const std::string& title,
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_VER_MAJOR);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_VER_MINOR);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    // temp
-    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
     handle = glfwCreateWindow(width, height, title.c_str(), nullptr,
         nullptr);

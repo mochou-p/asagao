@@ -7,7 +7,6 @@
 
 #define GLFW_INCLUDE_NONE
 #include "glfw3.h"
-#include "glad/glad.h"
 
 class Window
 {
@@ -22,6 +21,7 @@ public:
     static inline GLFWwindow* handle;
     static inline int         width;
     static inline int         height;
+    static inline bool        was_resized;
 private:
     void init(const std::string& title, int width, int height);
 };
