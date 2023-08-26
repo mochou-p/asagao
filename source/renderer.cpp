@@ -10,8 +10,6 @@ load_opengl_functions()
 {
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
         quit("gladLoadGLLoader failed");
-
-    std::cout << "OpenGL\t" << glGetString(GL_VERSION) << std::endl;
 }
 
 static void GLAPIENTRY

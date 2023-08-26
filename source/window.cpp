@@ -17,14 +17,15 @@ framebuffer_size_callback([[maybe_unused]] GLFWwindow* window,
                                            int         width,
                                            int         height)
 {
-    Window::was_resized = true;
-
     Window::size = {width, height};
 
-    glm::vec2 pos  {Window::size * Layout::scene.pos };
-    glm::vec2 size {Window::size * Layout::scene.size};
+    glm::vec2 pos  = {Window::size * Layout::scene.pos };
+    glm::vec2 size = {Window::size * Layout::scene.size};
 
     glViewport(pos.x, pos.y, size.x, size.y);
+
+    Application::aspect = Window::size * Layout::scene.size * Renderer::zoom;
+    Application::view_changed = true;
 }
 
 static void
@@ -34,41 +35,55 @@ scroll_callback([[maybe_unused]] GLFWwindow* window,
 {
     if (!yoffset) return;
 
-    Renderer::was_resized = true;
-
+    // to always zoom by 5% of zoom    vvvvv
     Renderer::zoom -= Renderer::zoom * 0.05f * yoffset;
+    Application::aspect = Window::size * Layout::scene.size * Renderer::zoom;
+    Application::view_changed = true;
 }
 
 static void
-key_callback([[maybe_unused]] GLFWwindow* window,
-                              int         key,
-             [[maybe_unused]] int         scancode,
-                              int         action,
-             [[maybe_unused]] int         mods)
+mouse_button_callback([[maybe_unused]] GLFWwindow* window,
+                                       int         button,
+                                       int         action,
+                      [[maybe_unused]] int         mods)
 {
-    if (action == GLFW_REPEAT) return;
+    if (button != GLFW_MOUSE_BUTTON_LEFT) return;
 
-    switch (key)
+    if (!action)
     {
-        case GLFW_KEY_W:
-        case GLFW_KEY_UP:
-            Application::moving.y += 1 == action ? 1 : -1;
-            break;
-        case GLFW_KEY_A:
-        case GLFW_KEY_LEFT:
-            Application::moving.x += 0 == action ? 1 : -1;
-            break;
-        case GLFW_KEY_S:
-        case GLFW_KEY_DOWN:
-            Application::moving.y += 0 == action ? 1 : -1;
-            break;
-        case GLFW_KEY_D:
-        case GLFW_KEY_RIGHT:
-            Application::moving.x += 1 == action ? 1 : -1;
-            break;
-        default:
-            break;
+        Window::moving_view = false;
+        return;
     }
+
+    glm::vec2 top_left     = Window::size * Layout::scene.pos;
+    glm::vec2 bottom_right = Window::size
+        * (Layout::scene.pos + Layout::scene.size);
+
+    if
+    (
+        top_left.x < Window::mouse_pos.x &&
+        Window::mouse_pos.x < bottom_right.x &&
+        top_left.y < Window::mouse_pos.y &&
+        Window::mouse_pos.y < bottom_right.y
+    )
+    { Window::moving_view = true; }
+}
+
+static void
+cursor_position_callback([[maybe_unused]] GLFWwindow* window,
+                                          double      xpos,
+                                          double      ypos)
+{
+    if (Window::moving_view)
+    {
+        glm::vec2 diff = {(Window::mouse_pos - glm::vec2(xpos, ypos))
+            * (Renderer::zoom * 2)};
+        Application::camera += glm::vec2(diff.x, -diff.y);
+
+        Application::view_changed = true;
+    }
+
+    Window::mouse_pos = {xpos, ypos};
 }
 
 Window::Window(const std::string& title,
@@ -111,8 +126,6 @@ Window::init(const std::string& title,
     if (handle)      quit("only one instance of window is allowed");
     if (!glfwInit()) quit("glfwInit failed");
 
-    std::cout << "GLFW\t" << glfwGetVersionString() << std::endl;
-
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_VER_MAJOR);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_VER_MINOR);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -122,10 +135,6 @@ Window::init(const std::string& title,
 
     if (!handle) quit("glfwCreateWindow failed");
 
-    glfwSetFramebufferSizeCallback(handle, framebuffer_size_callback);
-    glfwSetScrollCallback(         handle,           scroll_callback);
-    glfwSetKeyCallback(            handle,              key_callback);
-
     const GLFWvidmode* screen = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
     if (!screen) quit("glfwGetVideoMode failed");
@@ -134,6 +143,11 @@ Window::init(const std::string& title,
     int y = (screen->height - height) * 0.5f;
 
     glfwSetWindowPos(handle, x, y);
+
+    glfwSetFramebufferSizeCallback(handle, framebuffer_size_callback);
+    glfwSetScrollCallback(         handle,           scroll_callback);
+    glfwSetMouseButtonCallback(    handle,     mouse_button_callback);
+    glfwSetCursorPosCallback(      handle,  cursor_position_callback);
 
     glfwMakeContextCurrent(handle);
     glfwSwapInterval(VSYNC);

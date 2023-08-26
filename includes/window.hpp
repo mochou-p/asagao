@@ -21,7 +21,9 @@ public:
 
     static inline GLFWwindow* handle;
     static inline glm::vec2   size;
+    static inline glm::vec2   mouse_pos;
     static inline bool        was_resized;
+    static inline bool        moving_view;
 private:
     void init(const std::string& title, int width, int height);
 };

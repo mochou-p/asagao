@@ -63,9 +63,6 @@ Application::run() const
     Shader shader("test.glsl");
     shader.use();
 
-    glm::mat4 projection = glm::ortho(-4.8f, 4.8f, -4.5f, 4.5f);
-    shader.set_mat4("u_mvp", projection);
-
     IndexBuffer saber_ib(saber_indices,
         sizeof(saber_indices) / sizeof(GLuint));
     Texture saber_tex("saber.png");
@@ -76,10 +73,7 @@ Application::run() const
     Texture gudako_tex("gudako.png");
     objects.push_back("gudako");
 
-    glm::vec2 camera {0.0f, 0.0f};
-    glm::vec2 aspect;
-
-    bool view_changed = false;
+    aspect = (window.size * Layout::scene.size) * renderer.zoom;
 
     while (window.is_open())
     {
@@ -87,38 +81,19 @@ Application::run() const
 
         renderer.clear();
 
-        if (moving.x)
-        {
-            camera.x += moving.x * Renderer::zoom;
-            view_changed = true;
-        }
-
-        if (moving.y)
-        {
-            camera.y += moving.y * Renderer::zoom;
-            view_changed = true;
-        }
-
-        if (window.was_resized || renderer.was_resized)
-        {
-            aspect = (window.size * Layout::scene.size) * renderer.zoom;
-
-            window.was_resized   = false;
-            renderer.was_resized = false;
-            view_changed         = true;
-        }
-
         if (view_changed)
         {
-            projection = glm::ortho
+            shader.set_mat4
             (
-               -aspect.x + camera.x,
-                aspect.x + camera.x,
-               -aspect.y + camera.y,
-                aspect.y + camera.y
+                "u_mvp",
+                glm::ortho
+                (
+                   -aspect.x + camera.x,
+                    aspect.x + camera.x,
+                   -aspect.y + camera.y,
+                    aspect.y + camera.y
+                )
             );
-
-            shader.set_mat4("u_mvp", projection);
 
             view_changed = false;
         }

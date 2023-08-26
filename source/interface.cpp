@@ -44,8 +44,6 @@ Interface::Interface()
     ImGui_ImplGlfw_InitForOpenGL(Window::handle, true);
     ImGui_ImplOpenGL3_Init();
 
-    std::cout << "ImGui\t" << IMGUI_VERSION << std::endl;
-
     GetIO().IniFilename = nullptr;
     set_theme();
 }
