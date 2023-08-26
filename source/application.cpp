@@ -7,7 +7,6 @@
 #include "renderer.hpp"
 #include "window.hpp"
 #include "interface.hpp"
-#include "glm.hpp"
 #include "gtc/matrix_transform.hpp"
 #include "style.hpp"
 
@@ -77,7 +76,10 @@ Application::run() const
     Texture gudako_tex("gudako.png");
     objects.push_back("gudako");
 
-    float proj_w, proj_h;
+    glm::vec2 camera {0.0f, 0.0f};
+    glm::vec2 aspect;
+
+    bool view_changed = false;
 
     while (window.is_open())
     {
@@ -85,15 +87,40 @@ Application::run() const
 
         renderer.clear();
 
-        if (window.was_resized)
+        if (moving.x)
         {
-            proj_w = Window::width  * Layout::scene.size.x * 0.01f;
-            proj_h = Window::height * Layout::scene.size.y * 0.01f;
+            camera.x += moving.x * Renderer::zoom;
+            view_changed = true;
+        }
 
-            projection = glm::ortho(-proj_w, proj_w, -proj_h, proj_h);
+        if (moving.y)
+        {
+            camera.y += moving.y * Renderer::zoom;
+            view_changed = true;
+        }
+
+        if (window.was_resized || renderer.was_resized)
+        {
+            aspect = (window.size * Layout::scene.size) * renderer.zoom;
+
+            window.was_resized   = false;
+            renderer.was_resized = false;
+            view_changed         = true;
+        }
+
+        if (view_changed)
+        {
+            projection = glm::ortho
+            (
+               -aspect.x + camera.x,
+                aspect.x + camera.x,
+               -aspect.y + camera.y,
+                aspect.y + camera.y
+            );
+
             shader.set_mat4("u_mvp", projection);
 
-            window.was_resized = false;
+            view_changed = false;
         }
 
         shader.set_int("u_texture", saber_tex.get_slot());

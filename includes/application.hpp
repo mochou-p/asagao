@@ -6,6 +6,7 @@
 #define __application_hpp_
 
 #include <vector>
+#include "glm.hpp"
 
 class Application
 {
@@ -15,6 +16,7 @@ public:
     void run() const;
 
     static inline std::vector<const char*> objects;
+    static inline glm::vec2                moving;
 };
 
 #endif  // __application_hpp_

@@ -6,6 +6,7 @@
 #include "style.hpp"
 #include "utils.hpp"
 #include "renderer.hpp"
+#include "application.hpp"
 
 #define VSYNC 1
 #define OPENGL_VER_MAJOR 4
@@ -16,12 +17,58 @@ framebuffer_size_callback([[maybe_unused]] GLFWwindow* window,
                                            int         width,
                                            int         height)
 {
-    Window::width  = width;
-    Window::height = height;
     Window::was_resized = true;
 
-    glViewport(width * Layout::scene.pos.x, height * Layout::scene.pos.y,
-        width * Layout::scene.size.x, height * Layout::scene.size.y);
+    Window::size = {width, height};
+
+    glm::vec2 pos  {Window::size * Layout::scene.pos };
+    glm::vec2 size {Window::size * Layout::scene.size};
+
+    glViewport(pos.x, pos.y, size.x, size.y);
+}
+
+static void
+scroll_callback([[maybe_unused]] GLFWwindow* window,
+                [[maybe_unused]] double      xoffset,
+                                 double      yoffset)
+{
+    if (!yoffset) return;
+
+    Renderer::was_resized = true;
+
+    Renderer::zoom -= Renderer::zoom * 0.05f * yoffset;
+}
+
+static void
+key_callback([[maybe_unused]] GLFWwindow* window,
+                              int         key,
+             [[maybe_unused]] int         scancode,
+                              int         action,
+             [[maybe_unused]] int         mods)
+{
+    if (action == GLFW_REPEAT) return;
+
+    switch (key)
+    {
+        case GLFW_KEY_W:
+        case GLFW_KEY_UP:
+            Application::moving.y += 1 == action ? 1 : -1;
+            break;
+        case GLFW_KEY_A:
+        case GLFW_KEY_LEFT:
+            Application::moving.x += 0 == action ? 1 : -1;
+            break;
+        case GLFW_KEY_S:
+        case GLFW_KEY_DOWN:
+            Application::moving.y += 0 == action ? 1 : -1;
+            break;
+        case GLFW_KEY_D:
+        case GLFW_KEY_RIGHT:
+            Application::moving.x += 1 == action ? 1 : -1;
+            break;
+        default:
+            break;
+    }
 }
 
 Window::Window(const std::string& title,
@@ -76,6 +123,8 @@ Window::init(const std::string& title,
     if (!handle) quit("glfwCreateWindow failed");
 
     glfwSetFramebufferSizeCallback(handle, framebuffer_size_callback);
+    glfwSetScrollCallback(         handle,           scroll_callback);
+    glfwSetKeyCallback(            handle,              key_callback);
 
     const GLFWvidmode* screen = glfwGetVideoMode(glfwGetPrimaryMonitor());
 

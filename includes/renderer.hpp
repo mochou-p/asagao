@@ -20,6 +20,9 @@ public:
     void clear() const;
     void draw(const VertexArray& va, const IndexBuffer& ib,
         const Shader& shader) const;
+
+    static inline float zoom = 0.01f;
+    static inline bool  was_resized;
 private:
     GLuint m_id;
 };

@@ -7,6 +7,7 @@
 
 #define GLFW_INCLUDE_NONE
 #include "glfw3.h"
+#include "glm.hpp"
 
 class Window
 {
@@ -19,8 +20,7 @@ public:
     void swap_buffers() const;
 
     static inline GLFWwindow* handle;
-    static inline int         width;
-    static inline int         height;
+    static inline glm::vec2   size;
     static inline bool        was_resized;
 private:
     void init(const std::string& title, int width, int height);

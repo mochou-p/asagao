@@ -76,13 +76,13 @@ objects()
 
     SetNextWindowPos
     ({
-        Layout::objects.pos.x * Window::width,
-        Layout::objects.pos.y * Window::height
+        Layout::objects.pos.x * Window::size.x,
+        Layout::objects.pos.y * Window::size.y
     });
     SetNextWindowSize
     ({
-        Layout::objects.size.x * Window::width,
-        Layout::objects.size.y * Window::height
+        Layout::objects.size.x * Window::size.x,
+        Layout::objects.size.y * Window::size.y
     });
 
     Begin(title, nullptr, flags);
@@ -106,13 +106,13 @@ components()
 
     SetNextWindowPos
     ({
-        Layout::components.pos.x * Window::width,
-        Layout::components.pos.y * Window::height
+        Layout::components.pos.x * Window::size.x,
+        Layout::components.pos.y * Window::size.y
     });
     SetNextWindowSize
     ({
-        Layout::components.size.x * Window::width,
-        Layout::components.size.y * Window::height
+        Layout::components.size.x * Window::size.x,
+        Layout::components.size.y * Window::size.y
     });
 
     Begin(title, nullptr, flags);
