@@ -5,7 +5,6 @@
 #ifndef __renderer_hpp_
 #define __renderer_hpp_
 
-#include "glad/glad.h"
 #include "vertex_array.hpp"
 #include "index_buffer.hpp"
 #include "shader.hpp"
@@ -24,7 +23,7 @@ public:
     static inline float zoom = 0.01f;
     static inline bool  was_resized;
 private:
-    GLuint m_id;
+    unsigned int m_id;
 };
 
 #endif  // __renderer_hpp_

@@ -6,16 +6,20 @@
 #include <sstream>
 #include "shader.hpp"
 #include "utils.hpp"
+#include "glad/glad.h"
 
 #define SHADER_PATH "resources/shaders/"
 #define SHADER_STAGE_TAG_START "#stage "
 #define SHADER_STAGE_TAG_END "#endstage"
 
-static GLuint
-create_shader(const std::string& code,
-                    int          stage)
+static unsigned int
+create_shader
+(
+ const std::string& code,
+       int          stage
+)
 {
-    GLuint id = glCreateShader(stage);
+    unsigned int id = glCreateShader(stage);
     const char* code_cstr = code.c_str();
 
     glShaderSource(id, 1, &code_cstr, nullptr);
@@ -30,18 +34,15 @@ create_shader(const std::string& code,
 struct stage
 {
     std::string tag;
-    GLint       type;
-
-    stage(const std::string& tag,
-                GLint        type)
-    :  tag{tag}
-    , type{type}
-    {}
+    int         type;
 };
 
 static void
-parse_shader(const std::string& filepath,
-                   GLuint       shader)
+parse_shader
+(
+ const std::string& filepath,
+       unsigned int shader
+)
 {
     static const std::vector<stage> stages
     {
@@ -70,7 +71,7 @@ parse_shader(const std::string& filepath,
                 code += line + "\n";
             }
 
-            GLuint shader_stage = create_shader(code, s.type);
+            unsigned int shader_stage = create_shader(code, s.type);
             glAttachShader(shader, shader_stage);
             glDeleteShader(shader_stage);
 
@@ -102,15 +103,21 @@ Shader::use() const
 }
 
 void
-Shader::set_int(const std::string& location,
-                      int          value) const
+Shader::set_int
+(
+ const std::string& location,
+       int          value
+) const
 {
     glUniform1i(glGetUniformLocation(m_id, location.c_str()), value);
 }
 
 void
-Shader::set_mat4(const std::string& location,
-                 const glm::mat4&   value) const
+Shader::set_mat4
+(
+ const std::string& location,
+ const glm::mat4&   value
+) const
 {
     glUniformMatrix4fv(glGetUniformLocation(m_id, location.c_str()),
         1, GL_FALSE, &value[0][0]);

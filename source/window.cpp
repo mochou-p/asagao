@@ -13,9 +13,12 @@
 #define OPENGL_VER_MINOR 6
 
 static void
-framebuffer_size_callback([[maybe_unused]] GLFWwindow* window,
-                                           int         width,
-                                           int         height)
+framebuffer_size_callback
+(
+ GLFWwindow* window,
+ int         width,
+ int         height
+)
 {
     Window::size = {width, height};
 
@@ -26,12 +29,17 @@ framebuffer_size_callback([[maybe_unused]] GLFWwindow* window,
 
     Application::aspect = Window::size * Layout::scene.size * Renderer::zoom;
     Application::view_changed = true;
+
+    (void)(window);
 }
 
 static void
-scroll_callback([[maybe_unused]] GLFWwindow* window,
-                [[maybe_unused]] double      xoffset,
-                                 double      yoffset)
+scroll_callback
+(
+ GLFWwindow* window,
+ double      xoffset,
+ double      yoffset
+)
 {
     if (!yoffset) return;
 
@@ -39,13 +47,19 @@ scroll_callback([[maybe_unused]] GLFWwindow* window,
     Renderer::zoom -= Renderer::zoom * 0.05f * yoffset;
     Application::aspect = Window::size * Layout::scene.size * Renderer::zoom;
     Application::view_changed = true;
+
+    (void)(window);
+    (void)(xoffset);
 }
 
 static void
-mouse_button_callback([[maybe_unused]] GLFWwindow* window,
-                                       int         button,
-                                       int         action,
-                      [[maybe_unused]] int         mods)
+mouse_button_callback
+(
+ GLFWwindow* window,
+ int         button,
+ int         action,
+ int         mods
+)
 {
     if (button != GLFW_MOUSE_BUTTON_LEFT) return;
 
@@ -67,12 +81,18 @@ mouse_button_callback([[maybe_unused]] GLFWwindow* window,
         Window::mouse_pos.y < bottom_right.y
     )
     { Window::moving_view = true; }
+
+    (void)(window);
+    (void)(mods);
 }
 
 static void
-cursor_position_callback([[maybe_unused]] GLFWwindow* window,
-                                          double      xpos,
-                                          double      ypos)
+cursor_position_callback
+(
+ GLFWwindow* window,
+ double      xpos,
+ double      ypos
+)
 {
     if (Window::moving_view)
     {
@@ -84,11 +104,16 @@ cursor_position_callback([[maybe_unused]] GLFWwindow* window,
     }
 
     Window::mouse_pos = {xpos, ypos};
+
+    (void)(window);
 }
 
-Window::Window(const std::string& title,
-                     int          width,
-                     int          height)
+Window::Window
+(
+ const std::string& title,
+       int          width,
+       int          height
+)
 {
     init(title, width, height);
     Renderer::init();
@@ -119,9 +144,12 @@ Window::swap_buffers() const
 }
 
 void
-Window::init(const std::string& title,
-                   int          width,
-                   int          height)
+Window::init
+(
+ const std::string& title,
+       int          width,
+       int          height
+)
 {
     if (handle)      quit("only one instance of window is allowed");
     if (!glfwInit()) quit("glfwInit failed");

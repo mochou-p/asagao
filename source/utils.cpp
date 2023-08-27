@@ -14,13 +14,16 @@ quit(const std::string& message)
 }
 
 void
-opengl_check_error(      GLuint                id,
-                         GLint                 status,
-                   const std::string&          message,
-                         opengl_iv_func*       iv_func,
-                         opengl_info_log_func* info_func)
+opengl_check_error
+(
+       unsigned int          id,
+       int                   status,
+ const std::string&          message,
+       opengl_iv_func*       iv_func,
+       opengl_info_log_func* info_func
+)
 {
-    GLint success;
+    int success;
     (*iv_func)(id, status, &success);
 
     if (!success)

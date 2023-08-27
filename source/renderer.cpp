@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include "renderer.hpp"
-#include "window.hpp"
+#include "glfw3.h"
 
 static void
 load_opengl_functions()
@@ -13,19 +13,27 @@ load_opengl_functions()
 }
 
 static void GLAPIENTRY
-debug_message_callback([[maybe_unused]]       GLenum  source,
-                                              GLenum  type,
-                       [[maybe_unused]]       GLuint  id,
-                                              GLenum  severity,
-                       [[maybe_unused]]       GLsizei length,
-                                        const GLchar* message,
-                       [[maybe_unused]] const void*   param)
+debug_message_callback
+(
+       unsigned int source,
+       unsigned int type,
+       unsigned int id,
+       unsigned int severity,
+       int          length,
+ const char*        message,
+ const void*        param
+)
 {
     std::cout
         << '('   << "type     = 0x" << std::hex << type
         << "\n " << "severity = 0x" << std::hex << severity
         << "\n " << "message  = "   <<             message
         << ')'   << std::endl;
+
+    (void)(source);
+    (void)(id);
+    (void)(length);
+    (void)(param);
 }
 
 void
@@ -47,9 +55,12 @@ Renderer::clear() const
 }
 
 void
-Renderer::draw(const VertexArray& va,
-               const IndexBuffer& ib,
-               const Shader&      shader) const
+Renderer::draw
+(
+ const VertexArray& va,
+ const IndexBuffer& ib,
+ const Shader&      shader
+) const
 {
     shader.use();
     va.bind();

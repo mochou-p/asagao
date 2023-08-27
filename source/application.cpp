@@ -34,13 +34,13 @@ Application::run() const
         2.0f,  1.0f,   0.0f, 1.0f
     };
 
-    const GLuint saber_indices[]
+    const unsigned int saber_indices[]
     {
         0, 1, 2,
         2, 3, 0
     };
 
-    const GLuint gudako_indices[]
+    const unsigned int gudako_indices[]
     {
         4, 5, 6,
         6, 7, 4
@@ -64,12 +64,12 @@ Application::run() const
     shader.use();
 
     IndexBuffer saber_ib(saber_indices,
-        sizeof(saber_indices) / sizeof(GLuint));
+        sizeof(saber_indices) / sizeof(unsigned int));
     Texture saber_tex("saber.png");
     objects.push_back("saber");
 
     IndexBuffer gudako_ib(gudako_indices,
-        sizeof(gudako_indices) / sizeof(GLuint));
+        sizeof(gudako_indices) / sizeof(unsigned int));
     Texture gudako_tex("gudako.png");
     objects.push_back("gudako");
 

@@ -6,7 +6,6 @@
 #define __shader_hpp_
 
 #include <string>
-#include "glad/glad.h"
 #include "glm.hpp"
 
 class Shader
@@ -19,7 +18,7 @@ public:
     void set_int(const std::string& location, int value) const;
     void set_mat4(const std::string& location, const glm::mat4& value) const;
 private:
-    GLuint m_id;
+    unsigned int m_id;
 };
 
 #endif  // __shader_hpp_

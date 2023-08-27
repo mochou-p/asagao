@@ -7,8 +7,8 @@ VertexBufferLayout::VertexBufferLayout()
 : m_stride(0)
 {}
 
-static GLboolean
-get_type_normalisation(GLenum type)
+static bool
+get_type_normalisation(unsigned int type)
 {
     switch (type)
     {
@@ -21,8 +21,11 @@ get_type_normalisation(GLenum type)
 }
 
 void
-VertexBufferLayout::push(GLuint count,
-                         GLenum type)
+VertexBufferLayout::push
+(
+ unsigned int count,
+ unsigned int type
+)
 {
     m_attributes.push_back({count, type, get_type_normalisation(type)});
     m_stride += count * VertexAttribute::get_size_of_type(type);

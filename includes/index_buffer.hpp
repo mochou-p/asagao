@@ -5,19 +5,17 @@
 #ifndef __index_buffer_hpp_
 #define __index_buffer_hpp_
 
-#include "glad/glad.h"
-
 class IndexBuffer
 {
 public:
-    IndexBuffer(const GLuint* data, GLuint count);
+    IndexBuffer(const unsigned int* data, unsigned int count);
     ~IndexBuffer();
 
     void bind() const;
-    inline GLuint get_count() const { return m_count; }
+    inline unsigned int get_count() const { return m_count; }
 private:
-    GLuint m_id;
-    GLuint m_count;
+    unsigned int m_id;
+    unsigned int m_count;
 };
 
 #endif  // __index_buffer_hpp_

@@ -1,7 +1,6 @@
 // asagao/source/interface.cpp
 
 
-#include <iostream>
 #include "interface.hpp"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"

@@ -5,17 +5,17 @@
 #ifndef __vertex_buffer_hpp_
 #define __vertex_buffer_hpp_
 
-#include "glad/glad.h"
+#include <cstddef>
 
 class VertexBuffer
 {
 public:
-    VertexBuffer(const void* data, GLsizeiptr size);
+    VertexBuffer(const void* data, size_t size);
     ~VertexBuffer();
 
     void bind() const;
 private:
-    GLuint m_id;
+    unsigned int m_id;
 };
 
 #endif  // __vertex_buffer_hpp_

@@ -5,7 +5,6 @@
 #ifndef __style_hpp_
 #define __style_hpp_
 
-#include "imgui.h"
 #include "glm.hpp"
 
 struct layout

@@ -2,9 +2,13 @@
 
 
 #include "vertex_buffer.hpp"
+#include "glad/glad.h"
 
-VertexBuffer::VertexBuffer(const void*      data,
-                                 GLsizeiptr size)
+VertexBuffer::VertexBuffer
+(
+ const void*  data,
+       size_t size
+)
 {
     glGenBuffers(1, &m_id);
     glBindBuffer(GL_ARRAY_BUFFER, m_id);
