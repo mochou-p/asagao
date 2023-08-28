@@ -43,9 +43,18 @@ scroll_callback
 {
     if (!yoffset) return;
 
-    // to always zoom by 5% of zoom    vvvvv
+    glm::vec2 mouse_pos_frac = (Window::mouse_pos / Window::size);
+    mouse_pos_frac   *=  2;
+    mouse_pos_frac   -=  1;
+    mouse_pos_frac.y *= -1;
+    mouse_pos_frac   *= yoffset / abs(yoffset);
+
+    Application::camera += mouse_pos_frac * Window::size * Renderer::zoom
+        * 0.125f;
+
     Renderer::zoom -= Renderer::zoom * 0.05f * yoffset;
     Application::aspect = Window::size * Layout::scene.size * Renderer::zoom;
+
     Application::view_changed = true;
 
     (void)(window);

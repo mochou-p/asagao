@@ -102,23 +102,36 @@ Shader::use() const
     glUseProgram(m_id);
 }
 
+int
+Shader::get_uniform_location(const std::string& name)
+{
+    if (m_uniform_location_cache.find(name) != m_uniform_location_cache.end())
+        return m_uniform_location_cache[name];
+
+    int location = glGetUniformLocation(m_id, name.c_str());
+
+    if (location == -1) quit("cannot find uniform location " + name);
+
+    m_uniform_location_cache[name] = location;
+    return location;    
+}
+
 void
 Shader::set_int
 (
- const std::string& location,
+ const std::string& name,
        int          value
-) const
+)
 {
-    glUniform1i(glGetUniformLocation(m_id, location.c_str()), value);
+    glUniform1i(get_uniform_location(name), value);
 }
 
 void
 Shader::set_mat4
 (
- const std::string& location,
+ const std::string& name,
  const glm::mat4&   value
-) const
+)
 {
-    glUniformMatrix4fv(glGetUniformLocation(m_id, location.c_str()),
-        1, GL_FALSE, &value[0][0]);
+    glUniformMatrix4fv(get_uniform_location(name), 1, GL_FALSE, &value[0][0]);
 }

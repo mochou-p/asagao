@@ -6,6 +6,7 @@
 #define __shader_hpp_
 
 #include <string>
+#include <map>
 #include "glm.hpp"
 
 class Shader
@@ -15,10 +16,13 @@ public:
     ~Shader();
 
     void use() const;
-    void set_int(const std::string& location, int value) const;
-    void set_mat4(const std::string& location, const glm::mat4& value) const;
+    void set_int(const std::string& name, int value);
+    void set_mat4(const std::string& name, const glm::mat4& value);
 private:
-    unsigned int m_id;
+    int get_uniform_location(const std::string& name);
+
+    unsigned int               m_id;
+    std::map<std::string, int> m_uniform_location_cache;
 };
 
 #endif  // __shader_hpp_

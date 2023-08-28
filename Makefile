@@ -25,7 +25,6 @@ LINKS     := -lopengl32 -lglfw3 -lgdi32 -limgui
 
 $(APP):
 	-@ mkdir $(BIN) 2>nul ||:
-# c++23 doesnt exist yet, but g++ allows it for some reason
 	$(CXX) $(CXXFLAGS) $(SOURCES) -o $(BIN)\$@.exe \
 		$(HEADERS) $(LIBRARIES) $(LINKS)
 
