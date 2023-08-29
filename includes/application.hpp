@@ -13,11 +13,13 @@
 
 struct GameObject
 {
-    std::string              name;
-    glm::vec3                position;
-    std::unique_ptr<Texture> tex;
+    std::string name;
+    glm::vec3   position;
+    glm::vec3   scale;
+    float       rotation;
+    bool        visible;
 
-    bool         visible;
+    std::unique_ptr<Texture> tex;
 
     GameObject
     (
@@ -27,6 +29,8 @@ struct GameObject
     )
     :     name{name}
     , position{position.x, position.y, 0.0f}
+    ,    scale{1.0f, 1.0f, 1.0f}
+    , rotation{0.0f}
     ,  visible{true}
     {
         tex = std::make_unique<Texture>(texture_filepath);

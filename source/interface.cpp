@@ -39,6 +39,9 @@ set_theme()
     colors[ImGuiCol_Separator]        = {0.5f, 0.5f, 0.5f, 1.0f};
     colors[ImGuiCol_SeparatorHovered] = {0.5f, 0.5f, 0.5f, 1.0f};
     colors[ImGuiCol_SeparatorActive]  = {0.5f, 0.5f, 0.5f, 1.0f};
+
+    colors[ImGuiCol_SliderGrab]       = {0.6f, 0.6f, 0.6f, 1.0f};
+    colors[ImGuiCol_SliderGrabActive] = {0.8f, 0.8f, 0.8f, 1.0f};
 }
 
 Interface::Interface()
@@ -143,6 +146,21 @@ components()
         -1000.0f, 1000.0f);
     DragFloat("Y", &Application::selected_obj->position.y, 1.0f,
         -1000.0f, 1000.0f);
+
+    Separator();
+
+    Text("Size");
+    // space here since label == tag/id in imgui
+    DragFloat("X ", &Application::selected_obj->scale.x, 0.01f,
+        -50.0f, 50.0f);
+    DragFloat("Y ", &Application::selected_obj->scale.y, 0.01f,
+        -50.0f, 50.0f);
+
+    Separator();
+
+    Text("Rotation");
+    SliderFloat("Degrees", &Application::selected_obj->rotation,
+        0.0f, 360.0f);
 
     End();
 }

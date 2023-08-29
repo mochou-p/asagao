@@ -53,7 +53,9 @@ Application::run() const
     shader.use();
 
     const glm::mat4 mat4_identity(1.0f);
-    glm::mat4 model, view, projection, mvp;
+    const glm::vec3 z_axis(0.0f, 0.0f, 1.0f);
+
+    glm::mat4 model, view, projection;
 
     objects.push_back({"Saber",  {-138.0f, 0.0f},  "saber.png"});
     objects.push_back({"Gudako", { 138.0f, 0.0f}, "gudako.png"});
@@ -72,10 +74,13 @@ Application::run() const
             if (!obj.visible) continue;
 
             model = glm::translate(mat4_identity, obj.position);
-            mvp   = projection * view * model;
+            model = glm::rotate(model, glm::radians(obj.rotation), z_axis);
+            model = glm::scale(model, obj.scale);
 
-            shader.set_mat4("u_mvp", mvp);
+            shader.set_mat4("u_mvp", projection * view * model);
+
             shader.set_int("u_texture", obj.tex->get_slot());
+
             renderer.draw(va, ib, shader);
         }
 
