@@ -41,6 +41,7 @@ public:
     void run() const;
 
     static inline std::deque<GameObject> objects;
+    static inline GameObject*            selected_obj = nullptr;
 
     static inline bool view_changed = true;
 

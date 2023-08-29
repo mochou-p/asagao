@@ -8,6 +8,7 @@
 #include "window.hpp"
 #include "style.hpp"
 #include "application.hpp"
+#include "renderer.hpp"
 
 using namespace ImGui;
 
@@ -18,19 +19,26 @@ set_theme()
     style.WindowBorderSize = 0.0f;
 
     ImVec4* colors = style.Colors;
-    colors[ImGuiCol_TitleBg]        = {0.3f, 0.3f, 0.3f, 1.0f};
-    colors[ImGuiCol_TitleBgActive]  = {0.3f, 0.3f, 0.3f, 1.0f};
-    colors[ImGuiCol_WindowBg]       = {0.2f, 0.2f, 0.2f, 1.0f};
+    colors[ImGuiCol_TitleBg]          = {0.3f, 0.3f, 0.3f, 1.0f};
+    colors[ImGuiCol_TitleBgActive]    = {0.3f, 0.3f, 0.3f, 1.0f};
+    colors[ImGuiCol_WindowBg]         = {0.2f, 0.2f, 0.2f, 1.0f};
 
-    colors[ImGuiCol_FrameBg]        = {0.3f, 0.3f, 0.3f, 1.0f};
-    colors[ImGuiCol_FrameBgHovered] = {0.4f, 0.4f, 0.4f, 1.0f};
-    colors[ImGuiCol_FrameBgActive]  = {0.5f, 0.5f, 0.5f, 1.0f};
+    colors[ImGuiCol_FrameBg]          = {0.3f, 0.3f, 0.3f, 1.0f};
+    colors[ImGuiCol_FrameBgHovered]   = {0.4f, 0.4f, 0.4f, 1.0f};
+    colors[ImGuiCol_FrameBgActive]    = {0.5f, 0.5f, 0.5f, 1.0f};
 
-    colors[ImGuiCol_CheckMark]      = {1.0f, 1.0f, 1.0f, 1.0f};
+    colors[ImGuiCol_CheckMark]        = {1.0f, 1.0f, 1.0f, 1.0f};
 
-    colors[ImGuiCol_Button]         = {0.3f, 0.3f, 0.3f, 1.0f};
-    colors[ImGuiCol_ButtonHovered]  = {0.4f, 0.4f, 0.4f, 1.0f};
-    colors[ImGuiCol_ButtonActive]   = {0.5f, 0.5f, 0.5f, 1.0f};
+    colors[ImGuiCol_Button]           = {0.3f, 0.3f, 0.3f, 1.0f};
+    colors[ImGuiCol_ButtonHovered]    = {0.4f, 0.4f, 0.4f, 1.0f};
+    colors[ImGuiCol_ButtonActive]     = {0.5f, 0.5f, 0.5f, 1.0f};
+
+    colors[ImGuiCol_HeaderHovered]    = {0.4f, 0.4f, 0.4f, 1.0f};
+    colors[ImGuiCol_HeaderActive]     = {0.5f, 0.5f, 0.5f, 1.0f};
+
+    colors[ImGuiCol_Separator]        = {0.5f, 0.5f, 0.5f, 1.0f};
+    colors[ImGuiCol_SeparatorHovered] = {0.5f, 0.5f, 0.5f, 1.0f};
+    colors[ImGuiCol_SeparatorActive]  = {0.5f, 0.5f, 0.5f, 1.0f};
 }
 
 Interface::Interface()
@@ -65,11 +73,10 @@ new_frame()
 static void
 objects()
 {
-    static const char*            title = "Objects";
-    static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove
+    static const char*            title    = "Objects";
+    static const ImGuiWindowFlags flags    = ImGuiWindowFlags_NoMove
         | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
-    static unsigned int i;
-    static bool _ = true;
+    static const ImVec4           darkened = {1.0f, 1.0f, 1.0f, 0.4f};
 
     SetNextWindowPos
     ({
@@ -84,11 +91,15 @@ objects()
 
     Begin(title, nullptr, flags);
 
-    for (i = 0; i < Application::objects.size(); ++i)
+
+    for (GameObject& obj : Application::objects)
     {
-        Checkbox("##_", &_);
-        SameLine();
-        Button(Application::objects[i].name.c_str());
+        if (!obj.visible) PushStyleColor(ImGuiCol_Text, darkened);
+
+        if (Selectable(obj.name.c_str()))
+            Application::selected_obj = &obj;
+
+        if (!obj.visible) PopStyleColor();
     }
 
     End();
@@ -97,8 +108,8 @@ objects()
 static void
 components()
 {
-    static const char*            title = "Components";
-    static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove
+    static const char*                title = "Components";
+    static const ImGuiWindowFlags     flags = ImGuiWindowFlags_NoMove
         | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
 
     SetNextWindowPos
@@ -113,6 +124,26 @@ components()
     });
 
     Begin(title, nullptr, flags);
+
+    if (!Application::selected_obj)
+    {
+        TextDisabled("Select an object");
+
+        End();
+        return;
+    }
+
+    Checkbox(Application::selected_obj->name.c_str(),
+        &Application::selected_obj->visible);
+
+    Separator();
+
+    Text("Position");
+    DragFloat("X", &Application::selected_obj->position.x, 1.0f,
+        -1000.0f, 1000.0f);
+    DragFloat("Y", &Application::selected_obj->position.y, 1.0f,
+        -1000.0f, 1000.0f);
+
     End();
 }
 
