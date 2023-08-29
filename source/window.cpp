@@ -28,9 +28,24 @@ framebuffer_size_callback
     glViewport(pos.x, pos.y, size.x, size.y);
 
     Application::aspect = Window::size * Layout::scene.size * Renderer::zoom;
-    Application::view_changed = true;
 
     (void)(window);
+}
+
+static bool
+mouse_hovers_screen()
+{
+    glm::vec2 top_left     = Window::size * Layout::scene.pos;
+    glm::vec2 bottom_right = Window::size
+        * (Layout::scene.pos + Layout::scene.size);
+
+    return
+    (
+        top_left.x < Window::mouse_pos.x &&
+        Window::mouse_pos.x < bottom_right.x &&
+        top_left.y < Window::mouse_pos.y &&
+        Window::mouse_pos.y < bottom_right.y
+    );
 }
 
 static void
@@ -41,21 +56,22 @@ scroll_callback
  double      yoffset
 )
 {
-    if (!yoffset) return;
+    if (!yoffset || !mouse_hovers_screen()) return;
 
-    glm::vec2 mouse_pos_frac = (Window::mouse_pos / Window::size);
-    mouse_pos_frac   *=  2;
-    mouse_pos_frac   -=  1;
+    glm::vec2 mouse_pos_frac = Window::mouse_pos / Window::size;
+    mouse_pos_frac   *= -2;
+    mouse_pos_frac   +=  1;
+    mouse_pos_frac   /= Layout::scene.size;
     mouse_pos_frac.y *= -1;
     mouse_pos_frac   *= yoffset / abs(yoffset);
 
-    Application::camera += mouse_pos_frac * Window::size * Renderer::zoom
-        * 0.125f;
+    glm::vec2 offset = mouse_pos_frac * Window::size * Renderer::zoom
+        * 0.05f;
+
+    Application::camera += glm::vec3(offset.x, offset.y, 0.0f);
 
     Renderer::zoom -= Renderer::zoom * 0.05f * yoffset;
     Application::aspect = Window::size * Layout::scene.size * Renderer::zoom;
-
-    Application::view_changed = true;
 
     (void)(window);
     (void)(xoffset);
@@ -78,18 +94,8 @@ mouse_button_callback
         return;
     }
 
-    glm::vec2 top_left     = Window::size * Layout::scene.pos;
-    glm::vec2 bottom_right = Window::size
-        * (Layout::scene.pos + Layout::scene.size);
-
-    if
-    (
-        top_left.x < Window::mouse_pos.x &&
-        Window::mouse_pos.x < bottom_right.x &&
-        top_left.y < Window::mouse_pos.y &&
-        Window::mouse_pos.y < bottom_right.y
-    )
-    { Window::moving_view = true; }
+    if (mouse_hovers_screen())
+        Window::moving_view = true;
 
     (void)(window);
     (void)(mods);
@@ -107,9 +113,7 @@ cursor_position_callback
     {
         glm::vec2 diff = {(Window::mouse_pos - glm::vec2(xpos, ypos))
             * (Renderer::zoom * 2)};
-        Application::camera += glm::vec2(diff.x, -diff.y);
-
-        Application::view_changed = true;
+        Application::camera += glm::vec3(-diff.x, diff.y, 0.0f);
     }
 
     Window::mouse_pos = {xpos, ypos};

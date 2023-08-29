@@ -5,8 +5,33 @@
 #ifndef __application_hpp_
 #define __application_hpp_
 
-#include <vector>
+#include <string>
+#include <deque>
+#include <memory>
 #include "glm.hpp"
+#include "texture.hpp"
+
+struct GameObject
+{
+    std::string              name;
+    glm::vec3                position;
+    std::unique_ptr<Texture> tex;
+
+    bool         visible;
+
+    GameObject
+    (
+     const std::string& name,
+     const glm::vec2&   position,
+     const std::string& texture_filepath
+    )
+    :     name{name}
+    , position{position.x, position.y, 0.0f}
+    ,  visible{true}
+    {
+        tex = std::make_unique<Texture>(texture_filepath);
+    }
+};
 
 class Application
 {
@@ -15,11 +40,12 @@ public:
 
     void run() const;
 
-    static inline std::vector<const char*> objects;
+    static inline std::deque<GameObject> objects;
 
-    static inline bool      view_changed = true;
-    static inline glm::vec2 camera       = {0.0f, 0.0f};
+    static inline bool view_changed = true;
+
     static inline glm::vec2 aspect;
+    static inline glm::vec3 camera = {0.0f, 0.0f, 0.0f};
 };
 
 #endif  // __application_hpp_

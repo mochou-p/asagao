@@ -88,7 +88,7 @@ objects()
     {
         Checkbox("##_", &_);
         SameLine();
-        Button(Application::objects[i]);
+        Button(Application::objects[i].name.c_str());
     }
 
     End();

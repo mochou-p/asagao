@@ -19,31 +19,18 @@ Application::run() const
 {
     const float vertices[]
     {
-    //  position     | texcoord
-    //  x      y     | u     v
-
-    // saber
-       -4.0f, -1.0f,   0.0f, 0.0f,
-       -2.0f, -1.0f,   1.0f, 0.0f,
-       -2.0f,  1.0f,   1.0f, 1.0f,
-       -4.0f,  1.0f,   0.0f, 1.0f,
-    // gudako
-        2.0f, -1.0f,   0.0f, 0.0f,
-        4.0f, -1.0f,   1.0f, 0.0f,
-        4.0f,  1.0f,   1.0f, 1.0f,
-        2.0f,  1.0f,   0.0f, 1.0f
+    //  position       | texcoord
+    //  x       y      | u     v
+       -128.0f, -128.0f,   0.0f, 0.0f,
+        128.0f, -128.0f,   1.0f, 0.0f,
+        128.0f,  128.0f,   1.0f, 1.0f,
+       -128.0f,  128.0f,   0.0f, 1.0f,
     };
 
-    const unsigned int saber_indices[]
+    const unsigned int indices[]
     {
         0, 1, 2,
         2, 3, 0
-    };
-
-    const unsigned int gudako_indices[]
-    {
-        4, 5, 6,
-        6, 7, 4
     };
 
     Renderer renderer;
@@ -60,20 +47,16 @@ Application::run() const
     VertexArray va;
     va.add_vertex_buffer(vb, layout);
 
+    IndexBuffer ib(indices, sizeof(indices) / sizeof(unsigned int));
+
     Shader shader("test.glsl");
     shader.use();
 
-    IndexBuffer saber_ib(saber_indices,
-        sizeof(saber_indices) / sizeof(unsigned int));
-    Texture saber_tex("saber.png");
-    objects.push_back("saber");
+    const glm::mat4 mat4_identity(1.0f);
+    glm::mat4 model, view, projection, mvp;
 
-    IndexBuffer gudako_ib(gudako_indices,
-        sizeof(gudako_indices) / sizeof(unsigned int));
-    Texture gudako_tex("gudako.png");
-    objects.push_back("gudako");
-
-    aspect = (window.size * Layout::scene.size) * renderer.zoom;
+    objects.push_back({"Saber",  {-138.0f, 0.0f},  "saber.png"});
+    objects.push_back({"Gudako", { 138.0f, 0.0f}, "gudako.png"});
 
     while (window.is_open())
     {
@@ -81,27 +64,20 @@ Application::run() const
 
         renderer.clear();
 
-        if (view_changed)
+        projection  = glm::ortho(-aspect.x, aspect.x, -aspect.y, aspect.y);
+        view        = glm::translate(mat4_identity, camera);
+
+        for (const GameObject& obj : objects)
         {
-            shader.set_mat4
-            (
-                "u_mvp",
-                glm::ortho
-                (
-                   -aspect.x + camera.x,
-                    aspect.x + camera.x,
-                   -aspect.y + camera.y,
-                    aspect.y + camera.y
-                )
-            );
+            if (!obj.visible) continue;
 
-            view_changed = false;
+            model = glm::translate(mat4_identity, obj.position);
+            mvp   = projection * view * model;
+
+            shader.set_mat4("u_mvp", mvp);
+            shader.set_int("u_texture", obj.tex->get_slot());
+            renderer.draw(va, ib, shader);
         }
-
-        shader.set_int("u_texture", saber_tex.get_slot());
-        renderer.draw(va, saber_ib, shader);
-        shader.set_int("u_texture", gudako_tex.get_slot());
-        renderer.draw(va, gudako_ib, shader);
 
         ui.draw();
 
