@@ -42,6 +42,8 @@ class Application
 public:
     Application() {};
 
+    static void new_object();
+
     void run() const;
 
     static inline std::deque<GameObject> objects;

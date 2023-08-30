@@ -66,8 +66,8 @@ Application::run() const
 
         renderer.clear();
 
-        projection  = glm::ortho(-aspect.x, aspect.x, -aspect.y, aspect.y);
-        view        = glm::translate(mat4_identity, camera);
+        projection = glm::ortho(-aspect.x, aspect.x, -aspect.y, aspect.y);
+        view       = glm::translate(mat4_identity, camera);
 
         for (const GameObject& obj : objects)
         {
@@ -88,4 +88,13 @@ Application::run() const
 
         window.swap_buffers();
     }
+}
+
+void
+Application::new_object()
+{
+    static unsigned int i = 0;
+
+    objects.push_back({"Unnamed " + std::to_string(++i), {0.0f, 0.0f},
+        "default.png"});
 }
