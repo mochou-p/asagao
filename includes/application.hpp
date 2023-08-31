@@ -15,6 +15,7 @@ struct GameObject
 {
     std::string name;
     glm::vec3   position;
+    float       depth;
     glm::vec3   scale;
     float       rotation;
     bool        visible;
@@ -25,12 +26,16 @@ struct GameObject
     (
      const std::string& name,
      const glm::vec2&   position,
-     const std::string& texture_filepath
+     const std::string& texture_filepath,
+     const glm::vec2&   size     = {1.0f, 1.0f},
+           float        parallax = 0.0f,
+           float        rotation = 0.0f
     )
     :     name{name}
     , position{position.x, position.y, 0.0f}
-    ,    scale{1.0f, 1.0f, 1.0f}
-    , rotation{0.0f}
+    ,    depth{parallax}
+    ,    scale{size.x, size.y, 1.0f}
+    , rotation{rotation}
     ,  visible{true}
     {
         tex = std::make_unique<Texture>(texture_filepath);

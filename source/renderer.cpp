@@ -41,11 +41,14 @@ Renderer::init()
 {
     load_opengl_functions();
 
-    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-
     glEnable(GL_DEBUG_OUTPUT);
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
     glDebugMessageCallback(debug_message_callback, nullptr);
+
+    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
 }
 
 void

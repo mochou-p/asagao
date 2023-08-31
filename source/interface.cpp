@@ -152,6 +152,10 @@ components()
         -100000.0f, 100000.0f);
     DragFloat("Y", &Application::selected_obj->position.y, 1.0f,
         -100000.0f, 100000.0f);
+    DragFloat("Depth", &Application::selected_obj->depth, 0.2f,
+        -1000.0f, 1000.0f);
+
+    Separator();
 
     Separator();
 

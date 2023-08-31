@@ -57,8 +57,19 @@ Application::run() const
 
     glm::mat4 model, view, projection;
 
-    objects.push_back({"Saber",  {-138.0f, 0.0f},  "saber.png"});
-    objects.push_back({"Gudako", { 138.0f, 0.0f}, "gudako.png"});
+    // demo scene
+    objects.push_back
+    ({"Mountains", {   0.0f,  250.0f}, "mountains.png", {20.0f, 6.0f}, 10.0f});
+    objects.push_back
+    ({"Road",      {   0.0f, -650.0f},      "road.png", {8.0f, 2.0f}});
+    objects.push_back
+    ({"Birds",     {-315.0f,  200.0f},     "birds.png", {5.0f, 4.0f}, 3.0f});
+    objects.push_back
+    ({"Birds",     { 115.0f,  100.0f},     "birds.png", {3.0f, 2.0f}, 5.0f});
+    objects.push_back
+    ({"Saber",     {-600.0f, -435.0f},     "saber.png", {2.0f, 3.0f}});
+    objects.push_back
+    ({"Gudako",    { 450.0f, -435.0f},    "gudako.png", {2.0f, 2.2f}});
 
     while (window.is_open())
     {
@@ -67,11 +78,13 @@ Application::run() const
         renderer.clear();
 
         projection = glm::ortho(-aspect.x, aspect.x, -aspect.y, aspect.y);
-        view       = glm::translate(mat4_identity, camera);
 
         for (const GameObject& obj : objects)
         {
             if (!obj.visible) continue;
+
+            view  = glm::translate
+            (mat4_identity, camera * (1.0f - obj.depth * 0.2f));
 
             model = glm::translate(mat4_identity, obj.position);
             model = glm::rotate(model, glm::radians(obj.rotation), z_axis);
