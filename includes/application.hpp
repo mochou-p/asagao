@@ -49,7 +49,7 @@ public:
 
     static void new_object();
 
-    void run() const;
+    void run();
 
     static inline std::deque<GameObject> objects;
     static inline GameObject*            selected_obj = nullptr;
@@ -58,6 +58,8 @@ public:
 
     static inline glm::vec2 aspect;
     static inline glm::vec3 camera = {0.0f, 0.0f, 0.0f};
+private:
+    void load_demo_scene(unsigned int id);
 };
 
 #endif  // __application_hpp_

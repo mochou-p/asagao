@@ -15,16 +15,16 @@
 #define WINDOW_HEIGHT 900
 
 void
-Application::run() const
+Application::run()
 {
     const float vertices[]
     {
     //  position       | texcoord
     //  x       y      | u     v
-       -128.0f, -128.0f,   0.0f, 0.0f,
-        128.0f, -128.0f,   1.0f, 0.0f,
-        128.0f,  128.0f,   1.0f, 1.0f,
-       -128.0f,  128.0f,   0.0f, 1.0f,
+       -50.0f, -50.0f,   0.0f, 0.0f,
+        50.0f, -50.0f,   1.0f, 0.0f,
+        50.0f,  50.0f,   1.0f, 1.0f,
+       -50.0f,  50.0f,   0.0f, 1.0f,
     };
 
     const unsigned int indices[]
@@ -57,19 +57,15 @@ Application::run() const
 
     glm::mat4 model, view, projection;
 
-    // demo scene
-    objects.push_back
-    ({"Mountains", {   0.0f,  250.0f}, "mountains.png", {20.0f, 6.0f}, 10.0f});
-    objects.push_back
-    ({"Road",      {   0.0f, -650.0f},      "road.png", {8.0f, 2.0f}});
-    objects.push_back
-    ({"Birds",     {-315.0f,  200.0f},     "birds.png", {5.0f, 4.0f}, 3.0f});
-    objects.push_back
-    ({"Birds",     { 115.0f,  100.0f},     "birds.png", {3.0f, 2.0f}, 5.0f});
-    objects.push_back
-    ({"Saber",     {-600.0f, -435.0f},     "saber.png", {2.0f, 3.0f}});
-    objects.push_back
-    ({"Gudako",    { 450.0f, -435.0f},    "gudako.png", {2.0f, 2.2f}});
+    renderer.set_background_color
+    ({
+        223.0f / 255.0f,
+        246.0f / 255.0f,
+        245.0f / 255.0f,
+        1.0f
+    });
+
+    load_demo_scene(2);
 
     while (window.is_open())
     {
@@ -77,14 +73,19 @@ Application::run() const
 
         renderer.clear();
 
-        projection = glm::ortho(-aspect.x, aspect.x, -aspect.y, aspect.y);
+        projection = glm::ortho
+        (
+            -aspect.x, aspect.x,
+            -aspect.y, aspect.y,
+            -1000.0f,  1000.0f
+        );
 
         for (const GameObject& obj : objects)
         {
             if (!obj.visible) continue;
 
             view  = glm::translate
-            (mat4_identity, camera * (1.0f - obj.depth * 0.2f));
+            (mat4_identity, camera - (camera * obj.depth * 0.08f));
 
             model = glm::translate(mat4_identity, obj.position);
             model = glm::rotate(model, glm::radians(obj.rotation), z_axis);
@@ -110,4 +111,138 @@ Application::new_object()
 
     objects.push_back({"Unnamed " + std::to_string(++i), {0.0f, 0.0f},
         "default.png"});
+}
+
+void
+Application::load_demo_scene(unsigned int id)
+{
+    switch (id)
+    {
+    case 1:
+        objects.push_back
+        ({
+            "Mountains",
+            {0.0f,  250.0f},
+            "textures/mountains.png",
+            {20.0f, 6.0f},
+            10.0f
+        });
+
+        objects.push_back
+        ({
+            "Birds 1",
+            {350.0f,  100.0f},
+            "textures/birds.png",
+            {3.0f, 2.0f},
+            5.0f
+        });
+
+        objects.push_back
+        ({
+            "Birds 2",
+            {-630.0f,  200.0f},
+            "textures/birds.png",
+            {5.0f, 4.0f},
+            3.0f
+        });
+
+        objects.push_back
+        ({
+            "Road",
+            {0.0f, -650.0f},
+            "textures/road.png",
+            {30.0f, 2.0f}
+        });
+
+        objects.push_back
+        ({
+            "Saber",
+            {-600.0f, -435.0f},
+            "textures/saber.png",
+            {2.0f, 3.0f}
+        });
+
+        objects.push_back
+        ({
+            "Gudako",
+            {450.0f, -435.0f},
+            "textures/gudako.png",
+            {2.0f, 2.2f}
+        });
+
+        objects.push_back
+        ({
+            "Plane",
+            {2550.0f, 0.0f},
+            "textures/plane.png",
+            {10.0f, 5.0f},
+            -100.0f
+        });
+
+        break;
+    case 2:
+        objects.push_back({"Enemy",    {-100.0f,    0.0f}, "tiles/enemy0.png"});
+        objects.push_back({"Spikes",   {  50.0f,    0.0f}, "tiles/spikes.png"});
+
+        objects.push_back({"Ground 1", {-100.0f, -100.0f}, "tiles/TL.png"});
+        objects.push_back({"Ground 2", {   0.0f, -100.0f}, "tiles/TC.png"});
+        objects.push_back({"Ground 3", { 100.0f, -100.0f}, "tiles/TR.png"});
+        objects.push_back({"Ground 4", {-100.0f, -200.0f}, "tiles/CL.png"});
+        objects.push_back({"Ground 5", {   0.0f, -200.0f}, "tiles/CC.png"});
+        objects.push_back({"Ground 6", { 100.0f, -200.0f}, "tiles/CR.png"});
+        objects.push_back({"Ground 7", {-100.0f, -300.0f}, "tiles/BL.png"});
+        objects.push_back({"Ground 8", {   0.0f, -300.0f}, "tiles/BC.png"});
+        objects.push_back({"Ground 9", { 100.0f, -300.0f}, "tiles/BR.png"});
+
+        objects.push_back
+        ({
+            "Cloud 1",
+            {-400.0f,  600.0f},
+            "tiles/cloudL.png",
+            {1.0f, 1.0f}, 5.0f
+        });
+        objects.push_back
+        ({
+            "Cloud 2",
+            {-300.0f,  600.0f},
+            "tiles/cloudC.png",
+            {1.0f, 1.0f},
+            5.0f
+        });
+        objects.push_back
+        ({
+            "Cloud 3",
+            {-200.0f,  600.0f},
+            "tiles/cloudR.png",
+            {1.0f, 1.0f},
+            5.0f
+        });
+
+        objects.push_back
+        ({
+            "Cloud 4",
+            {200.0f,  400.0f},
+            "tiles/cloudL.png",
+            {1.0f, 1.0f}, 5.0f
+        });
+        objects.push_back
+        ({
+            "Cloud 5",
+            {300.0f,  400.0f},
+            "tiles/cloudC.png",
+            {1.0f, 1.0f},
+            5.0f
+        });
+        objects.push_back
+        ({
+            "Cloud 6",
+            {400.0f,  400.0f},
+            "tiles/cloudR.png",
+            {1.0f, 1.0f},
+            5.0f
+        });
+
+    default:
+        break;
+    }
 }

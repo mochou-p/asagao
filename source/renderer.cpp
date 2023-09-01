@@ -45,8 +45,6 @@ Renderer::init()
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
     glDebugMessageCallback(debug_message_callback, nullptr);
 
-    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
 }
@@ -70,4 +68,10 @@ Renderer::draw
     ib.bind();
 
     glDrawElements(GL_TRIANGLES, ib.get_count(), GL_UNSIGNED_INT, nullptr);
+}
+
+void
+Renderer::set_background_color(const glm::vec4& color) const
+{
+    glClearColor(color.r, color.g, color.b, color.a);
 }
