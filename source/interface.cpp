@@ -117,9 +117,10 @@ objects()
 static void
 components()
 {
-    static const char*                title = "Components";
-    static const ImGuiWindowFlags     flags = ImGuiWindowFlags_NoMove
+    static const char*                title     = "Components";
+    static const ImGuiWindowFlags     flags     = ImGuiWindowFlags_NoMove
         | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
+    static const float                close_btn = CalcTextSize("x ").x;
 
     SetNextWindowPos
     ({
@@ -136,7 +137,8 @@ components()
 
     if (!Application::selected_obj)
     {
-        TextDisabled("Select an object");
+        DragFloat("Anim speed", &Application::animation_speed, 0.1f,
+            0.0f, 100.0f);
 
         End();
         return;
@@ -144,27 +146,29 @@ components()
 
     Checkbox(Application::selected_obj->name.c_str(),
         &Application::selected_obj->visible);
+    SameLine(GetWindowContentRegionMax().x - close_btn);
+    if (Button("x"))
+    {
+        Application::selected_obj = nullptr;
+
+        End();
+        return;
+    }
 
     Separator();
 
     Text("Position");
-    DragFloat("X", &Application::selected_obj->position.x, 1.0f,
-        -100000.0f, 100000.0f);
-    DragFloat("Y", &Application::selected_obj->position.y, 1.0f,
-        -100000.0f, 100000.0f);
-    DragFloat("Depth", &Application::selected_obj->depth, 0.2f,
-        -1000.0f, 1000.0f);
+    DragFloat("X##pos", &Application::selected_obj->position.x, 1.0f);
+    DragFloat("Y##pos", &Application::selected_obj->position.y, 1.0f);
+    DragFloat("Depth",  &Application::selected_obj->depth,      0.2f);
 
     Separator();
 
     Separator();
 
     Text("Size");
-    // space here since label == tag/id in imgui
-    DragFloat("X ", &Application::selected_obj->scale.x, 0.01f,
-        -500.0f, 500.0f);
-    DragFloat("Y ", &Application::selected_obj->scale.y, 0.01f,
-        -500.0f, 500.0f);
+    DragFloat("X##size", &Application::selected_obj->scale.x, 0.01f);
+    DragFloat("Y##size", &Application::selected_obj->scale.y, 0.01f);
 
     Separator();
 

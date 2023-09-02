@@ -4,7 +4,6 @@
 #include <iostream>
 #include "application.hpp"
 #include "texture.hpp"
-#include "renderer.hpp"
 #include "window.hpp"
 #include "interface.hpp"
 #include "gtc/matrix_transform.hpp"
@@ -57,21 +56,15 @@ Application::run()
 
     glm::mat4 model, view, projection;
 
-    renderer.set_background_color
-    ({
-        223.0f / 255.0f,
-        246.0f / 255.0f,
-        245.0f / 255.0f,
-        1.0f
-    });
+    load_demo_scene(2, renderer);
 
-    load_demo_scene(2);
+    unsigned int animation_time;
 
     while (window.is_open())
     {
         window.poll_events();
 
-        renderer.clear();
+        animation_time = glfwGetTime() * animation_speed;
 
         projection = glm::ortho
         (
@@ -80,12 +73,17 @@ Application::run()
             -1000.0f,  1000.0f
         );
 
+        renderer.clear();
+
         for (const GameObject& obj : objects)
         {
             if (!obj.visible) continue;
 
             view  = glm::translate
-            (mat4_identity, camera - (camera * obj.depth * 0.08f));
+            (
+                mat4_identity,
+                camera - (camera * obj.depth * 0.08f)
+            );
 
             model = glm::translate(mat4_identity, obj.position);
             model = glm::rotate(model, glm::radians(obj.rotation), z_axis);
@@ -93,7 +91,11 @@ Application::run()
 
             shader.set_mat4("u_mvp", projection * view * model);
 
-            shader.set_int("u_texture", obj.tex->get_slot());
+            shader.set_int
+            (
+                "u_texture",
+                obj.textures[animation_time % obj.texture_count]->get_slot()
+            );
 
             renderer.draw(va, ib, shader);
         }
@@ -110,11 +112,15 @@ Application::new_object()
     static unsigned int i = 0;
 
     objects.push_back({"Unnamed " + std::to_string(++i), {0.0f, 0.0f},
-        "default.png"});
+        {"textures/default.png"}});
 }
 
 void
-Application::load_demo_scene(unsigned int id)
+Application::load_demo_scene
+(
+ unsigned int    id,
+ const Renderer& renderer
+)
 {
     switch (id)
     {
@@ -123,7 +129,7 @@ Application::load_demo_scene(unsigned int id)
         ({
             "Mountains",
             {0.0f,  250.0f},
-            "textures/mountains.png",
+            {"textures/mountains.png"},
             {20.0f, 6.0f},
             10.0f
         });
@@ -132,7 +138,7 @@ Application::load_demo_scene(unsigned int id)
         ({
             "Birds 1",
             {350.0f,  100.0f},
-            "textures/birds.png",
+            {"textures/birds.png"},
             {3.0f, 2.0f},
             5.0f
         });
@@ -141,7 +147,7 @@ Application::load_demo_scene(unsigned int id)
         ({
             "Birds 2",
             {-630.0f,  200.0f},
-            "textures/birds.png",
+            {"textures/birds.png"},
             {5.0f, 4.0f},
             3.0f
         });
@@ -150,7 +156,7 @@ Application::load_demo_scene(unsigned int id)
         ({
             "Road",
             {0.0f, -650.0f},
-            "textures/road.png",
+            {"textures/road.png"},
             {30.0f, 2.0f}
         });
 
@@ -158,7 +164,7 @@ Application::load_demo_scene(unsigned int id)
         ({
             "Saber",
             {-600.0f, -435.0f},
-            "textures/saber.png",
+            {"textures/saber.png"},
             {2.0f, 3.0f}
         });
 
@@ -166,7 +172,7 @@ Application::load_demo_scene(unsigned int id)
         ({
             "Gudako",
             {450.0f, -435.0f},
-            "textures/gudako.png",
+            {"textures/gudako.png"},
             {2.0f, 2.2f}
         });
 
@@ -174,73 +180,132 @@ Application::load_demo_scene(unsigned int id)
         ({
             "Plane",
             {2550.0f, 0.0f},
-            "textures/plane.png",
+            {"textures/plane.png"},
             {10.0f, 5.0f},
             -100.0f
         });
 
         break;
     case 2:
-        objects.push_back({"Enemy",    {-100.0f,    0.0f}, "tiles/enemy0.png"});
-        objects.push_back({"Spikes",   {  50.0f,    0.0f}, "tiles/spikes.png"});
-
-        objects.push_back({"Ground 1", {-100.0f, -100.0f}, "tiles/TL.png"});
-        objects.push_back({"Ground 2", {   0.0f, -100.0f}, "tiles/TC.png"});
-        objects.push_back({"Ground 3", { 100.0f, -100.0f}, "tiles/TR.png"});
-        objects.push_back({"Ground 4", {-100.0f, -200.0f}, "tiles/CL.png"});
-        objects.push_back({"Ground 5", {   0.0f, -200.0f}, "tiles/CC.png"});
-        objects.push_back({"Ground 6", { 100.0f, -200.0f}, "tiles/CR.png"});
-        objects.push_back({"Ground 7", {-100.0f, -300.0f}, "tiles/BL.png"});
-        objects.push_back({"Ground 8", {   0.0f, -300.0f}, "tiles/BC.png"});
-        objects.push_back({"Ground 9", { 100.0f, -300.0f}, "tiles/BR.png"});
+        renderer.set_background_color
+        ({
+            223.0f / 255.0f,
+            246.0f / 255.0f,
+            245.0f / 255.0f,
+            1.0f
+        });
 
         objects.push_back
         ({
             "Cloud 1",
-            {-400.0f,  600.0f},
-            "tiles/cloudL.png",
-            {1.0f, 1.0f}, 5.0f
+            {-240.0f, 600.0f},
+            {"tiles/cloudL.png"},
+            {0.8f, 0.8f},
+            7.0f
         });
         objects.push_back
         ({
             "Cloud 2",
-            {-300.0f,  600.0f},
-            "tiles/cloudC.png",
-            {1.0f, 1.0f},
-            5.0f
+            {-160.0f, 600.0f},
+            {"tiles/cloudC.png"},
+            {0.8f, 0.8f},
+            7.0f
         });
         objects.push_back
         ({
             "Cloud 3",
-            {-200.0f,  600.0f},
-            "tiles/cloudR.png",
-            {1.0f, 1.0f},
-            5.0f
+            {-80.0f, 600.0f},
+            {"tiles/cloudR.png"},
+            {0.8f, 0.8f},
+            7.0f
         });
 
         objects.push_back
         ({
             "Cloud 4",
-            {200.0f,  400.0f},
-            "tiles/cloudL.png",
+            {300.0f, 400.0f},
+            {"tiles/cloudL.png"},
             {1.0f, 1.0f}, 5.0f
         });
         objects.push_back
         ({
             "Cloud 5",
-            {300.0f,  400.0f},
-            "tiles/cloudC.png",
+            {400.0f, 400.0f},
+            {"tiles/cloudC.png"},
             {1.0f, 1.0f},
             5.0f
         });
         objects.push_back
         ({
             "Cloud 6",
-            {400.0f,  400.0f},
-            "tiles/cloudR.png",
+            {500.0f, 400.0f},
+            {"tiles/cloudR.png"},
             {1.0f, 1.0f},
             5.0f
         });
+
+        objects.push_back
+        ({
+            "Cloud 7",
+            {-600.0f, -100.0f},
+            {"tiles/cloudL.png"},
+            {1.0f, 1.0f}, 5.0f
+        });
+        objects.push_back
+        ({
+            "Cloud 8",
+            {-500.0f, -100.0f},
+            {"tiles/cloudC.png"},
+            {1.0f, 1.0f},
+            5.0f
+        });
+        objects.push_back
+        ({
+            "Cloud 9",
+            {-400.0f, -100.0f},
+            {"tiles/cloudR.png"},
+            {1.0f, 1.0f},
+            5.0f
+        });
+
+        objects.push_back
+        ({
+            "Fly 1",
+            {130.0f, 270.0f},
+            {"tiles/fly0.png", "tiles/fly1.png",
+             "tiles/fly2.png", "tiles/fly1.png"},
+            {0.9f, 0.9f},
+            2.0f
+        });
+
+        objects.push_back
+        ({
+            "Fly 2",
+            {240.0f, 200.0f},
+            {"tiles/fly1.png", "tiles/fly2.png",
+             "tiles/fly1.png", "tiles/fly0.png"},
+            {1.0f, 1.0f},
+            2.0f
+        });
+
+        objects.push_back
+        ({
+            "Player",
+            {-100.0f, 0.0f},
+            {"tiles/player0.png", "tiles/player1.png"}
+        });
+
+        objects.push_back({"Spikes", {50.0f, 0.0f}, {"tiles/spikes.png"}});
+
+        objects.push_back({"Ground 1", {-100.0f, -100.0f}, {"tiles/TL.png"}});
+        objects.push_back({"Ground 2", {   0.0f, -100.0f}, {"tiles/TC.png"}});
+        objects.push_back({"Ground 3", { 100.0f, -100.0f}, {"tiles/TR.png"}});
+        objects.push_back({"Ground 4", {-100.0f, -200.0f}, {"tiles/CL.png"}});
+        objects.push_back({"Ground 5", {   0.0f, -200.0f}, {"tiles/CC.png"}});
+        objects.push_back({"Ground 6", { 100.0f, -200.0f}, {"tiles/CR.png"}});
+        objects.push_back({"Ground 7", {-100.0f, -300.0f}, {"tiles/BL.png"}});
+        objects.push_back({"Ground 8", {   0.0f, -300.0f}, {"tiles/BC.png"}});
+        objects.push_back({"Ground 9", { 100.0f, -300.0f}, {"tiles/BR.png"}});
 
     default:
         break;
