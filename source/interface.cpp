@@ -80,7 +80,6 @@ objects()
     static const ImGuiWindowFlags flags    = ImGuiWindowFlags_NoMove
         | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
     static const ImVec4           darkened = {1.0f, 1.0f, 1.0f, 0.4f};
-    static const float            new_btn  = CalcTextSize("+ ").x;
 
     SetNextWindowPos
     ({
@@ -96,8 +95,6 @@ objects()
     Begin(title, nullptr, flags);
 
     Text("Demo scene");
-    SameLine(GetWindowContentRegionMax().x - new_btn);
-    if (Button("+")) Application::new_object();
 
     Separator();
 

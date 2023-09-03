@@ -135,3 +135,13 @@ Shader::set_mat4
 {
     glUniformMatrix4fv(get_uniform_location(name), 1, GL_FALSE, &value[0][0]);
 }
+
+void
+Shader::set_vec2
+(
+ const std::string& name,
+ const glm::vec2&   value
+)
+{
+    glUniform2f(get_uniform_location(name), value.x, value.y);
+}

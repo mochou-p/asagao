@@ -21,6 +21,7 @@ Texture::Texture(const std::string& filepath)
     if (!data) quit("stbi_load failed");
 
     m_slot = count;
+    m_size = {width, height};
 
     glGenTextures(1, &m_id);
     glActiveTexture(GL_TEXTURE0 + (count++));

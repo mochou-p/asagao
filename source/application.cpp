@@ -1,41 +1,76 @@
 // asagao/source/application.cpp
 
 
-#include <iostream>
 #include "application.hpp"
 #include "texture.hpp"
 #include "window.hpp"
 #include "interface.hpp"
 #include "gtc/matrix_transform.hpp"
 #include "style.hpp"
+#include "sprite_atlas.hpp"
 
 #define APP_NAME "Asagao"
 #define WINDOW_WIDTH 1600
 #define WINDOW_HEIGHT 900
 
+GameObject::GameObject
+(
+ const std::string&            name,
+ const glm::vec2&              position,
+ const std::vector<glm::vec2>& tile_offsets,
+       float                   rotation = 0.0f
+)
+:         name{name}
+,     position{
+               position.x * Application::rect_size,
+               position.y * Application::rect_size,
+               0.0f
+              }
+,        depth{0.0f}
+,        scale{1.0f, 1.0f, 1.0f}
+,     rotation{rotation}
+,      visible{true}
+, sprite_count{tile_offsets.size()}
+{
+    for (const glm::vec2& o : tile_offsets)
+        sprite_offsets.push_back(o * Application::uv_frac);
+}
+
 void
 Application::run()
 {
+    glm::mat4       model, view, projection;
+    unsigned int    animation_time;
+    unsigned int    sprite_id;
+
+    const glm::mat4 mat4_identity(1.0f);
+    const glm::vec3 z_axis(0.0f, 0.0f, 1.0f);
+
+    Renderer        renderer;
+    Window          window(APP_NAME, WINDOW_WIDTH, WINDOW_HEIGHT);
+    Interface       ui;
+    Shader          shader("atlas.glsl");
+    SpriteAtlas     atlas("atlases/tiles.png", 18);
+
+
+    uv_frac = atlas.sprite_uv_frac;
+
+    //  x, y
+    //  u, v
     const float vertices[]
     {
-    //  position       | texcoord
-    //  x       y      | u     v
-       -50.0f, -50.0f,   0.0f, 0.0f,
-        50.0f, -50.0f,   1.0f, 0.0f,
-        50.0f,  50.0f,   1.0f, 1.0f,
-       -50.0f,  50.0f,   0.0f, 1.0f,
+       -rect_size * 0.5f,       -rect_size * 0.5f,
+        0.0f,                    0.0f,
+
+        rect_size * 0.5f,       -rect_size * 0.5f,
+        atlas.sprite_uv_frac.x,  0.0f,
+
+        rect_size * 0.5f,        rect_size * 0.5f,
+        atlas.sprite_uv_frac.x,  atlas.sprite_uv_frac.y,
+
+       -rect_size * 0.5f,        rect_size * 0.5f,
+        0.0f,                    atlas.sprite_uv_frac.y,
     };
-
-    const unsigned int indices[]
-    {
-        0, 1, 2,
-        2, 3, 0
-    };
-
-    Renderer renderer;
-
-    Window window(APP_NAME, WINDOW_WIDTH, WINDOW_HEIGHT);
-    Interface ui;
 
     VertexBuffer vb(vertices, sizeof(vertices));
 
@@ -46,19 +81,21 @@ Application::run()
     VertexArray va;
     va.add_vertex_buffer(vb, layout);
 
+
+    const unsigned int indices[]
+    {
+        0, 1, 2,
+        2, 3, 0
+    };
+
     IndexBuffer ib(indices, sizeof(indices) / sizeof(unsigned int));
 
-    Shader shader("test.glsl");
+
+    load_demo_scene(renderer);
+
     shader.use();
+    shader.set_int("u_texture", atlas.texture->get_slot());
 
-    const glm::mat4 mat4_identity(1.0f);
-    const glm::vec3 z_axis(0.0f, 0.0f, 1.0f);
-
-    glm::mat4 model, view, projection;
-
-    load_demo_scene(2, renderer);
-
-    unsigned int animation_time;
 
     while (window.is_open())
     {
@@ -66,12 +103,7 @@ Application::run()
 
         animation_time = glfwGetTime() * animation_speed;
 
-        projection = glm::ortho
-        (
-            -aspect.x, aspect.x,
-            -aspect.y, aspect.y,
-            -1000.0f,  1000.0f
-        );
+        projection = glm::ortho(-aspect.x, aspect.x, -aspect.y, aspect.y);
 
         renderer.clear();
 
@@ -79,23 +111,19 @@ Application::run()
         {
             if (!obj.visible) continue;
 
-            view  = glm::translate
+            view = glm::translate
             (
                 mat4_identity,
                 camera - (camera * obj.depth * 0.08f)
             );
 
-            model = glm::translate(mat4_identity, obj.position);
-            model = glm::rotate(model, glm::radians(obj.rotation), z_axis);
-            model = glm::scale(model, obj.scale);
+            model     = glm::translate(mat4_identity, obj.position);
+            model     = glm::rotate(model, glm::radians(obj.rotation), z_axis);
+            model     = glm::scale(model, obj.scale);
+            sprite_id = animation_time % obj.sprite_count;
 
-            shader.set_mat4("u_mvp", projection * view * model);
-
-            shader.set_int
-            (
-                "u_texture",
-                obj.textures[animation_time % obj.texture_count]->get_slot()
-            );
+            shader.set_mat4("u_mvp",     projection * view * model);
+            shader.set_vec2("u_tile_uv", obj.sprite_offsets[sprite_id]);
 
             renderer.draw(va, ib, shader);
         }
@@ -106,208 +134,137 @@ Application::run()
     }
 }
 
-void
-Application::new_object()
-{
-    static unsigned int i = 0;
-
-    objects.push_back({"Unnamed " + std::to_string(++i), {0.0f, 0.0f},
-        {"textures/default.png"}});
-}
-
+// temp
 void
 Application::load_demo_scene
 (
- unsigned int    id,
- const Renderer& renderer
+ const Renderer&    renderer
 )
 {
-    switch (id)
+    renderer.set_background_color
+    ({
+        223.0f / 255.0f,
+        246.0f / 255.0f,
+        245.0f / 255.0f,
+        1.0f
+    });
+
+    glm::vec2  diamond(7, 5);
+    glm::vec2   cactus(7, 2);
+    glm::vec2 platform(6, 1);
+    glm::vec2    spike(8, 5);
+    glm::vec2     sand(0, 5);
+
+    glm::vec2 block[] =
     {
-    case 1:
-        objects.push_back
-        ({
-            "Mountains",
-            {0.0f,  250.0f},
-            {"textures/mountains.png"},
-            {20.0f, 6.0f},
-            10.0f
-        });
+        {9, 8}, {10, 8}, {8, 7}
+    };
+    glm::vec2 grass[] =
+    {
+        {1, 7}, {2, 7}, {3, 7}
+    };
+    glm::vec2 snow[] =
+    {
+        {1, 4}, {2, 4}, {3, 4}
+    };
+    glm::vec2 dirt[] =
+    {
+        {1, 2}, {2, 2}, {3, 2},
+        {1, 1}, {2, 1}, {3, 1},
+        {0, 2}, {4, 7}, {5, 7}
+    };
+    glm::vec2 water[] =
+    {
+        {13, 7}, {13, 6},
+        {13, 5}
+    };
+    glm::vec2 flag[] =
+    {
+        {11, 3}, {12, 3},
+        {11, 2}
+    };
+    glm::vec2 coin[] =
+    {
+        {11, 1}, {12, 1}
+    };
+    glm::vec2 door[] =
+    {
+        {10, 2}, {10, 3}
+    };
+    glm::vec2 cloud[] =
+    {
+        {13, 1}, {14, 1}, {15, 1}
+    };
+    glm::vec2 weed[] =
+    {
+        {4, 2}, {5, 2}, {4, 1}
+    };
+    glm::vec2 tree[] =
+    {
+        {17, 2}, {18, 2}, {19, 2},
+        {16, 3}, {16, 4}
+    };
+    glm::vec2 leaf[] =
+    {
+        {17, 8}, {18, 8}, {19, 8},
+        {17, 6}, {17, 4}, {19, 6},
+        {16, 8}
+    };
 
-        objects.push_back
-        ({
-            "Birds 1",
-            {350.0f,  100.0f},
-            {"textures/birds.png"},
-            {3.0f, 2.0f},
-            5.0f
-        });
 
-        objects.push_back
-        ({
-            "Birds 2",
-            {-630.0f,  200.0f},
-            {"textures/birds.png"},
-            {5.0f, 4.0f},
-            3.0f
-        });
+    objects.push_back({"Leaf    1", {-2, 5}, {leaf[0]}});
+    objects.push_back({"Leaf    2", {-1, 5}, {leaf[1]}});
+    objects.push_back({"Leaf    3", { 0, 5}, {leaf[2]}});
 
-        objects.push_back
-        ({
-            "Road",
-            {0.0f, -650.0f},
-            {"textures/road.png"},
-            {30.0f, 2.0f}
-        });
+    objects.push_back({"Leaf    4", {-1.5f, 5.2f}, {leaf[6]}});
 
-        objects.push_back
-        ({
-            "Saber",
-            {-600.0f, -435.0f},
-            {"textures/saber.png"},
-            {2.0f, 3.0f}
-        });
+    objects.push_back({"Leaf    5", {-2, 4}, {leaf[3]}});
+    objects.push_back({"Leaf    6", {-1, 4}, {leaf[4]}});
+    objects.push_back({"Leaf    7", { 0, 4}, {leaf[5]}});
 
-        objects.push_back
-        ({
-            "Gudako",
-            {450.0f, -435.0f},
-            {"textures/gudako.png"},
-            {2.0f, 2.2f}
-        });
+    objects.push_back({"Tree    1", {-1, 3}, {tree[4]}});
 
-        objects.push_back
-        ({
-            "Plane",
-            {2550.0f, 0.0f},
-            {"textures/plane.png"},
-            {10.0f, 5.0f},
-            -100.0f
-        });
+    objects.push_back({"Tree    2", {-1, 2}, {tree[1]}});
+    objects.push_back({"Tree    3", { 0, 2}, {tree[2]}});
 
-        break;
-    case 2:
-        renderer.set_background_color
-        ({
-            223.0f / 255.0f,
-            246.0f / 255.0f,
-            245.0f / 255.0f,
-            1.0f
-        });
+    objects.push_back({"Coin    1", {1.5f, 2.5f}, {coin[0], coin[1]}});
 
-        objects.push_back
-        ({
-            "Cloud 1",
-            {-240.0f, 600.0f},
-            {"tiles/cloudL.png"},
-            {0.8f, 0.8f},
-            7.0f
-        });
-        objects.push_back
-        ({
-            "Cloud 2",
-            {-160.0f, 600.0f},
-            {"tiles/cloudC.png"},
-            {0.8f, 0.8f},
-            7.0f
-        });
-        objects.push_back
-        ({
-            "Cloud 3",
-            {-80.0f, 600.0f},
-            {"tiles/cloudR.png"},
-            {0.8f, 0.8f},
-            7.0f
-        });
+    objects.push_back({"Tree    4", {-1, 1}, {tree[0]}});
+    objects.push_back({"Weed    1", { 0, 1}, {weed[0]}});
+    objects.push_back({"Weed    2", {-2, 1}, {weed[1]}});
+    objects.push_back({"Cactus  1", { 3, 1}, {cactus}});
 
-        objects.push_back
-        ({
-            "Cloud 4",
-            {300.0f, 400.0f},
-            {"tiles/cloudL.png"},
-            {1.0f, 1.0f}, 5.0f
-        });
-        objects.push_back
-        ({
-            "Cloud 5",
-            {400.0f, 400.0f},
-            {"tiles/cloudC.png"},
-            {1.0f, 1.0f},
-            5.0f
-        });
-        objects.push_back
-        ({
-            "Cloud 6",
-            {500.0f, 400.0f},
-            {"tiles/cloudR.png"},
-            {1.0f, 1.0f},
-            5.0f
-        });
+    objects.push_back({"Grass   1", {-2,  0   }, {grass[0]}});
+    objects.push_back({"Grass   2", {-1,  0   }, {grass[1]}});
+    objects.push_back({"Grass   3", { 0,  0   }, {grass[2]}});
+    objects.push_back({"Water   1", { 1, -0.3f}, {water[0], water[1]}});
+    objects.push_back({"Water   2", { 2, -0.3f}, {water[0], water[1]}});
+    objects.push_back({"Sand    1", { 3,  0   }, {sand}});
 
-        objects.push_back
-        ({
-            "Cloud 7",
-            {-600.0f, -100.0f},
-            {"tiles/cloudL.png"},
-            {1.0f, 1.0f}, 5.0f
-        });
-        objects.push_back
-        ({
-            "Cloud 8",
-            {-500.0f, -100.0f},
-            {"tiles/cloudC.png"},
-            {1.0f, 1.0f},
-            5.0f
-        });
-        objects.push_back
-        ({
-            "Cloud 9",
-            {-400.0f, -100.0f},
-            {"tiles/cloudR.png"},
-            {1.0f, 1.0f},
-            5.0f
-        });
+    objects.push_back({"Dirt    1", {-2, -1}, {dirt[0]}});
+    objects.push_back({"Dirt    2", {-1, -1}, {dirt[1]}});
+    objects.push_back({"Dirt    3", { 0, -1}, {dirt[2]}});
+    objects.push_back({"Water   3", { 1, -1}, {water[2]}});
+    objects.push_back({"Water   4", { 2, -1}, {water[2]}});
+    objects.push_back({"Dirt    4", { 3, -1}, {dirt[6]}});
 
-        objects.push_back
-        ({
-            "Fly 1",
-            {130.0f, 270.0f},
-            {"tiles/fly0.png", "tiles/fly1.png",
-             "tiles/fly2.png", "tiles/fly1.png"},
-            {0.9f, 0.9f},
-            2.0f
-        });
+    objects.push_back({"Dirt    5", {-2, -2}, {dirt[0]}});
+    objects.push_back({"Dirt    6", {-1, -2}, {dirt[1]}});
+    objects.push_back({"Dirt    7", { 0, -2}, {dirt[1]}});
+    objects.push_back({"Dirt    8", { 1, -2}, {dirt[4]}, 180});
+    objects.push_back({"Dirt    9", { 2, -2}, {dirt[4]}, 180});
+    objects.push_back({"Dirt   10", { 3, -2}, {dirt[2]}});
 
-        objects.push_back
-        ({
-            "Fly 2",
-            {240.0f, 200.0f},
-            {"tiles/fly1.png", "tiles/fly2.png",
-             "tiles/fly1.png", "tiles/fly0.png"},
-            {1.0f, 1.0f},
-            2.0f
-        });
+    objects.push_back({"Dirt   11", {-2, -3}, {dirt[3]}});
+    objects.push_back({"Dirt   12", {-1, -3}, {dirt[4]}});
+    objects.push_back({"Dirt   13", { 0, -3}, {dirt[4]}});
+    objects.push_back({"Dirt   14", { 1, -3}, {dirt[4]}});
+    objects.push_back({"Dirt   15", { 2, -3}, {dirt[4]}});
+    objects.push_back({"Dirt   16", { 3, -3}, {dirt[5]}});
 
-        objects.push_back
-        ({
-            "Player",
-            {-100.0f, 0.0f},
-            {"tiles/player0.png", "tiles/player1.png"}
-        });
-
-        objects.push_back({"Spikes", {50.0f, 0.0f}, {"tiles/spikes.png"}});
-
-        objects.push_back({"Ground 1", {-100.0f, -100.0f}, {"tiles/TL.png"}});
-        objects.push_back({"Ground 2", {   0.0f, -100.0f}, {"tiles/TC.png"}});
-        objects.push_back({"Ground 3", { 100.0f, -100.0f}, {"tiles/TR.png"}});
-        objects.push_back({"Ground 4", {-100.0f, -200.0f}, {"tiles/CL.png"}});
-        objects.push_back({"Ground 5", {   0.0f, -200.0f}, {"tiles/CC.png"}});
-        objects.push_back({"Ground 6", { 100.0f, -200.0f}, {"tiles/CR.png"}});
-        objects.push_back({"Ground 7", {-100.0f, -300.0f}, {"tiles/BL.png"}});
-        objects.push_back({"Ground 8", {   0.0f, -300.0f}, {"tiles/BC.png"}});
-        objects.push_back({"Ground 9", { 100.0f, -300.0f}, {"tiles/BR.png"}});
-
-    default:
-        break;
-    }
+    (void)(block);
+    (void)(snow);
+    (void)(flag);
+    (void)(door);
+    (void)(cloud);
 }

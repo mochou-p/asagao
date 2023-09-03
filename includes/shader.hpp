@@ -18,6 +18,7 @@ public:
     void use() const;
     void set_int(const std::string& name, int value);
     void set_mat4(const std::string& name, const glm::mat4& value);
+    void set_vec2(const std::string& name, const glm::vec2& value);
 private:
     int get_uniform_location(const std::string& name);
 
