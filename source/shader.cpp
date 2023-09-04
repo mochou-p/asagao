@@ -4,6 +4,7 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
+#include <iostream>
 #include "shader.hpp"
 #include "utils.hpp"
 #include "glad/glad.h"
@@ -110,7 +111,12 @@ Shader::get_uniform_location(const std::string& name)
 
     int location = glGetUniformLocation(m_id, name.c_str());
 
-    if (location == -1) quit("cannot find uniform location " + name);
+    if (location == -1)
+    {
+        std::cerr << "cannot find a uniform location '"
+            << name << "'" << std::endl;
+        return -1;
+    }
 
     m_uniform_location_cache[name] = location;
     return location;    

@@ -12,10 +12,12 @@ get_type_normalisation(unsigned int type)
 {
     switch (type)
     {
-        case GL_FLOAT: return GL_FALSE;
+        case GL_FLOAT:
+            return GL_FALSE;
+        default:
+            std::cerr << "unsupported type: " << type << std::endl;
+            break;
     }
-
-    quit("unsupported VertexAttribute type");
 
     return false;
 }

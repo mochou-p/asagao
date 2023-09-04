@@ -50,7 +50,7 @@ Application::run()
     Window          window(APP_NAME, WINDOW_WIDTH, WINDOW_HEIGHT);
     Interface       ui;
     Shader          shader("atlas.glsl");
-    SpriteAtlas     atlas("atlases/tiles.png", 18);
+    SpriteAtlas     atlas("atlases/kenney_pixel-platformer.png", 18);
 
 
     uv_frac = atlas.sprite_uv_frac;

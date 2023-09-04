@@ -164,8 +164,9 @@ Window::init
        int          height
 )
 {
-    if (handle)      quit("only one instance of window is allowed");
-    if (!glfwInit()) quit("glfwInit failed");
+    if (handle) quit("only one instance of window is allowed");
+
+    assert(glfwInit());
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_VER_MAJOR);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_VER_MINOR);
@@ -174,16 +175,15 @@ Window::init
     handle = glfwCreateWindow(width, height, title.c_str(), nullptr,
         nullptr);
 
-    if (!handle) quit("glfwCreateWindow failed");
+    assert(handle);
 
-    const GLFWvidmode* screen = glfwGetVideoMode(glfwGetPrimaryMonitor());
+    if (const GLFWvidmode* screen = glfwGetVideoMode(glfwGetPrimaryMonitor()))
+    {
+        int x = (screen->width  - width)  * 0.5f;
+        int y = (screen->height - height) * 0.5f;
 
-    if (!screen) quit("glfwGetVideoMode failed");
-
-    int x = (screen->width  - width)  * 0.5f;
-    int y = (screen->height - height) * 0.5f;
-
-    glfwSetWindowPos(handle, x, y);
+        glfwSetWindowPos(handle, x, y);
+    }
 
     glfwSetFramebufferSizeCallback(handle, framebuffer_size_callback);
     glfwSetScrollCallback(         handle,           scroll_callback);

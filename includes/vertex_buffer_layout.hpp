@@ -6,6 +6,7 @@
 #define __vertex_buffer_layout_hpp_
 
 #include <vector>
+#include <iostream>
 #include "utils.hpp"
 #include "glad/glad.h"
 
@@ -20,10 +21,13 @@ struct VertexAttribute
     {
         switch (type)
         {
-            case GL_FLOAT: return 4;
+            case GL_FLOAT:
+                return 4;
+            default:
+                std::cerr << "unsupported type: " << type << std::endl;
+                break;
         }
 
-        quit("unsupported VertexAttribute type");
         return 0;
     }
 };

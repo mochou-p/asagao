@@ -2,14 +2,14 @@
 
 
 #include <iostream>
+#include <cassert>
 #include "renderer.hpp"
 #include "glfw3.h"
 
 static void
 load_opengl_functions()
 {
-    if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
-        quit("gladLoadGLLoader failed");
+    assert(gladLoadGLLoader((GLADloadproc) glfwGetProcAddress));
 }
 
 static void GLAPIENTRY
