@@ -1,15 +1,17 @@
 // asagao/source/renderer.cpp
 
 
-#include <iostream>
 #include <cassert>
 #include "renderer.hpp"
+#include "log.hpp"
 #include "glfw3.h"
 
 static void
 load_opengl_functions()
 {
     assert(gladLoadGLLoader((GLADloadproc) glfwGetProcAddress));
+
+    LOG_INFO(std::string("OpenGL ") + (const char*) glGetString(GL_VERSION));
 }
 
 static void GLAPIENTRY
@@ -24,13 +26,10 @@ debug_message_callback
  const void*        param
 )
 {
-    std::cout
-        << '('   << "type     = 0x" << std::hex << type
-        << "\n " << "severity = 0x" << std::hex << severity
-        << "\n " << "message  = "   <<             message
-        << ')'   << std::endl;
+    LOG_AUTO(severity, message);
 
     (void)(source);
+    (void)(type);
     (void)(id);
     (void)(length);
     (void)(param);

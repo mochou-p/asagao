@@ -55,12 +55,10 @@ Application::run()
 
     uv_frac = atlas.sprite_uv_frac;
 
-    //  x, y
-    //  u, v
     const float vertices[]
     {
-       -rect_size * 0.5f,       -rect_size * 0.5f,
-        0.0f,                    0.0f,
+       -rect_size * 0.5f,       -rect_size * 0.5f, // x, y
+        0.0f,                    0.0f,             // u, v
 
         rect_size * 0.5f,       -rect_size * 0.5f,
         atlas.sprite_uv_frac.x,  0.0f,
@@ -120,6 +118,7 @@ Application::run()
             model     = glm::translate(mat4_identity, obj.position);
             model     = glm::rotate(model, glm::radians(obj.rotation), z_axis);
             model     = glm::scale(model, obj.scale);
+
             sprite_id = animation_time % obj.sprite_count;
 
             shader.set_mat4("u_mvp",     projection * view * model);
@@ -138,7 +137,7 @@ Application::run()
 void
 Application::load_demo_scene
 (
- const Renderer&    renderer
+ const Renderer& renderer
 )
 {
     renderer.set_background_color
@@ -210,7 +209,6 @@ Application::load_demo_scene
         {17, 6}, {17, 4}, {19, 6},
         {16, 8}
     };
-
 
     objects.push_back({"Leaf    1", {-2, 5}, {leaf[0]}});
     objects.push_back({"Leaf    2", {-1, 5}, {leaf[1]}});

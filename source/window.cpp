@@ -1,12 +1,12 @@
 // asagao/source/window.cpp
 
 
-#include <iostream>
+#include <cassert>
 #include "window.hpp"
 #include "style.hpp"
-#include "utils.hpp"
 #include "renderer.hpp"
 #include "application.hpp"
+#include "log.hpp"
 
 #define VSYNC 1
 #define OPENGL_VER_MAJOR 4
@@ -164,9 +164,12 @@ Window::init
        int          height
 )
 {
-    if (handle) quit("only one instance of window is allowed");
+    if (handle)
+        LOG_FATAL("only one instance of window is allowed");
 
     assert(glfwInit());
+
+    LOG_INFO(std::string("GLFW ") + glfwGetVersionString());
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_VER_MAJOR);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_VER_MINOR);

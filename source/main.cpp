@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "application.hpp"
+#include "log.hpp"
 
 int
 main()
@@ -15,7 +16,7 @@ main()
     }
     catch (const std::exception& error)
     {
-        std::cerr << error.what() << std::endl;
+        LOG_ERROR(error.what());
 
         return EXIT_FAILURE;
     }

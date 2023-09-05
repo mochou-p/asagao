@@ -1,10 +1,9 @@
 // asagao/source/texture.cpp
 
 
-#include <iostream>
 #include <cstring>
 #include "texture.hpp"
-#include "utils.hpp"
+#include "log.hpp"
 #include "glad/glad.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -15,7 +14,7 @@
 Texture::Texture(const std::string& filepath)
 {
     if (count >= 32)
-        quit("maximum number of textures exceeded (32)");
+        LOG_FATAL("maximum number of textures exceeded (32)");
 
     stbi_set_flip_vertically_on_load(true);
 
@@ -29,32 +28,30 @@ Texture::Texture(const std::string& filepath)
     {
         if (filepath != DEFAULT_TEXTURE)
         {
-            std::cerr << "cannot find " << filepath << std::endl;
-            *this = Texture(DEFAULT_TEXTURE);
+            LOG_WARN("cannot find " + filepath);
 
+            *this = Texture(DEFAULT_TEXTURE);
             return;
         }
-        else
+
+        LOG_WARN("cannot find the fallback texture");
+
+        width  = 2;
+        height = 2;
+
+        unsigned int texel_count = width * height;
+        unsigned int array_count = 4 * texel_count;
+
+        unsigned char texels[array_count] =
         {
-            std::cerr << "cannot find the fallback texture" << std::endl;
+            255,   0, 255, 255,       0,   0,   0, 255,
+              0,   0,   0, 255,     255,   0, 255, 255
+        };
 
-            width  = 2;
-            height = 2;
+        unsigned long long size = array_count * sizeof(unsigned char);
 
-            unsigned int texel_count = width * height;
-            unsigned int array_count = 4 * texel_count;
-
-            unsigned char texels[array_count] =
-            {
-                255,   0, 255, 255,       0,   0,   0, 255,
-                  0,   0,   0, 255,     255,   0, 255, 255
-            };
-
-            unsigned long long size = array_count * sizeof(unsigned char);
-
-            data = (unsigned char*) malloc(size);
-            std::memcpy(data, texels, size);
-        }
+        data = (unsigned char*) malloc(size);
+        std::memcpy(data, texels, size);
     }
 
     m_slot = count;

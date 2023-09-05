@@ -4,9 +4,8 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
-#include <iostream>
 #include "shader.hpp"
-#include "utils.hpp"
+#include "log.hpp"
 #include "glad/glad.h"
 
 #define SHADER_PATH "resources/shaders/"
@@ -25,9 +24,6 @@ create_shader
 
     glShaderSource(id, 1, &code_cstr, nullptr);
     glCompileShader(id);
-
-    opengl_check_error(id, GL_COMPILE_STATUS, "glCompileShader",
-        &glGetShaderiv, &glGetShaderInfoLog);
 
     return id;
 }
@@ -87,9 +83,6 @@ Shader::Shader(const std::string& filepath)
     m_id = glCreateProgram();
     parse_shader(filepath, m_id);
     glLinkProgram(m_id);
-
-    opengl_check_error(m_id, GL_LINK_STATUS, "glLinkProgram", &glGetProgramiv,
-        &glGetProgramInfoLog);
 }
 
 Shader::~Shader()
@@ -113,8 +106,7 @@ Shader::get_uniform_location(const std::string& name)
 
     if (location == -1)
     {
-        std::cerr << "cannot find a uniform location '"
-            << name << "'" << std::endl;
+        LOG_WARN("cannot find a uniform location '" + name + "'");
         return -1;
     }
 

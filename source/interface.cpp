@@ -9,6 +9,7 @@
 #include "style.hpp"
 #include "application.hpp"
 #include "renderer.hpp"
+#include "log.hpp"
 
 using namespace ImGui;
 
@@ -53,6 +54,8 @@ Interface::Interface()
 
     ImGui_ImplGlfw_InitForOpenGL(Window::handle, true);
     ImGui_ImplOpenGL3_Init();
+
+    LOG_INFO(std::string("ImGui ") + IMGUI_VERSION);
 
     GetIO().IniFilename = nullptr;
     set_theme();
