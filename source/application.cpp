@@ -9,6 +9,13 @@
 #include "style.hpp"
 #include "sprite_atlas.hpp"
 
+// temp
+#include <iostream>
+#include <fstream>
+#define SCENE_PATH "resources/scenes"
+#define SCENE_EXT ".asagao"
+#define SCENE_VER "0.0.1"
+
 #define APP_NAME "Asagao"
 #define WINDOW_WIDTH 1600
 #define WINDOW_HEIGHT 900
@@ -32,8 +39,8 @@ GameObject::GameObject
 ,      visible{true}
 , sprite_count{tile_offsets.size()}
 {
-    for (const glm::vec2& o : tile_offsets)
-        sprite_offsets.push_back(o * Application::uv_frac);
+    for (const glm::vec2& ofs : tile_offsets)
+        sprite_offsets.push_back(ofs * Application::uv_frac);
 }
 
 void
@@ -50,7 +57,7 @@ Application::run()
     Window          window(APP_NAME, WINDOW_WIDTH, WINDOW_HEIGHT);
     Interface       ui;
     Shader          shader("atlas.glsl");
-    SpriteAtlas     atlas("atlases/kenney_pixel-platformer.png", 18);
+    SpriteAtlas     atlas("kenney_pixel-platformer.png", 18);
 
 
     uv_frac = atlas.sprite_uv_frac;
@@ -90,6 +97,7 @@ Application::run()
 
 
     load_demo_scene(renderer);
+
 
     shader.use();
     shader.set_int("u_texture", atlas.texture->get_slot());
@@ -131,6 +139,8 @@ Application::run()
 
         window.swap_buffers();
     }
+
+    save_current_scene("demo-scene");
 }
 
 // temp
@@ -148,23 +158,12 @@ Application::load_demo_scene
         1.0f
     });
 
-    glm::vec2  diamond(7, 5);
     glm::vec2   cactus(7, 2);
-    glm::vec2 platform(6, 1);
-    glm::vec2    spike(8, 5);
     glm::vec2     sand(0, 5);
 
-    glm::vec2 block[] =
-    {
-        {9, 8}, {10, 8}, {8, 7}
-    };
     glm::vec2 grass[] =
     {
         {1, 7}, {2, 7}, {3, 7}
-    };
-    glm::vec2 snow[] =
-    {
-        {1, 4}, {2, 4}, {3, 4}
     };
     glm::vec2 dirt[] =
     {
@@ -177,22 +176,9 @@ Application::load_demo_scene
         {13, 7}, {13, 6},
         {13, 5}
     };
-    glm::vec2 flag[] =
-    {
-        {11, 3}, {12, 3},
-        {11, 2}
-    };
     glm::vec2 coin[] =
     {
         {11, 1}, {12, 1}
-    };
-    glm::vec2 door[] =
-    {
-        {10, 2}, {10, 3}
-    };
-    glm::vec2 cloud[] =
-    {
-        {13, 1}, {14, 1}, {15, 1}
     };
     glm::vec2 weed[] =
     {
@@ -210,59 +196,107 @@ Application::load_demo_scene
         {16, 8}
     };
 
-    objects.push_back({"Leaf    1", {-2, 5}, {leaf[0]}});
-    objects.push_back({"Leaf    2", {-1, 5}, {leaf[1]}});
-    objects.push_back({"Leaf    3", { 0, 5}, {leaf[2]}});
+    objects.push_back({"Leaf 1", {-2, 5}, {leaf[0]}});
+    objects.push_back({"Leaf 2", {-1, 5}, {leaf[1]}});
+    objects.push_back({"Leaf 3", { 0, 5}, {leaf[2]}});
 
-    objects.push_back({"Leaf    4", {-1.5f, 5.2f}, {leaf[6]}});
+    objects.push_back({"Leaf 4", {-1.5f, 5.2f}, {leaf[6]}});
 
-    objects.push_back({"Leaf    5", {-2, 4}, {leaf[3]}});
-    objects.push_back({"Leaf    6", {-1, 4}, {leaf[4]}});
-    objects.push_back({"Leaf    7", { 0, 4}, {leaf[5]}});
+    objects.push_back({"Leaf 5", {-2, 4}, {leaf[3]}});
+    objects.push_back({"Leaf 6", {-1, 4}, {leaf[4]}});
+    objects.push_back({"Leaf 7", { 0, 4}, {leaf[5]}});
 
-    objects.push_back({"Tree    1", {-1, 3}, {tree[4]}});
+    objects.push_back({"Tree 1", {-1, 3}, {tree[4]}});
 
-    objects.push_back({"Tree    2", {-1, 2}, {tree[1]}});
-    objects.push_back({"Tree    3", { 0, 2}, {tree[2]}});
+    objects.push_back({"Tree 2", {-1, 2}, {tree[1]}});
+    objects.push_back({"Tree 3", { 0, 2}, {tree[2]}});
 
-    objects.push_back({"Coin    1", {1.5f, 2.5f}, {coin[0], coin[1]}});
+    objects.push_back({"Coin 1", {1.5f, 2.5f}, {coin[0], coin[1]}});
 
-    objects.push_back({"Tree    4", {-1, 1}, {tree[0]}});
-    objects.push_back({"Weed    1", { 0, 1}, {weed[0]}});
-    objects.push_back({"Weed    2", {-2, 1}, {weed[1]}});
-    objects.push_back({"Cactus  1", { 3, 1}, {cactus}});
+    objects.push_back({"Tree 4",   {-1, 1}, {tree[0]}});
+    objects.push_back({"Weed 1",   { 0, 1}, {weed[0]}});
+    objects.push_back({"Weed 2",   {-2, 1}, {weed[1]}});
+    objects.push_back({"Cactus 1", { 3, 1}, {cactus}});
 
-    objects.push_back({"Grass   1", {-2,  0   }, {grass[0]}});
-    objects.push_back({"Grass   2", {-1,  0   }, {grass[1]}});
-    objects.push_back({"Grass   3", { 0,  0   }, {grass[2]}});
-    objects.push_back({"Water   1", { 1, -0.3f}, {water[0], water[1]}});
-    objects.push_back({"Water   2", { 2, -0.3f}, {water[0], water[1]}});
-    objects.push_back({"Sand    1", { 3,  0   }, {sand}});
+    objects.push_back({"Grass 1", {-2,  0   }, {grass[0]}});
+    objects.push_back({"Grass 2", {-1,  0   }, {grass[1]}});
+    objects.push_back({"Grass 3", { 0,  0   }, {grass[2]}});
+    objects.push_back({"Water 1", { 1, -0.3f}, {water[0], water[1]}});
+    objects.push_back({"Water 2", { 2, -0.3f}, {water[0], water[1]}});
+    objects.push_back({"Sand 1",  { 3,  0   }, {sand}});
 
-    objects.push_back({"Dirt    1", {-2, -1}, {dirt[0]}});
-    objects.push_back({"Dirt    2", {-1, -1}, {dirt[1]}});
-    objects.push_back({"Dirt    3", { 0, -1}, {dirt[2]}});
-    objects.push_back({"Water   3", { 1, -1}, {water[2]}});
-    objects.push_back({"Water   4", { 2, -1}, {water[2]}});
-    objects.push_back({"Dirt    4", { 3, -1}, {dirt[6]}});
+    objects.push_back({"Dirt 1",  {-2, -1}, {dirt[0]}});
+    objects.push_back({"Dirt 2",  {-1, -1}, {dirt[1]}});
+    objects.push_back({"Dirt 3",  { 0, -1}, {dirt[2]}});
+    objects.push_back({"Water 3", { 1, -1}, {water[2]}});
+    objects.push_back({"Water 4", { 2, -1}, {water[2]}});
+    objects.push_back({"Dirt 4",  { 3, -1}, {dirt[6]}});
 
-    objects.push_back({"Dirt    5", {-2, -2}, {dirt[0]}});
-    objects.push_back({"Dirt    6", {-1, -2}, {dirt[1]}});
-    objects.push_back({"Dirt    7", { 0, -2}, {dirt[1]}});
-    objects.push_back({"Dirt    8", { 1, -2}, {dirt[4]}, 180});
-    objects.push_back({"Dirt    9", { 2, -2}, {dirt[4]}, 180});
-    objects.push_back({"Dirt   10", { 3, -2}, {dirt[2]}});
+    objects.push_back({"Dirt 5",  {-2, -2}, {dirt[0]}});
+    objects.push_back({"Dirt 6",  {-1, -2}, {dirt[1]}});
+    objects.push_back({"Dirt 7",  { 0, -2}, {dirt[1]}});
+    objects.push_back({"Dirt 8",  { 1, -2}, {dirt[4]}, 180});
+    objects.push_back({"Dirt 9",  { 2, -2}, {dirt[4]}, 180});
+    objects.push_back({"Dirt 10", { 3, -2}, {dirt[2]}});
 
-    objects.push_back({"Dirt   11", {-2, -3}, {dirt[3]}});
-    objects.push_back({"Dirt   12", {-1, -3}, {dirt[4]}});
-    objects.push_back({"Dirt   13", { 0, -3}, {dirt[4]}});
-    objects.push_back({"Dirt   14", { 1, -3}, {dirt[4]}});
-    objects.push_back({"Dirt   15", { 2, -3}, {dirt[4]}});
-    objects.push_back({"Dirt   16", { 3, -3}, {dirt[5]}});
+    objects.push_back({"Dirt 11", {-2, -3}, {dirt[3]}});
+    objects.push_back({"Dirt 12", {-1, -3}, {dirt[4]}});
+    objects.push_back({"Dirt 13", { 0, -3}, {dirt[4]}});
+    objects.push_back({"Dirt 14", { 1, -3}, {dirt[4]}});
+    objects.push_back({"Dirt 15", { 2, -3}, {dirt[4]}});
+    objects.push_back({"Dirt 16", { 3, -3}, {dirt[5]}});
+}
 
-    (void)(block);
-    (void)(snow);
-    (void)(flag);
-    (void)(door);
-    (void)(cloud);
+// temp
+void
+Application::save_current_scene(const std::string& name)
+{
+    std::ofstream file(SCENE_PATH + ("/" + name) + SCENE_EXT, std::ios::binary);
+
+    if (!file.is_open())
+    {
+        LOG_ERROR("failed to open " + name);
+        return;
+    }
+
+    file << "### Asagao Scene File ###" << std::endl
+         << std::endl
+         << "version: " << SCENE_VER << std::endl
+         << "name: " << name << std::endl
+         << std::endl
+         << "--- Scene Objects -------" << std::endl;
+
+    for (const GameObject& obj : objects)
+    {
+        file << std::endl
+             << "name: " << obj.name
+             << std::endl
+             << "position: " << (obj.position.x / rect_size) << ","
+                            << (obj.position.y / rect_size)
+             << std::endl
+             << "depth: " << obj.depth
+             << std::endl
+             << "scale: " << obj.scale.x << ","
+                         << obj.scale.y
+             << std::endl
+             << "rotation: " << obj.rotation
+             << std::endl
+             << "visible: " << obj.visible
+             << std::endl
+             << "sprite_count: " << obj.sprite_count
+             << std::endl
+             << "sprite_offsets: ";
+
+        unsigned char i = 0;
+        for (const glm::vec2& ofs : obj.sprite_offsets)
+        {
+            if (i++) file << ",";
+            file << ofs.x / uv_frac.x << ","
+                 << ofs.y / uv_frac.y;
+        }
+
+        file << std::endl;
+    }
+
+    file.close();
 }

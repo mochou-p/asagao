@@ -55,9 +55,9 @@ parse_shader
         if (line.find(SHADER_STAGE_TAG_START) == std::string::npos)
             continue;
 
-        for (const stage& s : stages)
+        for (const stage& stage : stages)
         {
-            if (line.find(s.tag) == std::string::npos)
+            if (line.find(stage.tag) == std::string::npos)
                 continue;
 
             while (std::getline(ifs, line))
@@ -68,7 +68,7 @@ parse_shader
                 code += line + "\n";
             }
 
-            unsigned int shader_stage = create_shader(code, s.type);
+            unsigned int shader_stage = create_shader(code, stage.type);
             glAttachShader(shader, shader_stage);
             glDeleteShader(shader_stage);
 

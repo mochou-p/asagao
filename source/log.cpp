@@ -85,7 +85,7 @@ Log::info
  const std::string& message
 )
 {
-    std::cout << BLUE << header(file, line) << message << std::endl;
+    std::cout << BLUE << header(file, line) << message << WHITE << std::endl;
 }
 
 void

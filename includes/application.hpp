@@ -40,8 +40,6 @@ class Application
 public:
     Application() {};
 
-    static void new_object();
-
     void run();
 
     static inline std::deque<GameObject> objects;
@@ -57,6 +55,7 @@ public:
     static inline       glm::vec2 uv_frac;
 private:
     void load_demo_scene(const Renderer& renderer);
+    void save_current_scene(const std::string& name);
 };
 
 #endif  // __application_hpp_
