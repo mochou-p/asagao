@@ -25,14 +25,6 @@ struct GameObject
 
     std::vector<glm::vec2> sprite_offsets;
     long long unsigned int sprite_count;
-
-    GameObject
-    (
-     const std::string&            name,
-     const glm::vec2&              position,
-     const std::vector<glm::vec2>& tile_offsets,
-           float                   rotation
-    );
 };
 
 class Application
@@ -53,9 +45,6 @@ public:
     static inline       float     animation_speed =   1.7f;
     static inline const float     rect_size       = 100.0f;
     static inline       glm::vec2 uv_frac;
-private:
-    void load_demo_scene(const Renderer& renderer);
-    void save_current_scene(const std::string& name);
 };
 
 #endif  // __application_hpp_
