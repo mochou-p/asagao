@@ -17,8 +17,6 @@ public:
     ~SpriteAtlas() {}
 
     std::unique_ptr<Texture> texture;
-    glm::vec3                sprite_size;
-    glm::vec2                sprite_uv_frac;
 };
 
 #endif  // __sprite_atlas_hpp_

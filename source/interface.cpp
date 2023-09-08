@@ -10,6 +10,7 @@
 #include "application.hpp"
 #include "renderer.hpp"
 #include "log.hpp"
+#include "game_object.hpp"
 
 using namespace ImGui;
 
@@ -101,12 +102,12 @@ objects()
 
     Separator();
 
-    for (GameObject& obj : Application::objects)
+    for (GameObject& obj : Application::scene->objects)
     {
         if (!obj.visible) PushStyleColor(ImGuiCol_Text, darkened);
 
         if (Selectable(obj.name.c_str()))
-            Application::selected_obj = &obj;
+            Application::scene->selected = &obj;
 
         if (!obj.visible) PopStyleColor();
     }
@@ -135,7 +136,7 @@ components()
 
     Begin(title, nullptr, flags);
 
-    if (!Application::selected_obj)
+    if (!Application::scene->selected)
     {
         DragFloat("Anim speed", &Application::animation_speed, 0.1f,
             0.0f, 100.0f);
@@ -144,12 +145,12 @@ components()
         return;
     }
 
-    Checkbox(Application::selected_obj->name.c_str(),
-        &Application::selected_obj->visible);
+    Checkbox(Application::scene->selected->name.c_str(),
+        &Application::scene->selected->visible);
     SameLine(GetWindowContentRegionMax().x - close_btn);
     if (Button("x"))
     {
-        Application::selected_obj = nullptr;
+        Application::scene->selected = nullptr;
 
         End();
         return;
@@ -158,22 +159,22 @@ components()
     Separator();
 
     Text("Position");
-    DragFloat("X##pos", &Application::selected_obj->position.x, 1.0f);
-    DragFloat("Y##pos", &Application::selected_obj->position.y, 1.0f);
-    DragFloat("Depth",  &Application::selected_obj->depth,      0.2f);
+    DragFloat("X##pos", &Application::scene->selected->position.x, 1.0f);
+    DragFloat("Y##pos", &Application::scene->selected->position.y, 1.0f);
+    DragFloat("Depth",  &Application::scene->selected->depth,      0.2f);
 
     Separator();
 
     Separator();
 
     Text("Size");
-    DragFloat("X##size", &Application::selected_obj->scale.x, 0.01f);
-    DragFloat("Y##size", &Application::selected_obj->scale.y, 0.01f);
+    DragFloat("X##size", &Application::scene->selected->scale.x, 0.01f);
+    DragFloat("Y##size", &Application::scene->selected->scale.y, 0.01f);
 
     Separator();
 
     Text("Rotation");
-    SliderFloat("Degrees", &Application::selected_obj->rotation,
+    SliderFloat("Degrees", &Application::scene->selected->rotation,
         0.0f, 360.0f);
 
     End();

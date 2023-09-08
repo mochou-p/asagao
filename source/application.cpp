@@ -8,7 +8,6 @@
 #include "gtc/matrix_transform.hpp"
 #include "style.hpp"
 #include "sprite_atlas.hpp"
-#include "scene.hpp"
 
 #define APP_NAME "Asagao"
 #define WINDOW_WIDTH 1600
@@ -30,8 +29,8 @@ Application::run()
     Shader          shader("atlas.glsl");
     SpriteAtlas     atlas("kenney_pixel-platformer.png", 18);
 
+    scene = std::make_unique<Scene>("demo-scene");
 
-    uv_frac = atlas.sprite_uv_frac;
 
     const float vertices[]
     {
@@ -75,8 +74,6 @@ Application::run()
         1.0f
     });
 
-    Scene::load("demo-scene");
-
 
     shader.use();
     shader.set_int("u_texture", atlas.texture->get_slot());
@@ -92,7 +89,7 @@ Application::run()
 
         renderer.clear();
 
-        for (const GameObject& obj : objects)
+        for (const GameObject& obj : scene->objects)
         {
             if (!obj.visible) continue;
 

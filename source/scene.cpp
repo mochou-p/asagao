@@ -12,8 +12,12 @@
 #define SCENE_HEADER_TOP "### Asagao Scene File ###"
 #define SCENE_HEADER_OBJ "--- Scene Objects -------"
 
-void
-Scene::load(const std::string& name)
+// temp
+// expecting that users did not "corrupt" the scene file
+// or atleast kept the same format and logic as Scene::save
+Scene::Scene(const std::string& name)
+: selected{nullptr}
+, m_name{name}
 {
     std::ifstream file(SCENE_PATH + ("/" + name) + SCENE_EXT);
 
@@ -37,91 +41,105 @@ Scene::load(const std::string& name)
     std::size_t help;
     float x, y;
 
-    // temp
-    // expecting that users did not "corrupt" the scene file
-    // or atleast kept the same format and logic as Scene::save
+    std::string obj_name;
+    glm::vec3 obj_position(0.0f), obj_scale(1.0f);
+    float obj_depth, obj_rotation;
+    bool obj_visible;
+    unsigned long long obj_sprite_count;
+    std::vector<glm::vec2> obj_sprite_offsets;
+
     while (!file.eof())
     {
         GameObject obj;
 
         // name
         std::getline(file, line);
-        obj.name = line.substr(line.find(" ") + 1);
+        obj_name = line.substr(line.find(" ") + 1);
 
         // position
         std::getline(file, line);
         temp = line.substr(line.find(" ") + 1);
         help = temp.find(",");
-        obj.position.x  = std::stof(temp.substr(0, help));
-        obj.position.y  = std::stof(temp.substr(help + 1));
-        obj.position   *= Application::rect_size;
+        obj_position.x  = std::stof(temp.substr(0, help));
+        obj_position.y  = std::stof(temp.substr(help + 1));
+        obj_position   *= Application::rect_size;
 
         // depth
         std::getline(file, line);
-        obj.depth = std::stof(line.substr(line.find(" ") + 1));
+        obj_depth = std::stof(line.substr(line.find(" ") + 1));
 
         // scale
         std::getline(file, line);
         temp = line.substr(line.find(" ") + 1);
         help = temp.find(",");
-        obj.scale.x = std::stof(temp.substr(0, help));
-        obj.scale.y = std::stof(temp.substr(help + 1));
-        obj.scale.z = 1.0f;
+        obj_scale.x = std::stof(temp.substr(0, help));
+        obj_scale.y = std::stof(temp.substr(help + 1));
 
         // rotation
         std::getline(file, line);
-        obj.rotation = std::stof(line.substr(line.find(" ") + 1));
+        obj_rotation = std::stof(line.substr(line.find(" ") + 1));
 
         // visible
         std::getline(file, line);
-        obj.visible = std::stoi(line.substr(line.find(" ") + 1));
+        obj_visible = std::stoi(line.substr(line.find(" ") + 1));
 
         // sprite count
         std::getline(file, line);
-        obj.sprite_count = std::stoull(line.substr(line.find(" ") + 1));
+        obj_sprite_count = std::stoull(line.substr(line.find(" ") + 1));
 
         // sprite offsets
         std::getline(file, line);
         std::istringstream iss(line.substr(line.find(" ") + 1));
+        obj_sprite_offsets.clear();
         while (std::getline(iss, temp, ','))
         {
             x = std::stof(temp);
             std::getline(iss, temp, ',');
             y = std::stof(temp);
 
-            obj.sprite_offsets.push_back
+            obj_sprite_offsets.push_back
             (
                 glm::vec2(x, y) * Application::uv_frac
             );
         }
 
-        Application::objects.push_back(obj);
+        objects.emplace_back
+        (
+            obj_name,
+            obj_position,
+            obj_depth,
+            obj_scale,
+            obj_rotation,
+            obj_visible,
+            obj_sprite_count,
+            obj_sprite_offsets
+        );
 
         std::getline(file, line);
     }
 }
 
 void
-Scene::save(const std::string& name)
+Scene::save() const
 {
-    std::ofstream file(SCENE_PATH + ("/" + name) + SCENE_EXT);
+    std::ofstream file(SCENE_PATH + ("/" + m_name) + SCENE_EXT);
 
     if (!file.is_open())
     {
-        LOG_ERROR("failed to open " + name);
+        LOG_ERROR("failed to open " + m_name);
         return;
     }
 
     file << SCENE_HEADER_TOP << std::endl
          << std::endl
          << "version: " << SCENE_VER << std::endl
-         << "name: " << name << std::endl
+         << "name: " << m_name << std::endl
          << std::endl
          << SCENE_HEADER_OBJ << std::endl;
 
     unsigned char i;
 
-    for (const GameObject& obj : Application::objects)
+    for (const GameObject& obj : objects)
     {
         file << std::endl
              << "name: " << obj.name

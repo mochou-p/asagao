@@ -13,19 +13,7 @@
 #include "glm.hpp"
 #include "texture.hpp"
 #include "renderer.hpp"
-
-struct GameObject
-{
-    std::string name;
-    glm::vec3   position;
-    float       depth;
-    glm::vec3   scale;
-    float       rotation;
-    bool        visible;
-
-    std::vector<glm::vec2> sprite_offsets;
-    long long unsigned int sprite_count;
-};
+#include "scene.hpp"
 
 class Application
 {
@@ -33,9 +21,6 @@ public:
     Application() {};
 
     void run();
-
-    static inline std::deque<GameObject> objects;
-    static inline GameObject*            selected_obj = nullptr;
 
     static inline bool view_changed = true;
 
@@ -45,6 +30,8 @@ public:
     static inline       float     animation_speed =   1.7f;
     static inline const float     rect_size       = 100.0f;
     static inline       glm::vec2 uv_frac;
+
+    static inline std::unique_ptr<Scene> scene;
 };
 
 #endif  // __application_hpp_
