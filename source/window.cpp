@@ -2,15 +2,18 @@
 
 
 #include <cassert>
+#include <array>
 #include "window.hpp"
 #include "style.hpp"
 #include "renderer.hpp"
 #include "application.hpp"
 #include "log.hpp"
+#include "image.hpp"
 
 #define VSYNC 1
 #define OPENGL_VER_MAJOR 4
 #define OPENGL_VER_MINOR 6
+#define WINDOW_ICON_PATH "resources/branding/"
 
 static void
 framebuffer_size_callback
@@ -180,6 +183,26 @@ Window::init
 
     assert(handle);
 
+    std::array<Image, 5> images
+    {
+        Image(WINDOW_ICON_PATH + std::string("asagao-256x256.png")),
+        Image(WINDOW_ICON_PATH + std::string("asagao-128x128.png")),
+        Image(WINDOW_ICON_PATH + std::string("asagao-64x64.png")),
+        Image(WINDOW_ICON_PATH + std::string("asagao-32x32.png")),
+        Image(WINDOW_ICON_PATH + std::string("asagao-16x16.png"))
+    };
+
+    GLFWimage icons[images.size()];
+    
+    for (unsigned char i = 0; i < images.size(); ++i)
+    {
+        icons[i].width  = images[i].get_width();
+        icons[i].height = images[i].get_height();
+        icons[i].pixels = images[i].get_data();
+    }
+
+    glfwSetWindowIcon(handle, images.size(), icons);
+
     if (const GLFWvidmode* screen = glfwGetVideoMode(glfwGetPrimaryMonitor()))
     {
         int x = (screen->width  - width)  * 0.5f;
@@ -188,10 +211,10 @@ Window::init
         glfwSetWindowPos(handle, x, y);
     }
 
-    glfwSetFramebufferSizeCallback(handle, framebuffer_size_callback);
-    glfwSetScrollCallback(         handle,           scroll_callback);
-    glfwSetMouseButtonCallback(    handle,     mouse_button_callback);
-    glfwSetCursorPosCallback(      handle,  cursor_position_callback);
+    glfwSetFramebufferSizeCallback (handle, framebuffer_size_callback);
+    glfwSetScrollCallback          (handle,           scroll_callback);
+    glfwSetMouseButtonCallback     (handle,     mouse_button_callback);
+    glfwSetCursorPosCallback       (handle,  cursor_position_callback);
 
     glfwMakeContextCurrent(handle);
     glfwSwapInterval(VSYNC);

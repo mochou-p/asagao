@@ -4,9 +4,8 @@
 #include <cstring>
 #include "texture.hpp"
 #include "log.hpp"
+#include "image.hpp"
 #include "glad/glad.h"
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
 
 #define TEXTURE_PATH "resources/"
 #define DEFAULT_TEXTURE "texture/default.png"
@@ -15,14 +14,12 @@ Texture::Texture(const std::string& filepath)
 {
     if (count >= 32)
         LOG_FATAL("maximum number of textures exceeded (32)");
-
-    stbi_set_flip_vertically_on_load(true);
-
-    int width, height, channels;
-    stbi_uc* data;
     
-    data = stbi_load((TEXTURE_PATH + filepath).c_str(), &width,
-        &height, &channels, 4);
+    Image image(TEXTURE_PATH + filepath);
+
+    unsigned char* data   = image.get_data();
+    int            width  = image.get_width();
+    int            height = image.get_height();
 
     if (!data)
     {
@@ -69,8 +66,6 @@ Texture::Texture(const std::string& filepath)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
         GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
-
-    stbi_image_free(data);
 }
 
 Texture::~Texture()
