@@ -17,7 +17,7 @@
 // or atleast kept the same format and logic as Scene::save
 Scene::Scene(const std::string& name)
 : selected{nullptr}
-, m_name{name}
+, name{name}
 {
     std::ifstream file(SCENE_PATH + ("/" + name) + SCENE_EXT);
 
@@ -122,18 +122,18 @@ Scene::Scene(const std::string& name)
 void
 Scene::save() const
 {
-    std::ofstream file(SCENE_PATH + ("/" + m_name) + SCENE_EXT);
+    std::ofstream file(SCENE_PATH + ("/" + name) + SCENE_EXT);
 
     if (!file.is_open())
     {
-        LOG_ERROR("failed to open " + m_name);
+        LOG_ERROR("failed to open " + name);
         return;
     }
 
     file << SCENE_HEADER_TOP << std::endl
          << std::endl
          << "version: " << SCENE_VER << std::endl
-         << "name: " << m_name << std::endl
+         << "name: " << name << std::endl
          << std::endl
          << SCENE_HEADER_OBJ << std::endl;
 

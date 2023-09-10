@@ -1,6 +1,7 @@
 // asagao/source/interface.cpp
 
 
+#include <filesystem>
 #include "interface.hpp"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -12,7 +13,9 @@
 #include "log.hpp"
 #include "game_object.hpp"
 
+namespace fs = std::filesystem; 
 using namespace ImGui;
+
 
 static void
 set_theme()
@@ -47,6 +50,12 @@ set_theme()
 }
 
 Interface::Interface()
+: m_current_view{0}
+//               wow
+,        m_views{
+                 [this]() { this->startup_view(); },
+                 [this]() { this->scene_view();   }
+                }
 {
     IMGUI_CHECKVERSION();
 
@@ -78,7 +87,14 @@ new_frame()
 }
 
 static void
-objects()
+render_draw_data()
+{
+    Render();
+    ImGui_ImplOpenGL3_RenderDrawData(GetDrawData());
+}
+
+void
+Interface::objects()
 {
     static const char*            title    = "Objects";
     static const ImGuiWindowFlags flags    = ImGuiWindowFlags_NoMove
@@ -98,7 +114,17 @@ objects()
 
     Begin(title, nullptr, flags);
 
-    Text("Demo scene");
+    if (Button("Back"))
+    {
+        Application::scene = nullptr;
+        m_current_view     = 0;
+
+        End();
+        return;
+    }
+
+    SameLine();
+    Text(Application::scene->name.c_str());
 
     Separator();
 
@@ -122,6 +148,8 @@ components()
     static const ImGuiWindowFlags     flags     = ImGuiWindowFlags_NoMove
         | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
     static const float                close_btn = CalcTextSize("x ").x;
+
+    if (!Application::scene) return;
 
     SetNextWindowPos
     ({
@@ -180,24 +208,64 @@ components()
     End();
 }
 
-static void
-update_widgets()
+void
+Interface::draw()
 {
-    objects();
-    components();
+    new_frame();
+    m_views[m_current_view]();
+    render_draw_data();
 }
 
-static void
-render_draw_data()
+static std::vector<std::string>
+get_scenes()
 {
-    Render();
-    ImGui_ImplOpenGL3_RenderDrawData(GetDrawData());
+    static const fs::path    directory = "resources/scenes";
+    static const std::string extension = ".asagao";
+
+    std::vector<std::string> scenes;
+
+    for (const auto& entry : fs::directory_iterator(directory))
+    {
+        if (entry.is_regular_file() && entry.path().extension() == extension)
+            scenes.emplace_back(entry.path().stem().string());
+    }
+
+    if (!scenes.size())
+        LOG_WARN("no scenes found");
+
+    return scenes;
 }
 
 void
-Interface::draw() const
+Interface::startup_view()
 {
-    new_frame();
-    update_widgets();
-    render_draw_data();
+    static const char*            title = "Select a scene";
+    static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove
+        | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
+    static const ImVec2           pos   = {0.0f, 0.0f};
+
+    static const std::vector<std::string> scenes = get_scenes();
+
+    SetNextWindowPos(pos);
+    SetNextWindowSize({Window::size.x, Window::size.y});
+
+    Begin(title, nullptr, flags);
+
+    for (const std::string& scene : scenes)
+    {
+        if (Button(scene.c_str()))
+        {
+            Application::scene = std::make_unique<Scene>(scene);
+            m_current_view     = 1;
+        }
+    }
+
+    End();
+}
+
+void
+Interface::scene_view()
+{
+    objects();
+    components();
 }

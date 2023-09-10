@@ -29,8 +29,6 @@ Application::run()
     Shader          shader("atlas.glsl");
     SpriteAtlas     atlas("kenney_pixel-platformer.png", 18);
 
-    scene = std::make_unique<Scene>("demo-scene");
-
 
     const float vertices[]
     {
@@ -83,32 +81,35 @@ Application::run()
     {
         window.poll_events();
 
-        animation_time = glfwGetTime() * animation_speed;
-
-        projection = glm::ortho(-aspect.x, aspect.x, -aspect.y, aspect.y);
-
-        renderer.clear();
-
-        for (const GameObject& obj : scene->objects)
+        if (scene)
         {
-            if (!obj.visible) continue;
+            animation_time = glfwGetTime() * animation_speed;
 
-            view = glm::translate
-            (
-                mat4_identity,
-                camera - (camera * obj.depth * 0.08f)
-            );
+            projection = glm::ortho(-aspect.x, aspect.x, -aspect.y, aspect.y);
 
-            model     = glm::translate(mat4_identity, obj.position);
-            model     = glm::rotate(model, glm::radians(obj.rotation), z_axis);
-            model     = glm::scale(model, obj.scale);
+            renderer.clear();
 
-            sprite_id = animation_time % obj.sprite_count;
+            for (const GameObject& obj : scene->objects)
+            {
+                if (!obj.visible) continue;
 
-            shader.set_mat4("u_mvp",     projection * view * model);
-            shader.set_vec2("u_tile_uv", obj.sprite_offsets[sprite_id]);
+                view = glm::translate
+                (
+                    mat4_identity,
+                    camera - (camera * obj.depth * 0.08f)
+                );
 
-            renderer.draw(va, ib, shader);
+                model = glm::translate(mat4_identity, obj.position);
+                model = glm::rotate(model, glm::radians(obj.rotation), z_axis);
+                model = glm::scale(model, obj.scale);
+
+                sprite_id = animation_time % obj.sprite_count;
+
+                shader.set_mat4("u_mvp",     projection * view * model);
+                shader.set_vec2("u_tile_uv", obj.sprite_offsets[sprite_id]);
+
+                renderer.draw(va, ib, shader);
+            }
         }
 
         ui.draw();

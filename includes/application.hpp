@@ -18,8 +18,6 @@
 class Application
 {
 public:
-    Application() {};
-
     void run();
 
     static inline bool view_changed = true;

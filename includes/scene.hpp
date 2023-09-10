@@ -18,9 +18,8 @@ public:
     void save() const;
 
     std::vector<GameObject> objects;
-    GameObject* selected;
-private:
-    std::string m_name;
+    GameObject*             selected;
+    std::string             name;
 };
 
 #endif  // __scene_hpp_
