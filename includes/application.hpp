@@ -14,6 +14,7 @@
 #include "texture.hpp"
 #include "renderer.hpp"
 #include "scene.hpp"
+#include "camera.hpp"
 
 class Application
 {
@@ -23,7 +24,7 @@ public:
     static inline bool view_changed = true;
 
     static inline glm::vec2 aspect;
-    static inline glm::vec3 camera = {0.0f, 0.0f, 0.0f};
+    static inline Camera camera;
 
     static inline       float     animation_speed =   1.7f;
     static inline const float     rect_size       = 100.0f;

@@ -16,12 +16,8 @@
 void
 Application::run()
 {
-    glm::mat4       model, view, projection;
     unsigned int    animation_time;
     unsigned int    sprite_id;
-
-    const glm::mat4 mat4_identity(1.0f);
-    const glm::vec3 z_axis(0.0f, 0.0f, 1.0f);
 
     Renderer        renderer;
     Window          window(APP_NAME, WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -81,31 +77,20 @@ Application::run()
     {
         window.poll_events();
 
+        renderer.clear();
+
         if (scene)
         {
             animation_time = glfwGetTime() * animation_speed;
-
-            projection = glm::ortho(-aspect.x, aspect.x, -aspect.y, aspect.y);
-
-            renderer.clear();
 
             for (const GameObject& obj : scene->objects)
             {
                 if (!obj.visible) continue;
 
-                view = glm::translate
-                (
-                    mat4_identity,
-                    camera - (camera * obj.depth * 0.08f)
-                );
-
-                model = glm::translate(mat4_identity, obj.position);
-                model = glm::rotate(model, glm::radians(obj.rotation), z_axis);
-                model = glm::scale(model, obj.scale);
-
+                camera.update_object(obj);
                 sprite_id = animation_time % obj.sprite_count;
 
-                shader.set_mat4("u_mvp",     projection * view * model);
+                shader.set_mat4("u_mvp",     camera.get_mvp());
                 shader.set_vec2("u_tile_uv", obj.sprite_offsets[sprite_id]);
 
                 renderer.draw(va, ib, shader);

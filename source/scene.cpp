@@ -117,6 +117,8 @@ Scene::Scene(const std::string& name)
 
         std::getline(file, line);
     }
+
+    Application::camera.set_position({0.0f, 0.0f, 0.0f});
 }
 
 void

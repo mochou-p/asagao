@@ -30,7 +30,7 @@ framebuffer_size_callback
 
     glViewport(pos.x, pos.y, size.x, size.y);
 
-    Application::aspect = Window::size * Layout::scene.size * Renderer::zoom;
+    Application::camera.update_projection();
 
     (void)(window);
 }
@@ -38,9 +38,9 @@ framebuffer_size_callback
 static bool
 mouse_hovers_screen()
 {
-    glm::vec2 top_left     = Window::size * Layout::scene.pos;
-    glm::vec2 bottom_right = Window::size
-        * (Layout::scene.pos + Layout::scene.size);
+    glm::vec2 top_left      = Window::size * Layout::scene.pos;
+    glm::vec2 bottom_right  = Window::size;
+    bottom_right           *= Layout::scene.pos + Layout::scene.size;
 
     return
     (
@@ -71,10 +71,11 @@ scroll_callback
     glm::vec2 offset = mouse_pos_frac * Window::size * Renderer::zoom
         * 0.05f;
 
-    Application::camera += glm::vec3(offset.x, offset.y, 0.0f);
 
     Renderer::zoom -= Renderer::zoom * 0.05f * yoffset;
-    Application::aspect = Window::size * Layout::scene.size * Renderer::zoom;
+
+    Application::camera.move({offset.x, offset.y, 0.0f});
+    Application::camera.update_projection();
 
     (void)(window);
     (void)(xoffset);
@@ -116,7 +117,8 @@ cursor_position_callback
     {
         glm::vec2 diff = {(Window::mouse_pos - glm::vec2(xpos, ypos))
             * (Renderer::zoom * 2)};
-        Application::camera += glm::vec3(-diff.x, diff.y, 0.0f);
+
+        Application::camera.move({-diff.x, diff.y, 0.0f});
     }
 
     Window::mouse_pos = {xpos, ypos};
