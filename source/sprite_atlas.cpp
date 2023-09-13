@@ -14,5 +14,5 @@ SpriteAtlas::SpriteAtlas
 {
     texture = std::make_unique<Texture>(ATLAS_PATH + filepath);
 
-    Application::uv_frac = (float) sprite_size / texture->get_size();
+    Application::uv_fraction = (float) sprite_size / texture->get_size();
 }

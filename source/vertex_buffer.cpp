@@ -6,13 +6,18 @@
 
 VertexBuffer::VertexBuffer
 (
- const void*  data,
-       size_t size
+ const Rect& quad
 )
 {
     glGenBuffers(1, &m_id);
     glBindBuffer(GL_ARRAY_BUFFER, m_id);
-    glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+    glBufferData
+    (
+        GL_ARRAY_BUFFER,
+        quad.get_vertices_size(),
+        quad.get_vertices(),
+        GL_STATIC_DRAW
+    );
 }
 
 VertexBuffer::~VertexBuffer()

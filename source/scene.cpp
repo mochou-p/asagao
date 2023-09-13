@@ -99,7 +99,7 @@ Scene::Scene(const std::string& name)
 
             obj_sprite_offsets.push_back
             (
-                glm::vec2(x, y) * Application::uv_frac
+                glm::vec2(x, y) * Application::uv_fraction
             );
         }
 
@@ -166,8 +166,8 @@ Scene::save() const
         for (const glm::vec2& ofs : obj.sprite_offsets)
         {
             if (i++) file << ",";
-            file << ofs.x / Application::uv_frac.x << ","
-                 << ofs.y / Application::uv_frac.y;
+            file << ofs.x / Application::uv_fraction.x << ","
+                 << ofs.y / Application::uv_fraction.y;
         }
 
         file << std::endl;

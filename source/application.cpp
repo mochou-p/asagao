@@ -8,6 +8,7 @@
 #include "gtc/matrix_transform.hpp"
 #include "style.hpp"
 #include "sprite_atlas.hpp"
+#include "rect.hpp"
 
 #define APP_NAME "Asagao"
 #define WINDOW_WIDTH 1600
@@ -16,32 +17,16 @@
 void
 Application::run()
 {
-    unsigned int animation_time;
+    Renderer  renderer;
+    Window    window(APP_NAME, WINDOW_WIDTH, WINDOW_HEIGHT);
+    Interface ui;
 
-    Renderer     renderer;
-    Window       window(APP_NAME, WINDOW_WIDTH, WINDOW_HEIGHT);
-    Interface    ui;
-    Shader       shader("atlas.glsl");
-    SpriteAtlas  atlas("kenney_pixel-platformer.png", 18);
+    Shader      shader("atlas.glsl");
+    SpriteAtlas atlas("kenney_pixel-platformer.png", 18);
 
+    Rect quad(rect_size, uv_fraction);
 
-    const float vertices[]
-    {
-       -rect_size * 0.5f,   -rect_size * 0.5f, // x, y
-        0.0f,               0.0f,              // u, v
-
-        rect_size * 0.5f,   -rect_size * 0.5f,
-        uv_frac.x,          0.0f,
-
-        rect_size * 0.5f,   rect_size * 0.5f,
-        uv_frac.x,          uv_frac.y,
-
-       -rect_size * 0.5f,   rect_size * 0.5f,
-        0.0f,               uv_frac.y,
-    };
-
-    VertexBuffer vb(vertices, sizeof(vertices));
-
+    VertexBuffer       vb(quad);
     VertexBufferLayout layout;
     layout.push(2, GL_FLOAT);  // position
     layout.push(2, GL_FLOAT);  // texcoord
@@ -49,28 +34,14 @@ Application::run()
     VertexArray va;
     va.add_vertex_buffer(vb, layout);
 
+    IndexBuffer ib(quad);
 
-    const unsigned int indices[]
-    {
-        0, 1, 2,
-        2, 3, 0
-    };
-
-    IndexBuffer ib(indices, sizeof(indices) / sizeof(unsigned int));
-
-
-    renderer.set_background_color
-    ({
-        223.0f / 255.0f,
-        246.0f / 255.0f,
-        245.0f / 255.0f,
-        1.0f
-    });
-
+    renderer.set_background_color({0.875f, 0.965f, 0.961f, 1.0f});
 
     shader.use();
     shader.set_int("u_texture", atlas.texture->get_slot());
 
+    unsigned int animation_time;
 
     while (window.is_open())
     {

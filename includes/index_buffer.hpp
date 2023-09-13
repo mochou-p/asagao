@@ -5,10 +5,12 @@
 #ifndef __index_buffer_hpp_
 #define __index_buffer_hpp_
 
+#include "rect.hpp"
+
 class IndexBuffer
 {
 public:
-    IndexBuffer(const unsigned int* data, unsigned int count);
+    IndexBuffer(const Rect& quad);
     ~IndexBuffer();
 
     void bind() const;

@@ -6,11 +6,12 @@
 #define __vertex_buffer_hpp_
 
 #include <cstddef>
+#include "rect.hpp"
 
 class VertexBuffer
 {
 public:
-    VertexBuffer(const void* data, size_t size);
+    VertexBuffer(const Rect& quad);
     ~VertexBuffer();
 
     void bind() const;

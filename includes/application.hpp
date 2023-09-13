@@ -28,7 +28,7 @@ public:
 
     static inline       float     animation_speed =   1.7f;
     static inline const float     rect_size       = 100.0f;
-    static inline       glm::vec2 uv_frac;
+    static inline       glm::vec2 uv_fraction;
 
     static inline std::unique_ptr<Scene> scene;
 };

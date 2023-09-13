@@ -6,15 +6,19 @@
 
 IndexBuffer::IndexBuffer
 (
- const unsigned int* data,
-       unsigned int  count
+ const Rect& quad
 )
-: m_count(count)
+: m_count(quad.get_indices_count())
 {
     glGenBuffers(1, &m_id);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_id);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), data,
-        GL_STATIC_DRAW);
+    glBufferData
+    (
+        GL_ELEMENT_ARRAY_BUFFER,
+        m_count * sizeof(unsigned int),
+        quad.get_indices(),
+        GL_STATIC_DRAW
+    );
 }
 
 IndexBuffer::~IndexBuffer()
