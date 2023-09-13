@@ -16,14 +16,13 @@
 void
 Application::run()
 {
-    unsigned int    animation_time;
-    unsigned int    sprite_id;
+    unsigned int animation_time;
 
-    Renderer        renderer;
-    Window          window(APP_NAME, WINDOW_WIDTH, WINDOW_HEIGHT);
-    Interface       ui;
-    Shader          shader("atlas.glsl");
-    SpriteAtlas     atlas("kenney_pixel-platformer.png", 18);
+    Renderer     renderer;
+    Window       window(APP_NAME, WINDOW_WIDTH, WINDOW_HEIGHT);
+    Interface    ui;
+    Shader       shader("atlas.glsl");
+    SpriteAtlas  atlas("kenney_pixel-platformer.png", 18);
 
 
     const float vertices[]
@@ -76,7 +75,6 @@ Application::run()
     while (window.is_open())
     {
         window.poll_events();
-
         renderer.clear();
 
         if (scene)
@@ -88,17 +86,15 @@ Application::run()
                 if (!obj.visible) continue;
 
                 camera.update_object(obj);
-                sprite_id = animation_time % obj.sprite_count;
 
                 shader.set_mat4("u_mvp",     camera.get_mvp());
-                shader.set_vec2("u_tile_uv", obj.sprite_offsets[sprite_id]);
+                shader.set_vec2("u_tile_uv", obj.get_uv(animation_time));
 
                 renderer.draw(va, ib, shader);
             }
         }
 
         ui.draw();
-
         window.swap_buffers();
     }
 }

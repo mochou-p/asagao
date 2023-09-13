@@ -20,6 +20,9 @@ struct GameObject
 
     long long unsigned int sprite_count;
     std::vector<glm::vec2> sprite_offsets;
+
+    inline const glm::vec2& get_uv(const unsigned int animation_time) const
+    { return sprite_offsets[animation_time % sprite_count]; }
 };
 
 #endif  // __game_object_hpp_
