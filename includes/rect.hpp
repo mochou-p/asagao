@@ -8,6 +8,10 @@
 #include <vector>
 #include "glm.hpp"
 
+#define INDEX_COUNT 6
+// 4 * (position(x, y), texcoord(u, v))
+#define VERTEX_COUNT 16
+
 class Rect
 {
 public:
@@ -15,20 +19,20 @@ public:
     ~Rect() {}
 
     inline const float* get_vertices() const
-    { return m_vertices.data(); }
+    { return m_vertices; }
 
     inline size_t get_vertices_size() const
-    { return sizeof(float) * m_vertices.size(); }
+    { return VERTEX_COUNT * sizeof(float); }
 
     inline const unsigned int* get_indices() const
-    { return m_indices.data(); }
+    { return m_indices; }
 
     inline unsigned int get_indices_count() const
-    { return m_indices.size(); }
+    { return INDEX_COUNT; }
 
 private:
-    std::vector<float>        m_vertices;
-    std::vector<unsigned int> m_indices;
+    float        m_vertices[VERTEX_COUNT];
+    unsigned int m_indices[INDEX_COUNT];
 };
 
 #endif  // __rect_hpp_
