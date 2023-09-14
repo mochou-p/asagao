@@ -51,6 +51,8 @@ mouse_hovers_screen()
     );
 }
 
+static inline bool sign(float value) { return value >= 0.0f; }
+
 static void
 scroll_callback
 (
@@ -68,13 +70,19 @@ scroll_callback
     mouse_pos_frac.y *= -1;
     mouse_pos_frac   *= yoffset / abs(yoffset);
 
-    glm::vec2 offset = mouse_pos_frac * Window::size * Renderer::zoom
-        * 0.05f;
-
-
-    Renderer::zoom -= Renderer::zoom * 0.05f * yoffset;
+    glm::vec2 offset  = mouse_pos_frac;
+    offset           *= Window::size;
+    offset           *= Renderer::zoom;
+    offset           *= 0.05f;
 
     Application::camera.move({offset.x, offset.y, 0.0f});
+
+    const float zoom_diff = sign(yoffset)
+        ? Renderer::zoom / -20
+        : Renderer::zoom /  19;
+
+    Renderer::zoom += zoom_diff;
+
     Application::camera.update_projection();
 
     (void)(window);
