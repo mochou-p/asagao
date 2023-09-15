@@ -1,3 +1,6 @@
+<!-- asagao/README.md -->
+
+
 # Asagao - 2D Game Engine
 
 ![Asagao icon](resources/branding/asagao-banner.png "Asagao")
@@ -7,6 +10,20 @@
 ---
 
 ### Usage
-Run `make` from your terminal to compile\
-Run `make run` to run the app
-###### *At this moment, this ensures that no path related errors will occur
+
+```bash
+# Navigate to the project root (../asagao)
+
+# Generate project files
+$ vendor/premake/premake5 [action]
+...
+
+# Compile the project
+$ make
+...
+
+# Run the executable
+$ build/Debug/Asagao
+```
+
+[Premake documentation for \[action\]](https://premake.github.io/docs/Using-Premake "How to use Premake")

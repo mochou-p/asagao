@@ -63,12 +63,12 @@ scroll_callback
 {
     if (!yoffset || !mouse_hovers_screen()) return;
 
-    glm::vec2 mouse_pos_frac = Window::mouse_pos / Window::size;
-    mouse_pos_frac   *= -2;
-    mouse_pos_frac   +=  1;
-    mouse_pos_frac   /= Layout::scene.size;
-    mouse_pos_frac.y *= -1;
-    mouse_pos_frac   *= yoffset / abs(yoffset);
+    glm::vec2 mouse_pos_frac  = Window::mouse_pos / Window::size;
+    mouse_pos_frac           *= -2;
+    mouse_pos_frac           +=  1;
+    mouse_pos_frac           /= Layout::scene.size;
+    mouse_pos_frac.y         *= -1;
+    mouse_pos_frac           *= yoffset / abs(yoffset);
 
     glm::vec2 offset  = mouse_pos_frac;
     offset           *= Window::size;
