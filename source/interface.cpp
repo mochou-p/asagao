@@ -12,15 +12,14 @@
 #include "renderer.hpp"
 #include "log.hpp"
 #include "game_object.hpp"
+#include "image.hpp"
 
 namespace fs = std::filesystem; 
-using namespace ImGui;
-
 
 static void
 set_theme()
 {
-    ImGuiStyle& style = GetStyle();
+    ImGuiStyle& style = ImGui::GetStyle();
     style.WindowBorderSize = 0.0f;
 
     ImVec4* colors = style.Colors;
@@ -59,15 +58,15 @@ Interface::Interface()
 {
     IMGUI_CHECKVERSION();
 
-    CreateContext();
-    StyleColorsDark();
+    ImGui::CreateContext();
+    ImGui::StyleColorsDark();
 
     ImGui_ImplGlfw_InitForOpenGL(Window::handle, true);
     ImGui_ImplOpenGL3_Init();
 
     LOG_INFO(std::string("ImGui ") + IMGUI_VERSION);
 
-    GetIO().IniFilename = nullptr;
+    ImGui::GetIO().IniFilename = nullptr;
     set_theme();
 }
 
@@ -75,7 +74,7 @@ Interface::~Interface()
 {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
-    DestroyContext();
+    ImGui::DestroyContext();
 }
 
 static void
@@ -83,19 +82,21 @@ new_frame()
 {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
-    NewFrame();
+    ImGui::NewFrame();
 }
 
 static void
 render_draw_data()
 {
-    Render();
-    ImGui_ImplOpenGL3_RenderDrawData(GetDrawData());
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 void
 Interface::objects()
 {
+    using namespace ImGui;
+
     static const char*            title    = "Objects";
     static const ImGuiWindowFlags flags    = ImGuiWindowFlags_NoMove
         | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
@@ -144,6 +145,8 @@ Interface::objects()
 static void
 components()
 {
+    using namespace ImGui;
+
     static const char*                title     = "Components";
     static const ImGuiWindowFlags     flags     = ImGuiWindowFlags_NoMove
         | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
@@ -239,6 +242,8 @@ get_scenes()
 void
 Interface::startup_view()
 {
+    using namespace ImGui;
+
     static const char*            title = "Select a scene";
     static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove
         | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
@@ -268,4 +273,20 @@ Interface::scene_view()
 {
     objects();
     components();
+}
+
+static void
+tilemap_view()
+{
+    // todo: get here from right click on a tilemap and change m_current_view there
+
+    using namespace ImGui;
+
+    static const Texture     texture("atlases/kenney_pixel-platformer.png", false);
+    static const ImTextureID tex_slot = (void*) texture.get_slot();
+    static const ImVec2      tex_size = {texture.get_size().x, texture.get_size().y};
+
+    ImGui::Begin("Tile selector", nullptr);
+        ImGui::Image(tex_slot, tex_size);
+    ImGui::End();
 }

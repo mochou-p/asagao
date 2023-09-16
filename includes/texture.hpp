@@ -11,7 +11,7 @@
 class Texture
 {
 public:
-    Texture(const std::string& filepath);
+    Texture(const std::string& filepath, bool flip_y = true);
     ~Texture();
 
     static inline unsigned int count = 0;

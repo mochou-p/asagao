@@ -10,12 +10,16 @@
 #define TEXTURE_PATH "resources/"
 #define DEFAULT_TEXTURE "texture/default.png"
 
-Texture::Texture(const std::string& filepath)
+Texture::Texture
+(
+ const std::string& filepath,
+       bool         flip_y
+)
 {
     if (count >= 32)
         LOG_FATAL("maximum number of textures exceeded (32)");
     
-    Image image(TEXTURE_PATH + filepath);
+    Image image(TEXTURE_PATH + filepath, flip_y);
 
     unsigned char* data   = image.get_data();
     int            width  = image.get_width();
