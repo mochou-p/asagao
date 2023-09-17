@@ -21,7 +21,7 @@ public:
 private:
     void startup_view();
     void scene_view();
-    void objects();
+    void details();
 
     unsigned char         m_current_view;
     std::function<void()> m_views[2];

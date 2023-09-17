@@ -22,7 +22,7 @@ Application::run()
     Interface ui;
 
     Shader      shader("atlas.glsl");
-    SpriteAtlas atlas("kenney_pixel-platformer.png", 18);
+    SpriteAtlas atlas("kenney-pixel-platformer.png", 18);
 
     Rect quad(rect_size, uv_fraction);
 
@@ -56,9 +56,7 @@ Application::run()
             {
                 if (!obj.visible) continue;
 
-                camera.update_object(obj);
-
-                shader.set_mat4("u_mvp",     camera.get_mvp());
+                shader.set_mat4("u_mvp",     camera.get_mvp(obj));
                 shader.set_vec2("u_tile_uv", obj.get_uv(animation_time));
 
                 renderer.draw(va, ib, shader);
