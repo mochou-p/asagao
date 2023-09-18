@@ -86,12 +86,11 @@ load_fonts()
 }
 
 Interface::Interface()
-: m_current_view{0}
-//               wow
-,        m_views{
-                 [this]() { this->startup_view(); },
-                 [this]() { this->scene_view();   }
-                }
+//        wow
+: m_views{
+          [this]() { this->startup_view(); },
+          [this]() { this->scene_view();   }
+         }
 {
     IMGUI_CHECKVERSION();
 
@@ -177,6 +176,8 @@ Interface::details()
     static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove;
     static const float button_height    = GetItemRectSize().y;
     static const ImVec2 window_padding  = {0.0f, 0.0f};
+    static const ImVec4 black           = {0.0f, 0.0f, 0.0f, 1.0f};
+    static glm::vec2 camera_pos;
 
     SetNextWindowPos
     ({
@@ -193,20 +194,21 @@ Interface::details()
 
     Begin(title, nullptr, flags);
 
+    PushStyleColor(ImGuiCol_Button, black);
     if (Button((ICON_FA_MOUNTAIN_SUN " " + Application::scene->name).c_str()))
     {
         Application::scene = nullptr;
-        m_current_view     = 0;
+        current_view       = STARTUP_VIEW;
 
+        PopStyleColor();
         End();
         PopStyleVar();
         return;
     }
+    PopStyleColor();
 
     SameLine();
-
     TextDisabled("|");
-
     SameLine();
 
     Text
@@ -217,6 +219,38 @@ Interface::details()
             + "%%"
         ).c_str()
     );
+
+    SameLine();
+    TextDisabled("|");
+    SameLine();
+
+    camera_pos = Application::camera.get_position();
+    Text
+    (
+        (
+            (ICON_FA_CAMERA " ")
+            + std::to_string((int) camera_pos.x)
+            + ", "
+            + std::to_string((int) camera_pos.y)
+        ).c_str()
+    );
+
+    if (mouse_hovers_scene())
+    {
+        SameLine();
+        TextDisabled("|");
+        SameLine();
+
+        Text
+        (
+            (
+                (ICON_FA_ARROW_POINTER " ")
+                + std::to_string((int) (Window::mouse_pos.x - Window::size.x * 0.5f))
+                + ", "
+                + std::to_string((int) (Window::mouse_pos.y - Window::size.y * 0.5f))
+            ).c_str()
+        );
+    }
 
     End();
 
@@ -300,7 +334,7 @@ void
 Interface::draw()
 {
     new_frame();
-    m_views[m_current_view]();
+    m_views[current_view]();
     render_draw_data();
 }
 
@@ -347,7 +381,7 @@ Interface::startup_view()
         if (Button((ICON_FA_MOUNTAIN_SUN " " + scene).c_str()))
         {
             Application::scene = std::make_unique<Scene>(scene);
-            m_current_view     = 1;
+            current_view       = SCENE_VIEW;
         }
     }
     PopStyleVar();

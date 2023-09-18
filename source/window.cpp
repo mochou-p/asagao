@@ -4,11 +4,11 @@
 #include <cassert>
 #include <array>
 #include "window.hpp"
-#include "style.hpp"
 #include "renderer.hpp"
 #include "application.hpp"
 #include "log.hpp"
 #include "image.hpp"
+#include "interface.hpp"
 
 #define VSYNC 1
 #define OPENGL_VER_MAJOR 4
@@ -35,22 +35,6 @@ framebuffer_size_callback
     (void)(window);
 }
 
-static bool
-mouse_hovers_screen()
-{
-    glm::vec2 top_left      = Window::size * Layout::scene.pos;
-    glm::vec2 bottom_right  = Window::size;
-    bottom_right           *= Layout::scene.pos + Layout::scene.size;
-
-    return
-    (
-        top_left.x < Window::mouse_pos.x &&
-        Window::mouse_pos.x < bottom_right.x &&
-        top_left.y < Window::mouse_pos.y &&
-        Window::mouse_pos.y < bottom_right.y
-    );
-}
-
 static inline bool sign(float value) { return value >= 0.0f; }
 
 static void
@@ -61,7 +45,8 @@ scroll_callback
  double      yoffset
 )
 {
-    if (!yoffset || !mouse_hovers_screen()) return;
+    if (!yoffset || Interface::get_view() != SCENE_VIEW || !mouse_hovers_scene())
+        return;
 
     glm::vec2 mouse_pos_frac  = Window::mouse_pos / Window::size;
     mouse_pos_frac           *= -2;
@@ -77,11 +62,7 @@ scroll_callback
 
     Application::camera.move({offset.x, offset.y, 0.0f});
 
-    const float zoom_diff = sign(yoffset)
-        ? Renderer::zoom / -20
-        : Renderer::zoom /  19;
-
-    Renderer::zoom += zoom_diff;
+    Renderer::zoom += Renderer::zoom / (sign(yoffset) ? -20 : 19);
 
     Application::camera.update_projection();
 
@@ -98,7 +79,8 @@ mouse_button_callback
  int         mods
 )
 {
-    if (button != GLFW_MOUSE_BUTTON_LEFT) return;
+    if (button != GLFW_MOUSE_BUTTON_LEFT || Interface::get_view() != SCENE_VIEW)
+        return;
 
     if (!action)
     {
@@ -106,7 +88,7 @@ mouse_button_callback
         return;
     }
 
-    if (mouse_hovers_screen())
+    if (mouse_hovers_scene())
         Window::moving_view = true;
 
     (void)(window);
@@ -121,6 +103,9 @@ cursor_position_callback
  double      ypos
 )
 {
+    if (Interface::get_view() != SCENE_VIEW)
+        return;
+
     if (Window::moving_view)
     {
         glm::vec2 diff = {(Window::mouse_pos - glm::vec2(xpos, ypos))
