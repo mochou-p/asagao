@@ -17,40 +17,39 @@
 
 #define FONT_SIZE 18.0f
 
-namespace fs = std::filesystem; 
-
 static void
 set_theme()
 {
     ImGuiStyle& style = ImGui::GetStyle();
+
     style.WindowBorderSize = 0.0f;
 
     ImVec4* colors = style.Colors;
 
-    colors[ImGuiCol_TitleBg]          = {0.13f, 0.13f, 0.13f, 1.0f};
-    colors[ImGuiCol_TitleBgActive]    = {0.13f, 0.13f, 0.13f, 1.0f};
-    colors[ImGuiCol_WindowBg]         = {0.00f, 0.00f, 0.00f, 1.0f};
+    colors[ImGuiCol_TitleBg]              = {0.13f, 0.13f, 0.13f, 1.0f};
+    colors[ImGuiCol_TitleBgActive]        = {0.13f, 0.13f, 0.13f, 1.0f};
+    colors[ImGuiCol_WindowBg]             = {0.00f, 0.00f, 0.00f, 1.0f};
 
-    colors[ImGuiCol_FrameBg]          = {0.15f, 0.15f, 0.15f, 1.0f};
-    colors[ImGuiCol_FrameBgHovered]   = {0.25f, 0.25f, 0.25f, 1.0f};
-    colors[ImGuiCol_FrameBgActive]    = {0.35f, 0.35f, 0.35f, 1.0f};
+    colors[ImGuiCol_FrameBg]              = {0.15f, 0.15f, 0.15f, 1.0f};
+    colors[ImGuiCol_FrameBgHovered]       = {0.25f, 0.25f, 0.25f, 1.0f};
+    colors[ImGuiCol_FrameBgActive]        = {0.35f, 0.35f, 0.35f, 1.0f};
 
-    colors[ImGuiCol_Text]             = {1.00f, 1.00f, 1.00f, 1.0f};
-    colors[ImGuiCol_CheckMark]        = {1.00f, 1.00f, 1.00f, 1.0f};
+    colors[ImGuiCol_Text]                 = {1.00f, 1.00f, 1.00f, 1.0f};
+    colors[ImGuiCol_CheckMark]            = {1.00f, 1.00f, 1.00f, 1.0f};
 
-    colors[ImGuiCol_Button]           = {0.15f, 0.15f, 0.15f, 1.0f};
-    colors[ImGuiCol_ButtonHovered]    = {0.25f, 0.25f, 0.25f, 1.0f};
-    colors[ImGuiCol_ButtonActive]     = {0.35f, 0.35f, 0.35f, 1.0f};
+    colors[ImGuiCol_Button]               = {0.15f, 0.15f, 0.15f, 1.0f};
+    colors[ImGuiCol_ButtonHovered]        = {0.25f, 0.25f, 0.25f, 1.0f};
+    colors[ImGuiCol_ButtonActive]         = {0.35f, 0.35f, 0.35f, 1.0f};
 
-    colors[ImGuiCol_HeaderHovered]    = {0.15f, 0.15f, 0.15f, 1.0f};
-    colors[ImGuiCol_HeaderActive]     = {0.25f, 0.25f, 0.25f, 1.0f};
+    colors[ImGuiCol_ScrollbarGrab]        = {0.20f, 0.20f, 0.20f, 1.0f};
+    colors[ImGuiCol_ScrollbarGrabHovered] = {0.30f, 0.30f, 0.30f, 1.0f};
+    colors[ImGuiCol_ScrollbarGrabActive]  = {0.40f, 0.40f, 0.40f, 1.0f};
 
-    colors[ImGuiCol_Separator]        = {0.01f, 0.01f, 0.01f, 1.0f};
-    colors[ImGuiCol_SeparatorHovered] = {0.01f, 0.01f, 0.01f, 1.0f};
-    colors[ImGuiCol_SeparatorActive]  = {0.01f, 0.01f, 0.01f, 1.0f};
+    colors[ImGuiCol_HeaderHovered]        = {0.15f, 0.15f, 0.15f, 1.0f};
+    colors[ImGuiCol_HeaderActive]         = {0.25f, 0.25f, 0.25f, 1.0f};
 
-    colors[ImGuiCol_SliderGrab]       = {0.35f, 0.35f, 0.35f, 1.0f};
-    colors[ImGuiCol_SliderGrabActive] = {0.45f, 0.45f, 0.45f, 1.0f};
+    colors[ImGuiCol_SliderGrab]           = {0.35f, 0.35f, 0.35f, 1.0f};
+    colors[ImGuiCol_SliderGrabActive]     = {0.45f, 0.45f, 0.45f, 1.0f};
 }
 
 static void
@@ -138,7 +137,7 @@ objects()
     static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove
         | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
 
-    static const ImVec4 darkened  = {1.0f, 1.0f, 1.0f, 0.4f};
+    static const ImVec4 darkened  = {1.00f, 1.00f, 1.00f, 0.4f};
     static const float  close_btn = CalcTextSize("   ").x;
 
     SetNextWindowPos
@@ -156,12 +155,29 @@ objects()
 
     for (GameObject& obj : Application::scene->objects)
     {
-        if (!obj.visible) PushStyleColor(ImGuiCol_Text, darkened);
+        if (!obj.visible)
+            PushStyleColor(ImGuiCol_Text, darkened);
 
-        if (Selectable((ICON_FA_CUBE " " + obj.name).c_str()))
+        if
+        (
+            Selectable
+            (
+                (
+                    ICON_FA_CUBE " "
+                    + obj.name
+                    + (&obj == Application::scene->selected
+                        ? "(*)"
+                        : ""
+                    )
+                ).c_str()
+            )
+        )
+        {
             Application::scene->selected = &obj;
+        }
 
-        if (!obj.visible) PopStyleColor();
+        if (!obj.visible)
+            PopStyleColor();
     }
 
     End();
@@ -175,8 +191,9 @@ Interface::details()
     static const char* title = "Details";
     static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove;
     static const float button_height    = GetItemRectSize().y;
-    static const ImVec2 window_padding  = {0.0f, 0.0f};
-    static const ImVec4 black           = {0.0f, 0.0f, 0.0f, 1.0f};
+    static const ImVec2 window_padding  = {0.00f, 0.00f};
+    static const ImVec4 button_color    = {0.15f, 0.15f, 0.15f, 1.0f};
+
     static glm::vec2 camera_pos;
 
     SetNextWindowPos
@@ -191,21 +208,22 @@ Interface::details()
     });
 
     PushStyleVar(ImGuiStyleVar_WindowPadding, window_padding);
+    PushStyleColor(ImGuiCol_WindowBg, button_color);
 
     Begin(title, nullptr, flags);
 
-    PushStyleColor(ImGuiCol_Button, black);
     if (Button((ICON_FA_MOUNTAIN_SUN " " + Application::scene->name).c_str()))
     {
         Application::scene = nullptr;
         current_view       = STARTUP_VIEW;
 
-        PopStyleColor();
         End();
+
+        PopStyleColor();
         PopStyleVar();
+
         return;
     }
-    PopStyleColor();
 
     SameLine();
     TextDisabled("|");
@@ -214,7 +232,7 @@ Interface::details()
     Text
     (
         (
-            (ICON_FA_MAGNIFYING_GLASS " ")
+            ICON_FA_MAGNIFYING_GLASS " "
             + std::to_string((int) (1.0f / Renderer::zoom * 100))
             + "%%"
         ).c_str()
@@ -228,7 +246,7 @@ Interface::details()
     Text
     (
         (
-            (ICON_FA_CAMERA " ")
+            ICON_FA_CAMERA " "
             + std::to_string((int) camera_pos.x)
             + ", "
             + std::to_string((int) camera_pos.y)
@@ -244,7 +262,7 @@ Interface::details()
         Text
         (
             (
-                (ICON_FA_ARROW_POINTER " ")
+                ICON_FA_ARROW_POINTER " "
                 + std::to_string((int) (Window::mouse_pos.x - Window::size.x * 0.5f))
                 + ", "
                 + std::to_string((int) (Window::mouse_pos.y - Window::size.y * 0.5f))
@@ -254,6 +272,7 @@ Interface::details()
 
     End();
 
+    PopStyleColor();
     PopStyleVar();
 }
 
@@ -270,6 +289,7 @@ components()
     static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove
         | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
     static const float close_btn = CalcTextSize("   ").x;
+    static const ImVec2 row      = {0.0f, 10.0f};
 
     if (!Application::scene) return;
 
@@ -309,20 +329,20 @@ components()
         return;
     }
 
-    Separator();
+    Dummy(row);
 
     Text(ICON_FA_SLIDERS " Position");
     DragFloat(ICON_FA_LEFT_RIGHT "##pos", &Application::scene->selected->position.x, 1.0f);
     DragFloat(ICON_FA_UP_DOWN    "##pos", &Application::scene->selected->position.y, 1.0f);
     DragFloat(ICON_FA_LAYER_GROUP,        &Application::scene->selected->depth,      0.2f);
 
-    Separator();
+    Dummy(row);
 
     Text(ICON_FA_SLIDERS " Size");
     DragFloat(ICON_FA_LEFT_RIGHT "##size", &Application::scene->selected->scale.x, 0.01f);
     DragFloat(ICON_FA_UP_DOWN    "##size", &Application::scene->selected->scale.y, 0.01f);
 
-    Separator();
+    Dummy(row);
 
     Text(ICON_FA_SLIDERS " Rotation");
     SliderFloat(ICON_FA_ROTATE, &Application::scene->selected->rotation, 0.0f, 360.0f);
@@ -341,6 +361,8 @@ Interface::draw()
 static std::vector<std::string>
 get_scenes()
 {
+    namespace fs = std::filesystem;
+
     static const fs::path    directory = "resources/scenes";
     static const std::string extension = ".asagao";
 

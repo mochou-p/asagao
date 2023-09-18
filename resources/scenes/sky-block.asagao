@@ -5,6 +5,60 @@ name: sky-block
 
 --- Scene Objects -------
 
+name: Cloud 1
+position: 5,3
+depth: 4
+scale: 1,1
+rotation: 0
+visible: 1
+sprite_count: 1
+sprite_offsets: 13,1
+
+name: Cloud 2
+position: 6,3
+depth: 4
+scale: 1,1
+rotation: 0
+visible: 1
+sprite_count: 1
+sprite_offsets: 14,1
+
+name: Cloud 3
+position: 7,3
+depth: 4
+scale: 1,1
+rotation: 0
+visible: 1
+sprite_count: 1
+sprite_offsets: 15,1
+
+name: Coin 1
+position: 1.5,2.5
+depth: 0
+scale: 1,1
+rotation: 0
+visible: 1
+sprite_count: 2
+sprite_offsets: 11,1,12,1
+
+name: Coin 2
+position: 0.5,2.5
+depth: 0
+scale: 1,1
+rotation: 0
+visible: 0
+sprite_count: 2
+sprite_offsets: 11,1,12,1
+
+name: Coin 3
+position: 2.5,2.5
+depth: 0
+scale: 1,1
+rotation: 0
+visible: 0
+sprite_count: 2
+sprite_offsets: 11,1,12,1
+
 name: Leaf 1
 position: -2,5
 depth: 0
@@ -94,15 +148,6 @@ rotation: 0
 visible: 1
 sprite_count: 1
 sprite_offsets: 19,2
-
-name: Coin 1
-position: 1.5,2.5
-depth: 0
-scale: 1,1
-rotation: 0
-visible: 1
-sprite_count: 2
-sprite_offsets: 11,1,12,1
 
 name: Tree 4
 position: -1,1

@@ -3,7 +3,9 @@
 
 # Asagao - 2D Game Engine
 
-![Asagao icon](resources/branding/asagao-banner.png "Asagao")
+![Asagao Icon](resources/branding/asagao-banner.png "Logo")
+&nbsp;
+![Asagao Editor](resources/branding/screenshots/asagao-editor.png "Preview")
 
 ###### *Currently in its early stage of development, with many features having temporary implementations
 
