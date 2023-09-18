@@ -11,6 +11,13 @@
 
 ---
 
+### Features
+
+- Memory efficient (4 vertices)
+- Fast rendering (1 texture atlas)
+- Animated sprites
+- Scene loading
+
 ### Usage
 
 ```bash
