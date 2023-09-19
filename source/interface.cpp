@@ -193,8 +193,8 @@ Interface::details()
     static const float button_height    = GetItemRectSize().y;
     static const ImVec2 window_padding  = {0.00f, 0.00f};
     static const ImVec4 button_color    = {0.15f, 0.15f, 0.15f, 1.0f};
-
     static glm::vec2 camera_pos;
+    static bool hover;
 
     SetNextWindowPos
     ({
@@ -203,7 +203,7 @@ Interface::details()
     });
     SetNextWindowSize
     ({
-        Window::size.x - (Layout::objects.size.x + Layout::components.size.x),
+        Layout::scene.size.x * Window::size.x,
         button_height
     });
 
@@ -223,6 +223,16 @@ Interface::details()
         PopStyleVar();
 
         return;
+    }
+    if (IsItemHovered() && !hover)
+    {
+        Window::set_cursor(CURSOR_POINTER);
+        hover ^= 1;
+    }
+    else if (!IsItemHovered() && hover)
+    {
+        Window::set_cursor(CURSOR_DEFAULT);
+        hover ^= 1;
     }
 
     SameLine();
@@ -290,8 +300,10 @@ components()
         | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
     static const float close_btn = CalcTextSize("   ").x;
     static const ImVec2 row      = {0.0f, 10.0f};
+    static bool hover;
 
-    if (!Application::scene) return;
+    if (!Application::scene)
+        return;
 
     SetNextWindowPos
     ({
@@ -303,7 +315,6 @@ components()
         Layout::components.size.x * Window::size.x,
         Layout::components.size.y * Window::size.y
     });
-
 
     if (!Application::scene->selected)
     {
@@ -327,6 +338,16 @@ components()
 
         End();
         return;
+    }
+    if (IsItemHovered() && !hover)
+    {
+        Window::set_cursor(CURSOR_POINTER);
+        hover ^= 1;
+    }
+    else if (!IsItemHovered() && hover)
+    {
+        Window::set_cursor(CURSOR_DEFAULT);
+        hover ^= 1;
     }
 
     Dummy(row);
@@ -389,6 +410,7 @@ Interface::startup_view()
     static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove
         | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
     static const ImVec2           pos   = {0.0f, 0.0f};
+    static bool hover;
 
     static const std::vector<std::string> scenes = get_scenes();
 
@@ -404,6 +426,16 @@ Interface::startup_view()
         {
             Application::scene = std::make_unique<Scene>(scene);
             current_view       = SCENE_VIEW;
+        }
+        if (IsItemHovered() && !hover)
+        {
+            Window::set_cursor(CURSOR_POINTER);
+            hover ^= 1;
+        }
+        else if (!IsItemHovered() && hover)
+        {
+            Window::set_cursor(CURSOR_DEFAULT);
+            hover ^= 1;
         }
     }
     PopStyleVar();

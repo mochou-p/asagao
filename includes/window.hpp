@@ -11,15 +11,21 @@
 #include "glm.hpp"
 #include "style.hpp"
 
+#define CURSOR_DEFAULT 0
+#define CURSOR_POINTER 1
+
 class Window
 {
 public:
     Window(const std::string& title, int width, int height);
     ~Window();
 
+    static void set_cursor(int mode);
+
     bool is_open()      const;
     void poll_events()  const;
     void swap_buffers() const;
+
 
     static inline GLFWwindow* handle;
     static inline glm::vec2   size;
@@ -27,6 +33,8 @@ public:
     static inline bool        moving_view;
 private:
     void init(const std::string& title, int width, int height);
+
+    static inline GLFWcursor* cursor_pointer;
 };
 
 inline bool mouse_hovers_scene()

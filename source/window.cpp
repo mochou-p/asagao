@@ -14,6 +14,7 @@
 #define OPENGL_VER_MAJOR 4
 #define OPENGL_VER_MINOR 6
 #define WINDOW_ICON_PATH "resources/branding/"
+#define ICON_COUNT 5
 
 static void
 framebuffer_size_callback
@@ -129,11 +130,32 @@ Window::Window
     init(title, width, height);
     Renderer::init();
     framebuffer_size_callback(handle, width, height);
+
+    cursor_pointer = glfwCreateStandardCursor(GLFW_HAND_CURSOR);
 }
 
 Window::~Window()
 {
+    glfwDestroyCursor(cursor_pointer);
+    glfwDestroyWindow(handle);
+
     glfwTerminate();
+}
+
+void
+Window::set_cursor(int mode)
+{
+    switch (mode)
+    {
+    case CURSOR_DEFAULT:
+        glfwSetCursor(handle, nullptr);
+        break;
+    case CURSOR_POINTER:
+        glfwSetCursor(handle, cursor_pointer);
+        break;
+    default:
+        LOG_WARN("unsupported cursor mode");
+    }
 }
 
 bool
@@ -178,25 +200,25 @@ Window::init
 
     assert(handle);
 
-    std::array<Image, 5> images
+    Image images[ICON_COUNT]
     {
-        Image(WINDOW_ICON_PATH + std::string("asagao-256x256.png")),
-        Image(WINDOW_ICON_PATH + std::string("asagao-128x128.png")),
-        Image(WINDOW_ICON_PATH + std::string("asagao-64x64.png")),
-        Image(WINDOW_ICON_PATH + std::string("asagao-32x32.png")),
-        Image(WINDOW_ICON_PATH + std::string("asagao-16x16.png"))
+        {WINDOW_ICON_PATH + std::string("asagao-256x256.png")},
+        {WINDOW_ICON_PATH + std::string("asagao-128x128.png")},
+        {WINDOW_ICON_PATH + std::string("asagao-64x64.png")},
+        {WINDOW_ICON_PATH + std::string("asagao-32x32.png")},
+        {WINDOW_ICON_PATH + std::string("asagao-16x16.png")}
     };
 
-    GLFWimage icons[images.size()];
+    GLFWimage icons[ICON_COUNT];
     
-    for (unsigned char i = 0; i < images.size(); ++i)
+    for (unsigned char i = 0; i < ICON_COUNT; ++i)
     {
         icons[i].width  = images[i].get_width();
         icons[i].height = images[i].get_height();
         icons[i].pixels = images[i].get_data();
     }
 
-    glfwSetWindowIcon(handle, images.size(), icons);
+    glfwSetWindowIcon(handle, ICON_COUNT, icons);
 
     if (const GLFWvidmode* screen = glfwGetVideoMode(glfwGetPrimaryMonitor()))
     {

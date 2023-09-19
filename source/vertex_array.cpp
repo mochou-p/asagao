@@ -30,15 +30,22 @@ VertexArray::add_vertex_buffer
     vb.bind();
 
     const auto& attributes = layout.get_attributes();
-    unsigned int offset = 0;
+    unsigned int  offset = 0;
+    unsigned char i = 0;
 
-    for (unsigned int i = 0; i < attributes.size(); ++i)
+    for (const VertexAttribute& va : attributes)
     {
-        const auto& attrib = attributes[i];
         glEnableVertexAttribArray(i);
-        glVertexAttribPointer(i, attrib.count, attrib.type, attrib.normalized,
-            layout.get_stride(), (const void*) (size_t) offset);
-        offset +=
-            attrib.count * VertexAttribute::get_size_of_type(attrib.type);
+        glVertexAttribPointer
+        (
+            i,
+            va.count, va.type, va.normalized,
+            layout.get_stride(),
+            (const void*) (size_t) offset
+        );
+
+        offset += va.count * VertexAttribute::get_size_of_type(va.type);
+
+        ++i;
     }
 }
