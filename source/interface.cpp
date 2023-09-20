@@ -17,10 +17,12 @@
 
 #define FONT_SIZE 18.0f
 
+using namespace ImGui;
+
 static void
 set_theme()
 {
-    ImGuiStyle& style = ImGui::GetStyle();
+    ImGuiStyle& style = GetStyle();
 
     style.WindowBorderSize = 0.0f;
 
@@ -55,7 +57,7 @@ set_theme()
 static void
 load_fonts()
 {
-    ImGuiIO& io = ImGui::GetIO();
+    ImGuiIO& io = GetIO();
 
     io.Fonts->Clear();
 
@@ -93,15 +95,15 @@ Interface::Interface()
 {
     IMGUI_CHECKVERSION();
 
-    ImGui::CreateContext();
-    ImGui::StyleColorsDark();
+    CreateContext();
+    StyleColorsDark();
 
     ImGui_ImplGlfw_InitForOpenGL(Window::handle, true);
     ImGui_ImplOpenGL3_Init();
 
     LOG_INFO(std::string("ImGui ") + IMGUI_VERSION);
 
-    ImGui::GetIO().IniFilename = nullptr;
+    GetIO().IniFilename = nullptr;
     set_theme();
     load_fonts();
 }
@@ -110,7 +112,7 @@ Interface::~Interface()
 {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
+    DestroyContext();
 }
 
 static void
@@ -118,27 +120,26 @@ new_frame()
 {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
+    NewFrame();
 }
 
 static void
 render_draw_data()
 {
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    Render();
+    ImGui_ImplOpenGL3_RenderDrawData(GetDrawData());
 }
 
 void
 objects()
 {
-    using namespace ImGui;
-
     static const char* title = " " ICON_FA_LIST_UL "  Objects";
     static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove
         | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
 
     static const ImVec4 darkened  = {1.00f, 1.00f, 1.00f, 0.4f};
     static const float  close_btn = CalcTextSize("   ").x;
+    static bool is_selected;
 
     SetNextWindowPos
     ({
@@ -155,6 +156,8 @@ objects()
 
     for (GameObject& obj : Application::scene->objects)
     {
+        is_selected = (&obj == Application::scene->selected);
+
         if (!obj.visible)
             PushStyleColor(ImGuiCol_Text, darkened);
 
@@ -165,16 +168,17 @@ objects()
                 (
                     ICON_FA_CUBE " "
                     + obj.name
-                    + (&obj == Application::scene->selected
-                        ? "(*)"
-                        : ""
-                    )
+                    + (is_selected ? "(*)" : "")
                 ).c_str()
             )
+            &&
+            !is_selected
         )
         {
             Application::scene->selected = &obj;
         }
+        if (!is_selected && IsItemHovered())
+            SetMouseCursor(ImGuiMouseCursor_Hand);
 
         if (!obj.visible)
             PopStyleColor();
@@ -186,8 +190,6 @@ objects()
 void
 Interface::details()
 {
-    using namespace ImGui;
-
     static const char* title = "Details";
     static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove;
     static const float button_height    = GetItemRectSize().y;
@@ -224,16 +226,8 @@ Interface::details()
 
         return;
     }
-    if (IsItemHovered() && !hover)
-    {
-        Window::set_cursor(CURSOR_POINTER);
-        hover ^= 1;
-    }
-    else if (!IsItemHovered() && hover)
-    {
-        Window::set_cursor(CURSOR_DEFAULT);
-        hover ^= 1;
-    }
+    if (IsItemHovered())
+        SetMouseCursor(ImGuiMouseCursor_Hand);
 
     SameLine();
     TextDisabled("|");
@@ -289,8 +283,6 @@ Interface::details()
 static void
 components()
 {
-    using namespace ImGui;
-
     static const char* titles[2]
     {
         " " ICON_FA_GEAR "  Settings",
@@ -321,6 +313,8 @@ components()
         Begin(titles[0], nullptr, flags);
         DragFloat("Anim speed", &Application::animation_speed, 0.1f,
             0.0f, 100.0f);
+        if (IsItemHovered())
+            SetMouseCursor(ImGuiMouseCursor_ResizeEW);
 
         End();
         return;
@@ -339,29 +333,31 @@ components()
         End();
         return;
     }
-    if (IsItemHovered() && !hover)
-    {
-        Window::set_cursor(CURSOR_POINTER);
-        hover ^= 1;
-    }
-    else if (!IsItemHovered() && hover)
-    {
-        Window::set_cursor(CURSOR_DEFAULT);
-        hover ^= 1;
-    }
+    if (IsItemHovered())
+        SetMouseCursor(ImGuiMouseCursor_Hand);
 
     Dummy(row);
 
     Text(ICON_FA_SLIDERS " Position");
     DragFloat(ICON_FA_LEFT_RIGHT "##pos", &Application::scene->selected->position.x, 1.0f);
+    if (IsItemHovered())
+        SetMouseCursor(ImGuiMouseCursor_ResizeEW);
     DragFloat(ICON_FA_UP_DOWN    "##pos", &Application::scene->selected->position.y, 1.0f);
+    if (IsItemHovered())
+        SetMouseCursor(ImGuiMouseCursor_ResizeEW);
     DragFloat(ICON_FA_LAYER_GROUP,        &Application::scene->selected->depth,      0.2f);
+    if (IsItemHovered())
+        SetMouseCursor(ImGuiMouseCursor_ResizeEW);
 
     Dummy(row);
 
     Text(ICON_FA_SLIDERS " Size");
     DragFloat(ICON_FA_LEFT_RIGHT "##size", &Application::scene->selected->scale.x, 0.01f);
+    if (IsItemHovered())
+        SetMouseCursor(ImGuiMouseCursor_ResizeEW);
     DragFloat(ICON_FA_UP_DOWN    "##size", &Application::scene->selected->scale.y, 0.01f);
+    if (IsItemHovered())
+        SetMouseCursor(ImGuiMouseCursor_ResizeEW);
 
     Dummy(row);
 
@@ -404,8 +400,6 @@ get_scenes()
 void
 Interface::startup_view()
 {
-    using namespace ImGui;
-
     static const char*            title = " " ICON_FA_FOLDER_OPEN "  Select a scene";
     static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove
         | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
@@ -427,16 +421,8 @@ Interface::startup_view()
             Application::scene = std::make_unique<Scene>(scene);
             current_view       = SCENE_VIEW;
         }
-        if (IsItemHovered() && !hover)
-        {
-            Window::set_cursor(CURSOR_POINTER);
-            hover ^= 1;
-        }
-        else if (!IsItemHovered() && hover)
-        {
-            Window::set_cursor(CURSOR_DEFAULT);
-            hover ^= 1;
-        }
+        if (IsItemHovered())
+            SetMouseCursor(ImGuiMouseCursor_Hand);
     }
     PopStyleVar();
 

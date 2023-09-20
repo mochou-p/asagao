@@ -130,32 +130,13 @@ Window::Window
     init(title, width, height);
     Renderer::init();
     framebuffer_size_callback(handle, width, height);
-
-    cursor_pointer = glfwCreateStandardCursor(GLFW_HAND_CURSOR);
 }
 
 Window::~Window()
 {
-    glfwDestroyCursor(cursor_pointer);
     glfwDestroyWindow(handle);
 
     glfwTerminate();
-}
-
-void
-Window::set_cursor(int mode)
-{
-    switch (mode)
-    {
-    case CURSOR_DEFAULT:
-        glfwSetCursor(handle, nullptr);
-        break;
-    case CURSOR_POINTER:
-        glfwSetCursor(handle, cursor_pointer);
-        break;
-    default:
-        LOG_WARN("unsupported cursor mode");
-    }
 }
 
 bool
