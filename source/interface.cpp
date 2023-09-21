@@ -195,7 +195,7 @@ Interface::details()
     static const float button_height    = GetItemRectSize().y;
     static const ImVec2 window_padding  = {0.00f, 0.00f};
     static const ImVec4 button_color    = {0.15f, 0.15f, 0.15f, 1.0f};
-    static glm::vec2 camera_pos;
+    static glm::vec2 camera_pos, mouse_pos, world_pos, tile_pos;
     static bool hover;
 
     SetNextWindowPos
@@ -246,7 +246,8 @@ Interface::details()
     TextDisabled("|");
     SameLine();
 
-    camera_pos = Application::camera.get_position();
+    camera_pos   = Application::camera.get_position();
+
     Text
     (
         (
@@ -259,6 +260,18 @@ Interface::details()
 
     if (mouse_hovers_scene())
     {
+        // todo: zoom
+        mouse_pos    = Window::mouse_pos;
+        mouse_pos   -= Window::size * 0.5f;
+
+        world_pos    = mouse_pos;
+        world_pos   -= camera_pos * 0.5f;
+        world_pos.y += camera_pos.y;  // workaround(?)
+
+        tile_pos     = world_pos;
+        tile_pos    /= Application::rect_size * 0.5f;
+        tile_pos    += 0.5f;
+
         SameLine();
         TextDisabled("|");
         SameLine();
@@ -267,9 +280,37 @@ Interface::details()
         (
             (
                 ICON_FA_ARROW_POINTER " "
-                + std::to_string((int) (Window::mouse_pos.x - Window::size.x * 0.5f))
+                + std::to_string((int) mouse_pos.x)
                 + ", "
-                + std::to_string((int) (Window::mouse_pos.y - Window::size.y * 0.5f))
+                + std::to_string((int) mouse_pos.y)
+            ).c_str()
+        );
+
+        SameLine();
+        TextDisabled("|");
+        SameLine();
+
+        Text
+        (
+            (
+                ICON_FA_GLOBE " "
+                + std::to_string((int) world_pos.x)
+                + ", "
+                + std::to_string((int) world_pos.y)
+            ).c_str()
+        );
+
+        SameLine();
+        TextDisabled("|");
+        SameLine();
+
+        Text
+        (
+            (
+                ICON_FA_SQUARE " "
+                + std::to_string((int) std::floor(tile_pos.x))
+                + ", "
+                + std::to_string((int) std::floor(tile_pos.y))
             ).c_str()
         );
     }
