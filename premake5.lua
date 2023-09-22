@@ -18,7 +18,7 @@ project "Asagao"
     files       { "resources/branding/icons/icon.res" }
     includedirs { "includes", "libraries/**" }
     libdirs     { "libraries/**" }
-    links       { "opengl32", "glad", "glfw3", "gdi32", "imgui" }
+    links       { "opengl32", "glad", "glfw3", "gdi32", "imgui", "imgui_stdlib" }
 
     filter "configurations:Debug"
         symbols "On"

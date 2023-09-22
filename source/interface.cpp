@@ -14,6 +14,7 @@
 #include "game_object.hpp"
 #include "image.hpp"
 #include "IconsFontAwesome6.h"
+#include "imgui_stdlib.h"
 
 #define FONT_SIZE 18.0f
 
@@ -363,8 +364,9 @@ components()
 
     Begin(titles[1], nullptr, flags);
 
-    Checkbox(Application::scene->selected->name.c_str(),
-        &Application::scene->selected->visible);
+    Checkbox("##visible", &Application::scene->selected->visible);
+    SameLine();
+    InputText("##name", &Application::scene->selected->name);
     SameLine(GetWindowContentRegionMax().x - close_btn);
 
     if (Button(ICON_FA_XMARK))
