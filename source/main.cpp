@@ -5,7 +5,6 @@
 
 #include "log.hpp"
 
-
 int
 main()
 {

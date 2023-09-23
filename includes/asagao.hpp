@@ -11,6 +11,9 @@
 #include "window.hpp"
 #include "interface.hpp"
 
+// somehow prevents a crash rn (later in pch.h)
+#include <iostream>
+
 namespace Asagao
 {
     inline auto& Application = Application::get_instance();
