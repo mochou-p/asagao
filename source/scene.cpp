@@ -1,6 +1,8 @@
 // asagao/source/scene.cpp
 
 
+#include "asagao.hpp"
+
 #include <fstream>
 #include <sstream>
 #include "scene.hpp"
@@ -60,7 +62,7 @@ Scene::Scene(const std::string& name)
         help = temp.find(",");
         obj_position.x  = std::stof(temp.substr(0, help));
         obj_position.y  = std::stof(temp.substr(help + 1));
-        obj_position   *= Application::rect_size;
+        obj_position   *= Asagao::Application.rect_size;
 
         // depth
         std::getline(file, line);
@@ -97,7 +99,7 @@ Scene::Scene(const std::string& name)
 
             obj_sprite_offsets.push_back
             (
-                glm::vec2(x, y) * Application::uv_fraction
+                glm::vec2(x, y) * Asagao::Application.uv_fraction
             );
         }
 
@@ -116,7 +118,7 @@ Scene::Scene(const std::string& name)
         std::getline(file, line);
     }
 
-    Application::camera.set_position({0.0f, 0.0f, 0.0f});
+    Asagao::Camera.set_position({0.0f, 0.0f, 0.0f});
 }
 
 void
@@ -144,8 +146,8 @@ Scene::save() const
         file << std::endl
              << "name: " << obj.name
              << std::endl
-             << "position: " << (obj.position.x / Application::rect_size) << ","
-                             << (obj.position.y / Application::rect_size)
+             << "position: " << (obj.position.x / Asagao::Application.rect_size) << ","
+                             << (obj.position.y / Asagao::Application.rect_size)
              << std::endl
              << "depth: " << obj.depth
              << std::endl
@@ -164,8 +166,8 @@ Scene::save() const
         for (const glm::vec2& ofs : obj.sprite_offsets)
         {
             if (i++) file << ",";
-            file << ofs.x / Application::uv_fraction.x << ","
-                 << ofs.y / Application::uv_fraction.y;
+            file << ofs.x / Asagao::Application.uv_fraction.x << ","
+                 << ofs.y / Asagao::Application.uv_fraction.y;
         }
 
         file << std::endl;

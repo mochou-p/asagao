@@ -1,9 +1,9 @@
 // asagao/source/renderer.cpp
 
 
-#include <cassert>
 #include "renderer.hpp"
 #include "log.hpp"
+
 #include "glfw3.h"
 
 static void
@@ -35,42 +35,45 @@ debug_message_callback
     (void)(param);
 }
 
-void
-Renderer::init()
+namespace Asagao
 {
-    load_opengl_functions();
+    void
+    Renderer::init()
+    {
+        load_opengl_functions();
 
-    glEnable(GL_DEBUG_OUTPUT);
-    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-    glDebugMessageCallback(debug_message_callback, nullptr);
+        glEnable(GL_DEBUG_OUTPUT);
+        glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+        glDebugMessageCallback(debug_message_callback, nullptr);
 
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
-}
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_BLEND);
+    }
 
-void
-Renderer::clear() const
-{
-    glClear(GL_COLOR_BUFFER_BIT);
-}
+    void
+    Renderer::clear() const
+    {
+        glClear(GL_COLOR_BUFFER_BIT);
+    }
 
-void
-Renderer::draw
-(
- const VertexArray& va,
- const IndexBuffer& ib,
- const Shader&      shader
-) const
-{
-    shader.use();
-    va.bind();
-    ib.bind();
+    void
+    Renderer::draw
+    (
+    const VertexArray& va,
+    const IndexBuffer& ib,
+    const Shader&      shader
+    ) const
+    {
+        shader.use();
+        va.bind();
+        ib.bind();
 
-    glDrawElements(GL_TRIANGLES, ib.get_count(), GL_UNSIGNED_INT, nullptr);
-}
+        glDrawElements(GL_TRIANGLES, ib.get_count(), GL_UNSIGNED_INT, nullptr);
+    }
 
-void
-Renderer::set_background_color(const glm::vec4& color) const
-{
-    glClearColor(color.r, color.g, color.b, color.a);
+    void
+    Renderer::set_background_color(const glm::vec4& color) const
+    {
+        glClearColor(color.r, color.g, color.b, color.a);
+    }
 }

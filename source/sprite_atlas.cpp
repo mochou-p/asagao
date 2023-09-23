@@ -1,6 +1,8 @@
 // asagao/source/sprite_atlas.cpp
 
 
+#include "asagao.hpp"
+
 #include "sprite_atlas.hpp"
 #include "application.hpp"
 
@@ -14,5 +16,5 @@ SpriteAtlas::SpriteAtlas
 {
     texture = std::make_unique<Texture>(ATLAS_PATH + filepath);
 
-    Application::uv_fraction = (float) sprite_size / texture->get_size();
+    Asagao::Application.uv_fraction = (float) sprite_size / texture->get_size();
 }

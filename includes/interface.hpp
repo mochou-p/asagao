@@ -15,23 +15,41 @@ class Interface;
 
 using ViewFunction = void (Interface::*)();
 
-class Interface
+namespace Asagao
 {
-public:
-    Interface();
-    ~Interface();
+    class Interface
+    {
+    public:
+        static Interface& get_instance()
+        {
+            static Interface instance;
 
-    static inline const unsigned char get_view() { return current_view; }
+            return instance;
+        }
+    private:
+        Interface();
+        ~Interface();
 
-    void draw();
-private:
-    void startup_view();
-    void scene_view();
-    void details();
+        Interface           (const Interface&) = delete;
+        Interface& operator=(const Interface&) = delete;
 
-    static inline unsigned char current_view = 0;
 
-    std::function<void()> m_views[VIEW_COUNT];
-};
+    public:
+
+        inline const unsigned char get_view() { return current_view; }
+
+        void draw();
+    private:
+        void startup_view();
+        void objects();
+        void details();
+        void components();
+        void scene_view();
+
+        unsigned char current_view = 0;
+
+        std::function<void()> m_views[VIEW_COUNT];
+    };
+}
 
 #endif  // __interface_hpp_

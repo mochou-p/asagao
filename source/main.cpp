@@ -1,18 +1,17 @@
 // asagao/source/main.cpp
 
 
-#include <iostream>
-#include "application.hpp"
+#include "asagao.hpp"
+
 #include "log.hpp"
+
 
 int
 main()
 {
-    Application app;
-
     try
     {
-        app.run();
+        Asagao::Application.run();
     }
     catch (const std::exception& error)
     {

@@ -10,21 +10,36 @@
 #include "shader.hpp"
 #include "glm.hpp"
 
-class Renderer
+namespace Asagao
 {
-public:
-    Renderer() {}
+    class Renderer
+    {
+    public:
+        static Renderer& get_instance()
+        {
+            static Renderer instance;
 
-    static void init();
+            return instance;
+        }
+    private:
+        Renderer() {}
 
-    void clear() const;
-    void draw(const VertexArray& va, const IndexBuffer& ib,
-        const Shader& shader) const;
-    void set_background_color(const glm::vec4& color) const;
+        Renderer           (const Renderer&) = delete;
+        Renderer& operator=(const Renderer&) = delete;
 
-    static inline float zoom = 1.0f;
-private:
-    unsigned int m_id;
-};
+
+    public:
+        static void init();
+
+        void clear() const;
+        void draw(const VertexArray& va, const IndexBuffer& ib,
+            const Shader& shader) const;
+        void set_background_color(const glm::vec4& color) const;
+
+        float zoom = 1.0f;
+    private:
+        unsigned int m_id;
+    };
+}
 
 #endif  // __renderer_hpp_

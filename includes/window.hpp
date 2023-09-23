@@ -14,38 +14,39 @@
 #define CURSOR_DEFAULT 0
 #define CURSOR_POINTER 1
 
-class Window
+namespace Asagao
 {
-public:
-    Window(const std::string& title, int width, int height);
-    ~Window();
+    class Window
+    {
+    public:
+        static Window& get_instance()
+        {
+            static Window instance("Asagao", 1600, 900);
 
-    bool is_open()      const;
-    void poll_events()  const;
-    void swap_buffers() const;
+            return instance;
+        }
+    private:
+        Window(const std::string& title, int width, int height);
+        ~Window();
+
+        Window           (const Window&) = delete;
+        Window& operator=(const Window&) = delete;
 
 
-    static inline GLFWwindow* handle;
-    static inline glm::vec2   size;
-    static inline glm::vec2   mouse_pos;
-    static inline bool        moving_view;
-private:
-    void init(const std::string& title, int width, int height);
-};
+    public:
+        bool is_open()            const;
+        void poll_events()        const;
+        void swap_buffers()       const;
+        bool mouse_hovers_scene() const;
+        void resize();
 
-inline bool mouse_hovers_scene()
-{
-    glm::vec2 top_left      = Window::size * Layout::scene.pos;
-    glm::vec2 bottom_right  = Window::size;
-    bottom_right           *= Layout::scene.pos + Layout::scene.size;
-
-    return
-    (
-        top_left.x < Window::mouse_pos.x &&
-        Window::mouse_pos.x < bottom_right.x &&
-        top_left.y < Window::mouse_pos.y &&
-        Window::mouse_pos.y < bottom_right.y
-    );
+        GLFWwindow* handle;
+        glm::vec2   size;
+        glm::vec2   mouse_pos;
+        bool        moving_view;
+    private:
+        void init(const std::string& title, int width, int height);
+    };
 }
 
 #endif  // __window_hpp_
