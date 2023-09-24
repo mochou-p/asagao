@@ -2,8 +2,6 @@
 
 
 #pragma once
-#ifndef __sprite_atlas_hpp_
-#define __sprite_atlas_hpp_
 
 #include <string>
 #include <memory>
@@ -18,5 +16,3 @@ public:
 
     std::unique_ptr<Texture> texture;
 };
-
-#endif  // __sprite_atlas_hpp_

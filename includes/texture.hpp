@@ -2,8 +2,6 @@
 
 
 #pragma once
-#ifndef __texture_hpp_
-#define __texture_hpp_
 
 #include <string>
 #include "glm.hpp"
@@ -23,5 +21,3 @@ private:
     glm::vec2    m_size;
     unsigned int m_id;
 };
-
-#endif  // __texture_hpp_

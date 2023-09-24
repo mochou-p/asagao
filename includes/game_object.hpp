@@ -2,12 +2,11 @@
 
 
 #pragma once
-#ifndef __game_object_hpp_
-#define __game_object_hpp_
+
+#include "glm.hpp"
 
 #include <string>
 #include <vector>
-#include "glm.hpp"
 
 struct GameObject
 {
@@ -46,5 +45,3 @@ struct GameObject
     , sprite_offsets{sprite_offsets}
     {}
 };
-
-#endif  // __game_object_hpp_

@@ -2,17 +2,12 @@
 
 
 #pragma once
-#ifndef __window_hpp_
-#define __window_hpp_
 
 #include <string>
 #define GLFW_INCLUDE_NONE
 #include "glfw3.h"
 #include "glm.hpp"
 #include "style.hpp"
-
-#define CURSOR_DEFAULT 0
-#define CURSOR_POINTER 1
 
 namespace Asagao
 {
@@ -48,5 +43,3 @@ namespace Asagao
         void init(const std::string& title, int width, int height);
     };
 }  // Asagao::
-
-#endif  // __window_hpp_

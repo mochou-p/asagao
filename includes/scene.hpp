@@ -2,8 +2,6 @@
 
 
 #pragma once
-#ifndef __scene_hpp_
-#define __scene_hpp_
 
 #include <string>
 #include <vector>
@@ -21,5 +19,3 @@ public:
     GameObject*             selected;
     std::string             name;
 };
-
-#endif  // __scene_hpp_

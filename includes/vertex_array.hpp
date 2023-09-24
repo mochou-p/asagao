@@ -2,8 +2,6 @@
 
 
 #pragma once
-#ifndef __vertex_array_hpp_
-#define __vertex_array_hpp_
 
 #include "vertex_buffer.hpp"
 #include "vertex_buffer_layout.hpp"
@@ -20,5 +18,3 @@ public:
 private:
     unsigned int m_id;
 };
-
-#endif  // __vertex_array_hpp_

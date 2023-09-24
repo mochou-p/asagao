@@ -2,8 +2,6 @@
 
 
 #pragma once
-#ifndef __vertex_buffer_layout_hpp_
-#define __vertex_buffer_layout_hpp_
 
 #include <vector>
 #include "log.hpp"
@@ -44,5 +42,3 @@ private:
     std::vector<VertexAttribute> m_attributes;
     unsigned int m_stride;
 };
-
-#endif  // __vertex_buffer_layout_hpp_

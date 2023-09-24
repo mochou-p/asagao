@@ -2,8 +2,6 @@
 
 
 #pragma once
-#ifndef __interface_hpp_
-#define __interface_hpp_
 
 #include <functional>
 
@@ -51,5 +49,3 @@ namespace Asagao
         std::function<void()> m_views[VIEW_COUNT];
     };
 }  // Asagao::
-
-#endif  // __interface_hpp_

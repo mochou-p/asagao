@@ -2,8 +2,6 @@
 
 
 #pragma once
-#ifndef __log_hpp_
-#define __log_hpp_
 
 #include <string>
 
@@ -52,5 +50,3 @@ public:
      const std::string& message
     );
 };
-
-#endif  // __log_hpp_

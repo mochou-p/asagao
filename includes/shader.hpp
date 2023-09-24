@@ -2,8 +2,6 @@
 
 
 #pragma once
-#ifndef __shader_hpp_
-#define __shader_hpp_
 
 #include <string>
 #include <map>
@@ -25,5 +23,3 @@ private:
     unsigned int               m_id;
     std::map<std::string, int> m_uniform_location_cache;
 };
-
-#endif  // __shader_hpp_

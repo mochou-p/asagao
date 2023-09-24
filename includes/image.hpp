@@ -2,8 +2,6 @@
 
 
 #pragma once
-#ifndef __image_hpp_
-#define __image_hpp_
 
 #include <string>
 
@@ -21,5 +19,3 @@ private:
     int            m_height;
     unsigned char* m_data;
 };
-
-#endif  // __image_hpp_

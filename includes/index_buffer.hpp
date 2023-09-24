@@ -2,8 +2,6 @@
 
 
 #pragma once
-#ifndef __index_buffer_hpp_
-#define __index_buffer_hpp_
 
 #include "rect.hpp"
 
@@ -19,5 +17,3 @@ private:
     unsigned int m_id;
     unsigned int m_count;
 };
-
-#endif  // __index_buffer_hpp_

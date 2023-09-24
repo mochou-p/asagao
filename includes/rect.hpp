@@ -2,8 +2,6 @@
 
 
 #pragma once
-#ifndef __rect_hpp_
-#define __rect_hpp_
 
 #include <vector>
 #include "glm.hpp"
@@ -35,5 +33,3 @@ private:
     float        m_vertices[VERTEX_COUNT];
     unsigned int m_indices[INDEX_COUNT];
 };
-
-#endif  // __rect_hpp_

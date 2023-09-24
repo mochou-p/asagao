@@ -2,8 +2,6 @@
 
 
 #pragma once
-#ifndef __asagao_hpp_
-#define __asagao_hpp_
 
 #include "application.hpp"
 #include "camera.hpp"
@@ -22,5 +20,3 @@ namespace Asagao
     inline auto& Camera      =      Camera::get_instance();
     inline auto& Interface   =   Interface::get_instance();
 }  // Asagao::
-
-#endif  // __asagao_hpp_

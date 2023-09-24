@@ -2,8 +2,6 @@
 
 
 #pragma once
-#ifndef __camera_hpp_
-#define __camera_hpp_
 
 #include "glm.hpp"
 
@@ -48,5 +46,3 @@ namespace Asagao
         glm::mat4 m_model;
     };
 }  // Asagao::
-
-#endif  // __camera_hpp_

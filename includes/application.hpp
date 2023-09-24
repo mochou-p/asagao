@@ -2,8 +2,6 @@
 
 
 #pragma once
-#ifndef __application_hpp_
-#define __application_hpp_
 
 #include "scene.hpp"
 
@@ -40,4 +38,3 @@ namespace Asagao
     };
 }  // Asagao::
 
-#endif  // __application_hpp_

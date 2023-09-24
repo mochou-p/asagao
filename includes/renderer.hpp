@@ -2,8 +2,6 @@
 
 
 #pragma once
-#ifndef __renderer_hpp_
-#define __renderer_hpp_
 
 #include "vertex_array.hpp"
 #include "index_buffer.hpp"
@@ -41,5 +39,3 @@ namespace Asagao
         unsigned int m_id;
     };
 }  // Asagao::
-
-#endif  // __renderer_hpp_
