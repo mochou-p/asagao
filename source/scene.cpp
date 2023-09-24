@@ -3,10 +3,12 @@
 
 #include "asagao.hpp"
 
-#include <fstream>
-#include <sstream>
 #include "scene.hpp"
 #include "application.hpp"
+#include "log.hpp"
+
+#include <sstream>
+#include <fstream>
 
 #define SCENE_PATH "resources/scenes"
 #define SCENE_EXT ".asagao"
@@ -40,14 +42,15 @@ Scene::Scene(const std::string& name)
         }
     }
 
-    std::size_t help;
+    size_t help;
     float x, y;
 
-    std::string            obj_name;
-    glm::vec3              obj_position(0.0f), obj_scale(1.0f);
-    float                  obj_depth, obj_rotation;
-    bool                   obj_visible;
-    unsigned long long     obj_sprite_count;
+    std::string obj_name;
+    glm::vec3   obj_position(0.0f), obj_scale(1.0f);
+    float       obj_depth, obj_rotation;
+    bool        obj_visible;
+    size_t      obj_sprite_count;
+
     std::vector<glm::vec2> obj_sprite_offsets;
 
     while (!file.eof())

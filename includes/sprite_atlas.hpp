@@ -3,10 +3,12 @@
 
 #pragma once
 
-#include <string>
-#include <memory>
 #include "texture.hpp"
+
 #include "glm.hpp"
+
+#include <memory>
+#include <string>
 
 class SpriteAtlas
 {

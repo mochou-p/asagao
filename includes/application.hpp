@@ -37,4 +37,3 @@ namespace Asagao
         std::unique_ptr<Scene> scene;
     };
 }  // Asagao::
-

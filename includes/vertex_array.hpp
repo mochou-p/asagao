@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include "vertex_buffer.hpp"
-#include "vertex_buffer_layout.hpp"
+class VertexBuffer;
+class VertexBufferLayout;
 
 class VertexArray
 {

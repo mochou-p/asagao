@@ -2,6 +2,8 @@
 
 
 #include "index_buffer.hpp"
+#include "rect.hpp"
+
 #include "glad/glad.h"
 
 IndexBuffer::IndexBuffer

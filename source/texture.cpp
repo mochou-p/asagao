@@ -49,7 +49,7 @@ Texture::Texture
               0,   0,   0, 255,     255,   0, 255, 255
         };
 
-        unsigned long long size = array_count * sizeof(unsigned char);
+        size_t size = array_count * sizeof(unsigned char);
 
         data = (unsigned char*) malloc(size);
         std::memcpy(data, texels, size);

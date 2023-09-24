@@ -3,9 +3,11 @@
 
 #pragma once
 
-#include <vector>
 #include "log.hpp"
+
 #include "glad/glad.h"
+
+#include <vector>
 
 struct VertexAttribute
 {

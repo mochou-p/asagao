@@ -5,7 +5,10 @@
 
 #include "image.hpp"
 #include "log.hpp"
+#include "style.hpp"
 
+#define GLFW_INCLUDE_NONE
+#include "glfw3.h"
 #include "glad.h"
 
 #define VSYNC 1
@@ -154,6 +157,12 @@ namespace Asagao
     Window::swap_buffers() const
     {
         glfwSwapBuffers(handle);
+    }
+
+    double
+    Window::get_time() const
+    {
+        return glfwGetTime();
     }
 
     void

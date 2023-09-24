@@ -3,11 +3,11 @@
 
 #pragma once
 
-#include <string>
-#define GLFW_INCLUDE_NONE
-#include "glfw3.h"
 #include "glm.hpp"
-#include "style.hpp"
+
+#include <string>
+
+struct GLFWwindow;
 
 namespace Asagao
 {
@@ -29,11 +29,12 @@ namespace Asagao
 
 
     public:
-        bool is_open()            const;
-        void poll_events()        const;
-        void swap_buffers()       const;
-        bool mouse_hovers_scene() const;
-        void resize();
+        bool   is_open()            const;
+        void   poll_events()        const;
+        void   swap_buffers()       const;
+        bool   mouse_hovers_scene() const;
+        double get_time()           const;
+        void   resize();
 
         GLFWwindow* handle;
         glm::vec2   size;

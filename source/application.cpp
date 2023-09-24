@@ -48,7 +48,7 @@ namespace Asagao
 
             if (scene)
             {
-                animation_time = glfwGetTime() * animation_speed;
+                animation_time = Window.get_time() * animation_speed;
 
                 for (const GameObject& obj : scene->objects)
                 {

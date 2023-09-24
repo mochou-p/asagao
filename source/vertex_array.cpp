@@ -2,6 +2,8 @@
 
 
 #include "vertex_array.hpp"
+#include "vertex_buffer.hpp"
+#include "vertex_buffer_layout.hpp"
 
 VertexArray::VertexArray()
 {
@@ -29,9 +31,9 @@ VertexArray::add_vertex_buffer
     bind();
     vb.bind();
 
-    const auto& attributes = layout.get_attributes();
-    unsigned int  offset = 0;
-    unsigned char i = 0;
+    const    auto& attributes = layout.get_attributes();
+    unsigned int   offset     = 0;
+    unsigned char  i          = 0;
 
     for (const VertexAttribute& va : attributes)
     {

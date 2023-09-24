@@ -3,8 +3,7 @@
 
 #pragma once
 
-#include <cstddef>
-#include "rect.hpp"
+class Rect;
 
 class VertexBuffer
 {

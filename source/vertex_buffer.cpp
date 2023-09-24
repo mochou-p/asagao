@@ -2,6 +2,8 @@
 
 
 #include "vertex_buffer.hpp"
+#include "rect.hpp"
+
 #include "glad/glad.h"
 
 VertexBuffer::VertexBuffer

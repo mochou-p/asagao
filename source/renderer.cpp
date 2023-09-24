@@ -4,6 +4,7 @@
 #include "renderer.hpp"
 #include "log.hpp"
 
+#include "glad.h"
 #include "glfw3.h"
 
 static void

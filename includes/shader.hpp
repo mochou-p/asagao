@@ -3,9 +3,10 @@
 
 #pragma once
 
+#include "glm.hpp"
+
 #include <string>
 #include <map>
-#include "glm.hpp"
 
 class Shader
 {

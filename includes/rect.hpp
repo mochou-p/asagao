@@ -3,8 +3,9 @@
 
 #pragma once
 
-#include <vector>
 #include "glm.hpp"
+
+#include <vector>
 
 // 2 triangles
 #define INDEX_COUNT 6

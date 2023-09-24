@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "rect.hpp"
+class Rect;
 
 class IndexBuffer
 {

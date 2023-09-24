@@ -6,6 +6,7 @@
 #include "vertex_array.hpp"
 #include "index_buffer.hpp"
 #include "shader.hpp"
+
 #include "glm.hpp"
 
 namespace Asagao

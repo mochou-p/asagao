@@ -3,9 +3,10 @@
 
 #pragma once
 
+#include "game_object.hpp"
+
 #include <string>
 #include <vector>
-#include "game_object.hpp"
 
 class Scene
 {

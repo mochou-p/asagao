@@ -3,8 +3,9 @@
 
 #pragma once
 
-#include <string>
 #include "glm.hpp"
+
+#include <string>
 
 class Texture
 {
