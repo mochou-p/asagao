@@ -47,6 +47,6 @@ namespace Asagao
         glm::mat4 m_view;
         glm::mat4 m_model;
     };
-}
+}  // Asagao::
 
 #endif  // __camera_hpp_

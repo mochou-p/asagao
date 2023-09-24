@@ -56,4 +56,4 @@ namespace Asagao
         m_model = glm::rotate(m_model, glm::radians(obj->rotation), z_axis);
         m_model = glm::scale(m_model, obj->scale);
     }
-}
+}  // Asagao::

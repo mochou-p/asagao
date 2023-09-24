@@ -65,4 +65,4 @@ namespace Asagao
             Window.swap_buffers();
         }
     }
-}  // Asagao
+}  // Asagao::

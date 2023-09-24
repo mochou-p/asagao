@@ -50,6 +50,6 @@ namespace Asagao
 
         std::function<void()> m_views[VIEW_COUNT];
     };
-}
+}  // Asagao::
 
 #endif  // __interface_hpp_

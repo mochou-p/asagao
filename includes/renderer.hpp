@@ -40,6 +40,6 @@ namespace Asagao
     private:
         unsigned int m_id;
     };
-}
+}  // Asagao::
 
 #endif  // __renderer_hpp_

@@ -47,6 +47,6 @@ namespace Asagao
     private:
         void init(const std::string& title, int width, int height);
     };
-}
+}  // Asagao::
 
 #endif  // __window_hpp_

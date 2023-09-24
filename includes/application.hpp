@@ -38,6 +38,6 @@ namespace Asagao
 
         std::unique_ptr<Scene> scene;
     };
-}
+}  // Asagao::
 
 #endif  // __application_hpp_

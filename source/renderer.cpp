@@ -76,4 +76,4 @@ namespace Asagao
     {
         glClearColor(color.r, color.g, color.b, color.a);
     }
-}
+}  // Asagao::

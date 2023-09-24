@@ -480,4 +480,4 @@ namespace Asagao
         details();
         components();
     }
-}
+}  // Asagao::

@@ -21,6 +21,6 @@ namespace Asagao
     inline auto& Window      =      Window::get_instance();
     inline auto& Camera      =      Camera::get_instance();
     inline auto& Interface   =   Interface::get_instance();
-}  // Asagao
+}  // Asagao::
 
 #endif  // __asagao_hpp_

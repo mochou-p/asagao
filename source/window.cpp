@@ -240,4 +240,4 @@ namespace Asagao
             mouse_pos.y < bottom_right.y
         );
     }
-}
+}  // Asagao::
