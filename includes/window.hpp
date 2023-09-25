@@ -9,6 +9,10 @@
 
 struct GLFWwindow;
 
+#define APP_TITLE "Asagao"
+#define WINDOW_WIDTH 1600
+#define WINDOW_HEIGHT 900
+
 namespace Asagao
 {
     class Window
@@ -16,7 +20,7 @@ namespace Asagao
     public:
         static Window& get_instance()
         {
-            static Window instance("Asagao", 1600, 900);
+            static Window instance(APP_TITLE, WINDOW_WIDTH, WINDOW_HEIGHT);
 
             return instance;
         }

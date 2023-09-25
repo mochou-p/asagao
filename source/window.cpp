@@ -33,8 +33,6 @@ framebuffer_size_callback
     glViewport(pos.x, pos.y, size.x, size.y);
 
     Asagao::Camera.update_projection();
-
-    (void)(window);
 }
 
 static inline bool sign(float value) { return value >= 0.0f; }
@@ -67,9 +65,6 @@ scroll_callback
     Asagao::Renderer.zoom += Asagao::Renderer.zoom / (sign(yoffset) ? -20 : 19);
 
     Asagao::Camera.update_projection();
-
-    (void)(window);
-    (void)(xoffset);
 }
 
 static void
@@ -92,9 +87,6 @@ mouse_button_callback
 
     if (Asagao::Window.mouse_hovers_scene())
         Asagao::Window.moving_view = true;
-
-    (void)(window);
-    (void)(mods);
 }
 
 static void
@@ -117,8 +109,6 @@ cursor_position_callback
     }
 
     Asagao::Window.mouse_pos = {xpos, ypos};
-
-    (void)(window);
 }
 
 namespace Asagao

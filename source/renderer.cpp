@@ -28,12 +28,6 @@ debug_message_callback
 )
 {
     LOG_AUTO(severity, message);
-
-    (void)(source);
-    (void)(type);
-    (void)(id);
-    (void)(length);
-    (void)(param);
 }
 
 namespace Asagao
