@@ -3,12 +3,6 @@
 
 #pragma once
 
-#include "types.hpp"
-
-class VertexArray;
-class IndexBuffer;
-class Shader;
-
 namespace Asagao
 {
     class Renderer

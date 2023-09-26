@@ -3,11 +3,6 @@
 
 #pragma once
 
-#include "types.hpp"
-
-class VertexBuffer;
-class VertexBufferLayout;
-
 class VertexArray
 {
 public:

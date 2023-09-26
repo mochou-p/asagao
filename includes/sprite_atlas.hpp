@@ -5,8 +5,6 @@
 
 #include "texture.hpp"
 
-#include <memory>
-
 class SpriteAtlas
 {
 public:

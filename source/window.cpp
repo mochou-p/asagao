@@ -7,10 +7,6 @@
 #include "log.hpp"
 #include "style.hpp"
 
-#define GLFW_INCLUDE_NONE
-#include "glfw3.h"
-#include "glad.h"
-
 #define VSYNC 1
 #define OPENGL_VER_MAJOR 4
 #define OPENGL_VER_MINOR 6

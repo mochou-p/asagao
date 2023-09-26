@@ -3,11 +3,7 @@
 
 #pragma once
 
-#include "types.hpp"
-
 #include "scene.hpp"
-
-#include <memory>
 
 namespace Asagao
 {

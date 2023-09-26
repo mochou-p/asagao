@@ -21,5 +21,8 @@ project "Asagao"
     libdirs     { "libraries/**" }
     links       { "opengl32", "glad", "glfw3", "gdi32", "imgui", "imgui_stdlib" }
 
+    pchheader "stdafx.h"
+    pchsource "stdafx.cpp"
+
     filter "configurations:Debug"
         symbols "On"

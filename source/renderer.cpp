@@ -1,14 +1,13 @@
 // asagao/source/renderer.cpp
 
 
+#include "stdafx.h"
+
 #include "renderer.hpp"
 #include "log.hpp"
 #include "shader.hpp"
 #include "vertex_array.hpp"
 #include "index_buffer.hpp"
-
-#include "glad.h"
-#include "glfw3.h"
 
 static void
 load_opengl_functions()

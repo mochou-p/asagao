@@ -3,10 +3,6 @@
 
 #pragma once
 
-#include "types.hpp"
-
-class Rect;
-
 class VertexBuffer
 {
 public:

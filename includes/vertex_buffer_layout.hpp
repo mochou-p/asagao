@@ -5,10 +5,6 @@
 
 #include "log.hpp"
 
-#include "glad/glad.h"
-
-#include <vector>
-
 struct VertexAttribute
 {
     u32  count;

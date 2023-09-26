@@ -3,10 +3,6 @@
 
 #pragma once
 
-#include "types.hpp"
-
-#include <map>
-
 class Shader
 {
 public:

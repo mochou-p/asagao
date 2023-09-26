@@ -1,6 +1,8 @@
 // asagao/source/vertex_buffer_layout.cpp
 
 
+#include "stdafx.h"
+
 #include "vertex_buffer_layout.hpp"
 #include "log.hpp"
 

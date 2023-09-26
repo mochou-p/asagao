@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include "types.hpp"
-
 class Image
 {
 public:

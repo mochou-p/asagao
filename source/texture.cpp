@@ -1,11 +1,11 @@
 // asagao/source/texture.cpp
 
 
-#include <cstring>
+#include "stdafx.h"
+
 #include "texture.hpp"
 #include "log.hpp"
 #include "image.hpp"
-#include "glad/glad.h"
 
 #define TEXTURE_PATH "resources/"
 #define DEFAULT_TEXTURE "texture/default.png"

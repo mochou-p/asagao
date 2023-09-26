@@ -1,6 +1,8 @@
 // asagao/source/image.cpp
 
 
+#include "stdafx.h"
+
 #include "image.hpp"
 #include "log.hpp"
 

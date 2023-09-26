@@ -1,10 +1,10 @@
 // asagao/source/vertex_buffer.cpp
 
 
+#include "stdafx.h"
+
 #include "vertex_buffer.hpp"
 #include "rect.hpp"
-
-#include "glad/glad.h"
 
 VertexBuffer::VertexBuffer
 (const Rect& quad)

@@ -1,12 +1,10 @@
 // asagao/source/shader.cpp
 
 
-#include <vector>
-#include <fstream>
-#include <sstream>
+#include "stdafx.h"
+
 #include "shader.hpp"
 #include "log.hpp"
-#include "glad/glad.h"
 
 #define SHADER_PATH "resources/shaders/"
 #define SHADER_STAGE_TAG_START "#stage "

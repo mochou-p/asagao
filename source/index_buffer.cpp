@@ -1,10 +1,10 @@
 // asagao/source/index_buffer.cpp
 
 
+#include "stdafx.h"
+
 #include "index_buffer.hpp"
 #include "rect.hpp"
-
-#include "glad/glad.h"
 
 IndexBuffer::IndexBuffer
 (const Rect& quad)

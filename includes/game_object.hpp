@@ -3,10 +3,6 @@
 
 #pragma once
 
-#include "types.hpp"
-
-#include <vector>
-
 struct GameObject
 {
     str  name;

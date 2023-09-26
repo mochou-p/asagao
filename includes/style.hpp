@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include "types.hpp"
-
 struct layout
 {
     v2 pos;

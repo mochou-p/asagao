@@ -7,14 +7,6 @@
 #include "log.hpp"
 #include "style.hpp"
 
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
-#include "imgui_stdlib.h"
-#include "IconsFontAwesome6.h"
-
-#include <filesystem>
-
 #define FONT_SIZE 18.0f
 
 using namespace ImGui;

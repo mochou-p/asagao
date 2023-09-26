@@ -1,6 +1,8 @@
 // asagao/source/vertex_array.cpp
 
 
+#include "stdafx.h"
+
 #include "vertex_array.hpp"
 #include "vertex_buffer.hpp"
 #include "vertex_buffer_layout.hpp"

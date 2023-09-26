@@ -3,10 +3,6 @@
 
 #pragma once
 
-#include "types.hpp"
-
-struct GLFWwindow;
-
 #define APP_TITLE "Asagao"
 #define WINDOW_WIDTH 1600
 #define WINDOW_HEIGHT 900

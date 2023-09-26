@@ -3,10 +3,6 @@
 
 #pragma once
 
-#include "types.hpp"
-
-class GameObject;
-
 namespace Asagao
 {
     class Camera

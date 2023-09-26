@@ -3,14 +3,13 @@
 
 #pragma once
 
+#include "stdafx.h"
+
 #include "application.hpp"
 #include "camera.hpp"
 #include "renderer.hpp"
 #include "window.hpp"
 #include "interface.hpp"
-
-// somehow prevents a crash rn (later in pch.h)
-#include <iostream>
 
 namespace Asagao
 {

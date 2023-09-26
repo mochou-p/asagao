@@ -7,8 +7,6 @@
 #include "game_object.hpp"
 #include "style.hpp"
 
-#include "gtc/matrix_transform.hpp"
-
 namespace Asagao
 {
     Camera::Camera()

@@ -1,11 +1,9 @@
 // asagao/source/log.cpp
 
 
-#include <iostream>
-#include <ctime>
-#include <sstream>
+#include "stdafx.h"
+
 #include "log.hpp"
-#include "glad/glad.h"
 
 #define WHITE "\033[0m"
 #define RED "\033[31m"

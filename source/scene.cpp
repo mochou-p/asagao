@@ -7,9 +7,6 @@
 #include "application.hpp"
 #include "log.hpp"
 
-#include <sstream>
-#include <fstream>
-
 #define SCENE_PATH "resources/scenes"
 #define SCENE_EXT ".asagao"
 #define SCENE_VER "0.0.1"

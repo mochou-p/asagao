@@ -1,6 +1,8 @@
 // asagao/source/rect.cpp
 
 
+#include "stdafx.h"
+
 #include "rect.hpp"
 
 Rect::Rect

@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include "types.hpp"
-
 #define LOG_AUTO(s, m) Log::automatic(__FILE__, __LINE__, s, m)
 #define LOG_INFO(m) Log::info(__FILE__, __LINE__, m)
 #define LOG_WARN(m) Log::warn(__FILE__, __LINE__, m)
