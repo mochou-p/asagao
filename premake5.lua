@@ -12,6 +12,7 @@ project "Asagao"
     language   "C++"
     cppdialect "C++17"
 
+    location  "build"
     targetdir "build/%{cfg.buildcfg}"
 
     files       { "includes/*.hpp", "source/*.cpp" }

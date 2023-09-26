@@ -35,4 +35,4 @@ $ make
 $ build/Debug/Asagao
 ```
 
-[Premake documentation for \[action\]](https://premake.github.io/docs/Using-Premake "How to use Premake")
+Premake documentation for [\[action\]](https://premake.github.io/docs/Using-Premake "How to use Premake")
