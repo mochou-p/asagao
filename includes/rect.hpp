@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "glm.hpp"
+#include "types.hpp"
 
 #include <vector>
 
@@ -15,22 +15,21 @@
 class Rect
 {
 public:
-    Rect(const float size, const glm::vec2& uv_fraction);
-    ~Rect() {}
+    Rect(const f32 size, const v2& uv_fraction);
 
-    inline const float* get_vertices() const
+    inline const f32* get_vertices() const
     { return m_vertices; }
 
-    inline size_t get_vertices_size() const
-    { return VERTEX_COUNT * sizeof(float); }
+    inline u64 get_vertices_size() const
+    { return VERTEX_COUNT * sizeof(f32); }
 
-    inline const unsigned int* get_indices() const
+    inline const u32* get_indices() const
     { return m_indices; }
 
-    inline unsigned int get_indices_count() const
+    inline u32 get_indices_count() const
     { return INDEX_COUNT; }
 
 private:
-    float        m_vertices[VERTEX_COUNT];
-    unsigned int m_indices[INDEX_COUNT];
+    f32 m_vertices[VERTEX_COUNT];
+    u32 m_indices[INDEX_COUNT];
 };

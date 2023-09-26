@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "types.hpp"
+
 class Rect;
 
 class IndexBuffer
@@ -11,9 +13,9 @@ public:
     IndexBuffer(const Rect& quad);
     ~IndexBuffer();
 
-    inline unsigned int get_count() const { return m_count; }
+    inline u32 get_count() const { return m_count; }
     void bind() const;
 private:
-    unsigned int m_id;
-    unsigned int m_count;
+    u32 m_id;
+    u32 m_count;
 };

@@ -3,22 +3,20 @@
 
 #pragma once
 
-#include "glm.hpp"
-
-#include <string>
+#include "types.hpp"
 
 class Texture
 {
 public:
-    Texture(const std::string& filepath, bool flip_y = true);
+    Texture(const str& filepath, bool flip_y = true);
     ~Texture();
 
-    static inline unsigned int count = 0;
+    static inline u32 count = 0;
 
-    inline       unsigned int get_slot() const { return m_slot; }
-    inline const glm::vec2&   get_size() const { return m_size; }
+    inline       u32 get_slot() const { return m_slot; }
+    inline const v2& get_size() const { return m_size; }
 private:
-    unsigned int m_slot;
-    glm::vec2    m_size;
-    unsigned int m_id;
+    u32 m_slot;
+    v2  m_size;
+    u32 m_id;
 };

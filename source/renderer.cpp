@@ -3,6 +3,9 @@
 
 #include "renderer.hpp"
 #include "log.hpp"
+#include "shader.hpp"
+#include "vertex_array.hpp"
+#include "index_buffer.hpp"
 
 #include "glad.h"
 #include "glfw3.h"
@@ -12,12 +15,12 @@ load_opengl_functions()
 {
     assert(gladLoadGLLoader((GLADloadproc) glfwGetProcAddress));
 
-    LOG_INFO(std::string("OpenGL ") + (const char*) glGetString(GL_VERSION));
+    LOG_INFO(str("OpenGL ") + (c_cstr) glGetString(GL_VERSION));
 }
 
 static void GLAPIENTRY
 debug_message_callback
-(unsigned int source, unsigned int type, unsigned int id, unsigned int severity, int length, const char* message, const void* param)
+(u32 source, u32 type, u32 id, u32 severity, i32 length, c_cstr message, const void* param)
 {
     LOG_AUTO(severity, message);
 }
@@ -56,7 +59,7 @@ namespace Asagao
 
     void
     Renderer::set_background_color
-    (const glm::vec4& color) const
+    (const v4& color) const
     {
         glClearColor(color.r, color.g, color.b, color.a);
     }

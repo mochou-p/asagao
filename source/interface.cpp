@@ -67,7 +67,7 @@ load_fonts()
         FONT_SIZE
     );
 
-    float icon_size = FONT_SIZE * 2.0f / 3.0f;
+    f32 icon_size = FONT_SIZE * 2.0f / 3.0f;
 
     ImFontConfig icon_config;
     icon_config.MergeMode        = true;
@@ -101,15 +101,15 @@ render_draw_data()
     ImGui_ImplOpenGL3_RenderDrawData(GetDrawData());
 }
 
-static std::vector<std::string>
+static std::vector<str>
 get_scenes()
 {
     namespace fs = std::filesystem;
 
-    static const fs::path    directory = "resources/scenes";
-    static const std::string extension = ".asagao";
+    static const fs::path directory = "resources/scenes";
+    static const str      extension = ".asagao";
 
-    std::vector<std::string> scenes;
+    std::vector<str> scenes;
 
     for (const auto& entry : fs::directory_iterator(directory))
     {
@@ -141,7 +141,7 @@ namespace Asagao
         ImGui_ImplGlfw_InitForOpenGL(Window.handle, true);
         ImGui_ImplOpenGL3_Init();
 
-        LOG_INFO(std::string("ImGui ") + IMGUI_VERSION);
+        LOG_INFO(str("ImGui ") + IMGUI_VERSION);
 
         GetIO().IniFilename = nullptr;
 
@@ -167,13 +167,13 @@ namespace Asagao
     void
     Interface::startup_view()
     {
-        static const char*            title = " " ICON_FA_FOLDER_OPEN "  Select a scene";
+        static c_cstr title = " " ICON_FA_FOLDER_OPEN "  Select a scene";
         static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove
             | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
         static const ImVec2           pos   = {0.0f, 0.0f};
         static bool hover;
 
-        static const std::vector<std::string> scenes = get_scenes();
+        static const std::vector<str> scenes = get_scenes();
 
         SetNextWindowPos(pos);
         SetNextWindowSize({Window.size.x, Window.size.y});
@@ -181,7 +181,7 @@ namespace Asagao
         Begin(title, nullptr, flags);
 
         PushStyleVar(ImGuiStyleVar_FramePadding, {20.0f, 15.0f});
-        for (const std::string& scene : scenes)
+        for (const str& scene : scenes)
         {
             if (Button((ICON_FA_MOUNTAIN_SUN " " + scene).c_str()))
             {
@@ -199,12 +199,12 @@ namespace Asagao
     void
     Interface::objects()
     {
-        static const char* title = " " ICON_FA_LIST_UL "  Objects";
+        static c_cstr title = " " ICON_FA_LIST_UL "  Objects";
         static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove
             | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
 
         static const ImVec4 darkened  = {1.00f, 1.00f, 1.00f, 0.4f};
-        static const float  close_btn = CalcTextSize("   ").x;
+        static const f32    close_btn = CalcTextSize("   ").x;
         static bool is_selected;
 
         SetNextWindowPos
@@ -256,12 +256,12 @@ namespace Asagao
     void
     Interface::details()
     {
-        static const char* title = "Details";
+        static c_cstr title = "Details";
         static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove;
-        static const float button_height    = GetItemRectSize().y;
+        static const f32    button_height    = GetItemRectSize().y;
         static const ImVec2 window_padding  = {0.00f, 0.00f};
         static const ImVec4 button_color    = {0.15f, 0.15f, 0.15f, 1.0f};
-        static glm::vec2 camera_pos, mouse_pos, world_pos, tile_pos;
+        static v2 camera_pos, mouse_pos, world_pos, tile_pos;
         static bool hover;
 
         SetNextWindowPos
@@ -303,7 +303,7 @@ namespace Asagao
         (
             (
                 ICON_FA_MAGNIFYING_GLASS " "
-                + std::to_string((int) (1.0f / Renderer.zoom * 100))
+                + std::to_string((i32) (1.0f / Renderer.zoom * 100))
                 + "%%"
             ).c_str()
         );
@@ -318,9 +318,9 @@ namespace Asagao
         (
             (
                 ICON_FA_CAMERA " "
-                + std::to_string((int) camera_pos.x)
+                + std::to_string((i32) camera_pos.x)
                 + ", "
-                + std::to_string((int) camera_pos.y)
+                + std::to_string((i32) camera_pos.y)
             ).c_str()
         );
 
@@ -346,9 +346,9 @@ namespace Asagao
             (
                 (
                     ICON_FA_ARROW_POINTER " "
-                    + std::to_string((int) mouse_pos.x)
+                    + std::to_string((i32) mouse_pos.x)
                     + ", "
-                    + std::to_string((int) mouse_pos.y)
+                    + std::to_string((i32) mouse_pos.y)
                 ).c_str()
             );
 
@@ -360,9 +360,9 @@ namespace Asagao
             (
                 (
                     ICON_FA_GLOBE " "
-                    + std::to_string((int) world_pos.x)
+                    + std::to_string((i32) world_pos.x)
                     + ", "
-                    + std::to_string((int) world_pos.y)
+                    + std::to_string((i32) world_pos.y)
                 ).c_str()
             );
 
@@ -374,9 +374,9 @@ namespace Asagao
             (
                 (
                     ICON_FA_SQUARE " "
-                    + std::to_string((int) std::floor(tile_pos.x))
+                    + std::to_string((i32) std::floor(tile_pos.x))
                     + ", "
-                    + std::to_string((int) std::floor(tile_pos.y))
+                    + std::to_string((i32) std::floor(tile_pos.y))
                 ).c_str()
             );
         }
@@ -390,14 +390,14 @@ namespace Asagao
     void
     Interface::components()
     {
-        static const char* titles[2]
+        static c_cstr titles[2]
         {
             " " ICON_FA_GEAR "  Settings",
             " " ICON_FA_PUZZLE_PIECE "  Components"
         };
         static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove
             | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
-        static const float close_btn = CalcTextSize("   ").x;
+        static const f32    close_btn = CalcTextSize("   ").x;
         static const ImVec2 row      = {0.0f, 10.0f};
         static bool hover;
 

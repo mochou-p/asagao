@@ -5,18 +5,14 @@
 
 #include "game_object.hpp"
 
-#include <string>
-#include <vector>
-
 class Scene
 {
 public:
-    Scene(const std::string& filepath);
-    ~Scene() {}
+    Scene(const str& filepath);
 
     void save() const;
 
     std::vector<GameObject> objects;
     GameObject*             selected;
-    std::string             name;
+    str                     name;
 };

@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include <string>
+#include "types.hpp"
 
 #define LOG_AUTO(s, m) Log::automatic(__FILE__, __LINE__, s, m)
 #define LOG_INFO(m) Log::info(__FILE__, __LINE__, m)
@@ -14,39 +14,10 @@
 class Log
 {
 public:
-    static void automatic
-    (
-     const std::string& file,
-           unsigned int line,
-           unsigned int severity,
-     const std::string& message
-    );
+    static void automatic(const str& file, u32 line, u32 severity, const str& message);
 
-    static void info
-    (
-     const std::string& file,
-           unsigned int line,
-     const std::string& message
-    );
-
-    static void warn
-    (
-     const std::string& file,
-           unsigned int line,
-     const std::string& message
-    );
-
-    static void error
-    (
-     const std::string& file,
-           unsigned int line,
-     const std::string& message
-    );
-
-    static void fatal
-    (
-     const std::string& file,
-           unsigned int line,
-     const std::string& message
-    );
+    static void      info(const str& file, u32 line, const str& message);
+    static void      warn(const str& file, u32 line, const str& message);
+    static void     error(const str& file, u32 line, const str& message);
+    static void     fatal(const str& file, u32 line, const str& message);
 };

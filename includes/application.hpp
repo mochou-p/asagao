@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include "scene.hpp"
+#include "types.hpp"
 
-#include "glm.hpp"
+#include "scene.hpp"
 
 #include <memory>
 
@@ -30,9 +30,9 @@ namespace Asagao
     public:
         void run() const;
 
-        const float rect_size       = 100.0f;
-        float       animation_speed =   1.0f;
-        glm::vec2   uv_fraction;
+        const f32 rect_size = 100.0f;
+        f32 animation_speed = 1.0f;
+        v2  uv_fraction;
 
         std::unique_ptr<Scene> scene;
     };

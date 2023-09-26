@@ -20,7 +20,7 @@
 // expecting that users did not "corrupt" the scene file
 // or atleast kept the same format and logic as Scene::save
 Scene::Scene
-(const std::string& name)
+(const str& name)
 : selected{nullptr}
 ,     name{name}
 {
@@ -32,7 +32,7 @@ Scene::Scene
         return;
     }
 
-    std::string line, temp, num;
+    str line, temp, num;
 
     while (std::getline(file, line))
     {
@@ -43,16 +43,16 @@ Scene::Scene
         }
     }
 
-    size_t help;
-    float x, y;
+    u64 help;
+    f32 x, y;
 
-    std::string obj_name;
-    glm::vec3   obj_position(0.0f), obj_scale(1.0f);
-    float       obj_depth, obj_rotation;
-    bool        obj_visible;
-    size_t      obj_sprite_count;
+    str  obj_name;
+    v3   obj_position(0.0f), obj_scale(1.0f);
+    f32  obj_depth, obj_rotation;
+    bool obj_visible;
+    u64  obj_sprite_count;
 
-    std::vector<glm::vec2> obj_sprite_offsets;
+    std::vector<v2> obj_sprite_offsets;
 
     while (!file.eof())
     {
@@ -103,7 +103,7 @@ Scene::Scene
 
             obj_sprite_offsets.push_back
             (
-                glm::vec2(x, y) * Asagao::Application.uv_fraction
+                v2(x, y) * Asagao::Application.uv_fraction
             );
         }
 
@@ -144,7 +144,7 @@ Scene::save() const
          << std::endl
          << SCENE_HEADER_OBJ << std::endl;
 
-    unsigned char i;
+    u16 i;
 
     for (const GameObject& obj : objects)
     {
@@ -171,7 +171,7 @@ Scene::save() const
 
         i = 0;
 
-        for (const glm::vec2& ofs : obj.sprite_offsets)
+        for (const v2& ofs : obj.sprite_offsets)
         {
             if (i++)
                 file << ",";

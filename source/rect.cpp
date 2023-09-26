@@ -4,9 +4,9 @@
 #include "rect.hpp"
 
 Rect::Rect
-(const float size, const glm::vec2& uv_fraction)
+(const f32 size, const v2& uv_fraction)
 {
-    const float half_of_rect = size * 0.5f;
+    const f32 half_of_rect = size * 0.5f;
 
     m_vertices[ 0] = -half_of_rect;  // x
     m_vertices[ 1] = -half_of_rect;  // y

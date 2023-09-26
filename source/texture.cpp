@@ -11,7 +11,7 @@
 #define DEFAULT_TEXTURE "texture/default.png"
 
 Texture::Texture
-(const std::string& filepath, bool flip_y)
+(const str& filepath, bool flip_y)
 {
     if (count >= 32)
         LOG_FATAL("maximum number of textures exceeded (32)");
@@ -38,18 +38,18 @@ Texture::Texture
         width  = 2;
         height = 2;
 
-        unsigned int texel_count = width * height;
-        unsigned int array_count = 4 * texel_count;
+        u32 texel_count = width * height;
+        u32 array_count = 4 * texel_count;
 
-        unsigned char texels[array_count] =
+        u8 texels[array_count] =
         {
             255,   0, 255, 255,       0,   0,   0, 255,
               0,   0,   0, 255,     255,   0, 255, 255
         };
 
-        size_t size = array_count * sizeof(unsigned char);
+        u64 size = array_count * sizeof(u8);
 
-        data = (unsigned char*) malloc(size);
+        data = (u8*) malloc(size);
         std::memcpy(data, texels, size);
     }
 

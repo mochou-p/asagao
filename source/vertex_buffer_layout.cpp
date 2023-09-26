@@ -10,7 +10,7 @@ VertexBufferLayout::VertexBufferLayout()
 
 static bool
 get_type_normalisation
-(unsigned int type)
+(u32 type)
 {
     switch (type)
     {
@@ -26,7 +26,7 @@ get_type_normalisation
 
 void
 VertexBufferLayout::push
-(unsigned int count, unsigned int type)
+(u32 count, u32 type)
 {
     m_attributes.push_back({count, type, get_type_normalisation(type)});
 

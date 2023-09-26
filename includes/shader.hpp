@@ -3,24 +3,23 @@
 
 #pragma once
 
-#include "glm.hpp"
+#include "types.hpp"
 
-#include <string>
 #include <map>
 
 class Shader
 {
 public:
-    Shader(const std::string& filepath);
+    Shader(const str& filepath);
     ~Shader();
 
     void use() const;
-    void set_int(const std::string& name, int value);
-    void set_mat4(const std::string& name, const glm::mat4& value);
-    void set_vec2(const std::string& name, const glm::vec2& value);
+    void set_int(const str& name, i32 value);
+    void set_mat4(const str& name, const m4& value);
+    void set_vec2(const str& name, const v2& value);
 private:
-    int get_uniform_location(const std::string& name);
+    i32 get_uniform_location(const str& name);
 
-    unsigned int               m_id;
-    std::map<std::string, int> m_uniform_location_cache;
+    u32 m_id;
+    std::map<str, i32> m_uniform_location_cache;
 };

@@ -3,37 +3,36 @@
 
 #pragma once
 
-#include "glm.hpp"
+#include "types.hpp"
 
-#include <string>
 #include <vector>
 
 struct GameObject
 {
-    std::string name;
-    glm::vec3   position;
-    float       depth;
-    glm::vec3   scale;
-    float       rotation;
-    bool        visible;
-    size_t      sprite_count;
+    str  name;
+    v3   position;
+    f32  depth;
+    v3   scale;
+    f32  rotation;
+    bool visible;
+    u64  sprite_count;
 
-    std::vector<glm::vec2> sprite_offsets;
+    std::vector<v2> sprite_offsets;
 
-    inline const glm::vec2& get_uv(const unsigned int animation_time) const
+    inline const v2& get_uv(const u32 animation_time) const
     { return sprite_offsets[animation_time % sprite_count]; }
 
     GameObject
     (
-     const std::string& name,
-     const glm::vec3&   position,
-           float        depth,
-     const glm::vec3&   scale,
-           float        rotation,
-           bool         visible,
-           size_t       sprite_count,
+     const str& name,
+     const v3&  position,
+           f32  depth,
+     const v3&  scale,
+           f32  rotation,
+           bool visible,
+           u64  sprite_count,
 
-     const std::vector<glm::vec2>& sprite_offsets
+     const std::vector<v2>& sprite_offsets
     )
     :           name{name}
     ,       position{position}

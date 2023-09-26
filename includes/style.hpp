@@ -3,12 +3,12 @@
 
 #pragma once
 
-#include "glm.hpp"
+#include "types.hpp"
 
 struct layout
 {
-    glm::vec2 pos;
-    glm::vec2 size;
+    v2 pos;
+    v2 size;
 };
 
 class Layout

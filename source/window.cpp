@@ -19,38 +19,38 @@
 
 static void
 framebuffer_size_callback
-(GLFWwindow* window, int width, int height)
+(GLFWwindow* window, i32 width, i32 height)
 {
     Asagao::Window.size = {width, height};
 
-    glm::vec2 pos  = {Asagao::Window.size * Layout::scene.pos };
-    glm::vec2 size = {Asagao::Window.size * Layout::scene.size};
+    v2 pos  = {Asagao::Window.size * Layout::scene.pos };
+    v2 size = {Asagao::Window.size * Layout::scene.size};
 
     glViewport(pos.x, pos.y, size.x, size.y);
 
     Asagao::Camera.update_projection();
 }
 
-static inline bool sign(float value) { return value >= 0.0f; }
+static inline bool sign(f32 value) { return value >= 0.0f; }
 
 static void
 scroll_callback
-(GLFWwindow* window, double xoffset, double yoffset)
+(GLFWwindow* window, f64 xoffset, f64 yoffset)
 {
     if (!yoffset || Asagao::Interface.get_view() != SCENE_VIEW || !Asagao::Window.mouse_hovers_scene())
         return;
 
-    glm::vec2 mouse_pos_frac  = Asagao::Window.mouse_pos / Asagao::Window.size;
-    mouse_pos_frac           *= -2;
-    mouse_pos_frac           +=  1;
-    mouse_pos_frac           /= Layout::scene.size;
-    mouse_pos_frac.y         *= -1;
-    mouse_pos_frac           *= yoffset / abs(yoffset);
+    v2 mouse_pos_frac  = Asagao::Window.mouse_pos / Asagao::Window.size;
+    mouse_pos_frac    *= -2;
+    mouse_pos_frac    +=  1;
+    mouse_pos_frac    /= Layout::scene.size;
+    mouse_pos_frac.y  *= -1;
+    mouse_pos_frac    *= yoffset / abs(yoffset);
 
-    glm::vec2 offset  = mouse_pos_frac;
-    offset           *= Asagao::Window.size;
-    offset           *= Asagao::Renderer.zoom;
-    offset           *= 0.05f;
+    v2 offset  = mouse_pos_frac;
+    offset    *= Asagao::Window.size;
+    offset    *= Asagao::Renderer.zoom;
+    offset    *= 0.05f;
 
     Asagao::Camera.move({offset.x, offset.y, 0.0f});
 
@@ -61,7 +61,7 @@ scroll_callback
 
 static void
 mouse_button_callback
-(GLFWwindow* window, int button, int action, int mods)
+(GLFWwindow* window, i32 button, i32 action, i32 mods)
 {
     if (button != GLFW_MOUSE_BUTTON_LEFT || Asagao::Interface.get_view() != SCENE_VIEW)
         return;
@@ -78,14 +78,14 @@ mouse_button_callback
 
 static void
 cursor_position_callback
-(GLFWwindow* window, double xpos, double ypos)
+(GLFWwindow* window, f64 xpos, f64 ypos)
 {
     if (Asagao::Interface.get_view() != SCENE_VIEW)
         return;
 
     if (Asagao::Window.moving_view)
     {
-        glm::vec2 diff = {(Asagao::Window.mouse_pos - glm::vec2(xpos, ypos))
+        v2 diff = {(Asagao::Window.mouse_pos - v2(xpos, ypos))
             * (Asagao::Renderer.zoom * 2)};
 
         Asagao::Camera.move({-diff.x, diff.y, 0.0f});
@@ -97,7 +97,7 @@ cursor_position_callback
 namespace Asagao
 {
     Window::Window
-    (const std::string& title, int width, int height)
+    (const str& title, u16 width, u16 height)
     {
         init(title, width, height);
         Renderer.init();
@@ -127,7 +127,7 @@ namespace Asagao
         glfwSwapBuffers(handle);
     }
 
-    double
+    f64
     Window::get_time() const
     {
         return glfwGetTime();
@@ -141,14 +141,14 @@ namespace Asagao
 
     void
     Window::init
-    (const std::string& title, int width, int height)
+    (const str& title, u16 width, u16 height)
     {
         if (handle)
             LOG_FATAL("only one instance of window is allowed");
 
         assert(glfwInit());
 
-        LOG_INFO(std::string("GLFW ") + glfwGetVersionString());
+        LOG_INFO(str("GLFW ") + glfwGetVersionString());
 
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_VER_MAJOR);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_VER_MINOR);
@@ -160,16 +160,16 @@ namespace Asagao
 
         Image images[ICON_COUNT]
         {
-            {WINDOW_ICON_PATH + std::string("asagao-256x256.png")},
-            {WINDOW_ICON_PATH + std::string("asagao-128x128.png")},
-            {WINDOW_ICON_PATH + std::string("asagao-64x64.png")},
-            {WINDOW_ICON_PATH + std::string("asagao-32x32.png")},
-            {WINDOW_ICON_PATH + std::string("asagao-16x16.png")}
+            {WINDOW_ICON_PATH + str("asagao-256x256.png")},
+            {WINDOW_ICON_PATH + str("asagao-128x128.png")},
+            {WINDOW_ICON_PATH + str("asagao-64x64.png")},
+            {WINDOW_ICON_PATH + str("asagao-32x32.png")},
+            {WINDOW_ICON_PATH + str("asagao-16x16.png")}
         };
 
         GLFWimage icons[ICON_COUNT];
         
-        for (unsigned char i = 0; i < ICON_COUNT; ++i)
+        for (u8 i = 0; i < ICON_COUNT; ++i)
         {
             icons[i].width  = images[i].get_width();
             icons[i].height = images[i].get_height();
@@ -180,8 +180,8 @@ namespace Asagao
 
         if (const GLFWvidmode* screen = glfwGetVideoMode(glfwGetPrimaryMonitor()))
         {
-            int x = (screen->width  - width)  * 0.5f;
-            int y = (screen->height - height) * 0.5f;
+            u16 x = (screen->width  - width)  * 0.5f;
+            u16 y = (screen->height - height) * 0.5f;
 
             glfwSetWindowPos(handle, x, y);
         }
@@ -200,15 +200,15 @@ namespace Asagao
     bool
     Window::mouse_hovers_scene() const
     {
-        glm::vec2 top_left      = size * Layout::scene.pos;
-        glm::vec2 bottom_right  = size;
-        bottom_right           *= Layout::scene.pos + Layout::scene.size;
+        v2 top_left      = size * Layout::scene.pos;
+        v2 bottom_right  = size;
+        bottom_right    *= Layout::scene.pos + Layout::scene.size;
 
         return
         (
             top_left.x < mouse_pos.x
             && mouse_pos.x < bottom_right.x
-            && top_left.y < mouse_pos.y
+            &&  top_left.y <    mouse_pos.y
             && mouse_pos.y < bottom_right.y
         );
     }

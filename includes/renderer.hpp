@@ -3,11 +3,11 @@
 
 #pragma once
 
-#include "vertex_array.hpp"
-#include "index_buffer.hpp"
-#include "shader.hpp"
+#include "types.hpp"
 
-#include "glm.hpp"
+class VertexArray;
+class IndexBuffer;
+class Shader;
 
 namespace Asagao
 {
@@ -32,10 +32,10 @@ namespace Asagao
 
         void clear() const;
         void draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const;
-        void set_background_color(const glm::vec4& color) const;
+        void set_background_color(const v4& color) const;
 
-        float zoom = 1.0f;
+        f32 zoom = 1.0f;
     private:
-        unsigned int m_id;
+        u32 m_id;
     };
 }  // Asagao::

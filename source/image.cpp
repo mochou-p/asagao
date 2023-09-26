@@ -8,7 +8,7 @@
 #include "stb_image.h"
 
 Image::Image
-(const std::string& filepath, bool flip_y)
+(const str& filepath, bool flip_y)
 {
     stbi_set_flip_vertically_on_load(flip_y);
 
@@ -18,8 +18,7 @@ Image::Image
         LOG_ERROR("failed to load " + filepath);
 }
 
-Image::~Image
-()
+Image::~Image()
 {
     stbi_image_free(m_data);
 }

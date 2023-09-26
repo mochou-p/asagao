@@ -11,13 +11,13 @@
 
 struct VertexAttribute
 {
-    unsigned int count;
-    unsigned int type;
-    bool         normalized;
+    u32  count;
+    u32  type;
+    bool normalized;
 
-    static unsigned int
+    static u32
     get_size_of_type
-    (unsigned int type)
+    (u32 type)
     {
         switch (type)
         {
@@ -37,11 +37,11 @@ class VertexBufferLayout
 public:
     VertexBufferLayout();
 
-    inline unsigned int get_stride() const { return m_stride; }
+    inline u32 get_stride() const { return m_stride; }
     inline const std::vector<VertexAttribute>& get_attributes() const
     { return m_attributes; }
-    void push(unsigned int count, unsigned int type);
+    void push(u32 count, u32 type);
 private:
     std::vector<VertexAttribute> m_attributes;
-    unsigned int m_stride;
+    u32 m_stride;
 };

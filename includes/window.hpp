@@ -3,9 +3,7 @@
 
 #pragma once
 
-#include "glm.hpp"
-
-#include <string>
+#include "types.hpp"
 
 struct GLFWwindow;
 
@@ -25,7 +23,7 @@ namespace Asagao
             return instance;
         }
     private:
-        Window(const std::string& title, int width, int height);
+        Window(const str& title, u16 width, u16 height);
         ~Window();
 
         Window           (const Window&) = delete;
@@ -33,18 +31,18 @@ namespace Asagao
 
 
     public:
-        bool   is_open()            const;
-        void   poll_events()        const;
-        void   swap_buffers()       const;
-        bool   mouse_hovers_scene() const;
-        double get_time()           const;
-        void   resize();
+        bool is_open()            const;
+        void poll_events()        const;
+        void swap_buffers()       const;
+        bool mouse_hovers_scene() const;
+        f64  get_time()           const;
+        void resize();
 
         GLFWwindow* handle;
-        glm::vec2   size;
-        glm::vec2   mouse_pos;
+        v2          size;
+        v2          mouse_pos;
         bool        moving_view;
     private:
-        void init(const std::string& title, int width, int height);
+        void init(const str& title, u16 width, u16 height);
     };
 }  // Asagao::

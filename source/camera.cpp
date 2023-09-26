@@ -16,7 +16,7 @@ namespace Asagao
         update_projection();
     }
 
-    const glm::mat4
+    const m4
     Camera::get_mvp
     (const GameObject& obj)
     {
@@ -27,14 +27,14 @@ namespace Asagao
 
     void
     Camera::set_position
-    (const glm::vec3& position)
+    (const v3& position)
     {
         m_position = position;
     }
 
     void
     Camera::move
-    (const glm::vec3& delta)
+    (const v3& delta)
     {
         m_position += delta;
     }
@@ -42,7 +42,7 @@ namespace Asagao
     void
     Camera::update_projection()
     {
-        const glm::vec2 aspect = Window.size * Layout::scene.size * Renderer.zoom;
+        const v2 aspect = Window.size * Layout::scene.size * Renderer.zoom;
 
         m_projection = glm::ortho(-aspect.x, aspect.x, -aspect.y, aspect.y);
     }

@@ -5,15 +5,12 @@
 
 #include "texture.hpp"
 
-#include "glm.hpp"
-
 #include <memory>
-#include <string>
 
 class SpriteAtlas
 {
 public:
-    SpriteAtlas(const std::string& filepath, unsigned int sprite_size);
+    SpriteAtlas(const str& filepath, u32 sprite_size);
 
     std::unique_ptr<Texture> texture;
 };

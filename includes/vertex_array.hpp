@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "types.hpp"
+
 class VertexBuffer;
 class VertexBufferLayout;
 
@@ -15,5 +17,5 @@ public:
     void bind() const;
     void add_vertex_buffer(const VertexBuffer& vb, const VertexBufferLayout& layout) const;
 private:
-    unsigned int m_id;
+    u32 m_id;
 };

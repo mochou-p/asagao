@@ -31,8 +31,8 @@ VertexArray::add_vertex_buffer
     const auto& attributes = layout.get_attributes();
     const auto  stride     = layout.get_stride();
 
-    size_t        offset = 0;
-    unsigned char i      = 0;
+    u64 offset = 0;
+    u8  i      = 0;
 
     for (const VertexAttribute& va : attributes)
     {

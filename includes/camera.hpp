@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "glm.hpp"
+#include "types.hpp"
 
 class GameObject;
 
@@ -26,23 +26,23 @@ namespace Asagao
 
 
     public:
-        const glm::mat4 get_mvp(const GameObject& obj);
-        inline const glm::vec2 get_position() const { return {m_position.x, m_position.y}; }
+        const m4 get_mvp(const GameObject& obj);
+        inline const v2 get_position() const { return {m_position.x, m_position.y}; }
 
-        void set_position(const glm::vec3& position);
-        void move(const glm::vec3& delta);
+        void set_position(const v3& position);
+        void move(const v3& delta);
 
         void update_projection();
     private:
         void update_object(const GameObject* obj);
 
-        const glm::mat4 mat4_identity = glm::mat4(1.0f);
-        const glm::vec3 z_axis        = {0.0f, 0.0f, 1.0f};
+        const m4 mat4_identity = m4(1.0f);
+        const v3 z_axis        = {0.0f, 0.0f, 1.0f};
 
-        glm::vec3 m_position;
+        v3 m_position;
 
-        glm::mat4 m_projection;
-        glm::mat4 m_view;
-        glm::mat4 m_model;
+        m4 m_projection;
+        m4 m_view;
+        m4 m_model;
     };
 }  // Asagao::

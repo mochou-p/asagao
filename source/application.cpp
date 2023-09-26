@@ -40,7 +40,7 @@ namespace Asagao
 
         Window.resize();
 
-        unsigned int animation_time;
+        u32 animation_time;
 
         while (Window.is_open())
         {

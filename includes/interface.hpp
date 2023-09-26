@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "types.hpp"
+
 #include <functional>
 
 #define STARTUP_VIEW 0
@@ -33,7 +35,7 @@ namespace Asagao
 
 
     public:
-        inline const unsigned char get_view() { return current_view; }
+        inline const u8 get_view() { return current_view; }
 
         void draw();
     private:
@@ -43,7 +45,7 @@ namespace Asagao
         void components();
         void scene_view();
 
-        unsigned char current_view = 0;
+        u8 current_view = 0;
 
         std::function<void()> m_views[VIEW_COUNT];
     };

@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "types.hpp"
+
 class Rect;
 
 class VertexBuffer
@@ -13,5 +15,5 @@ public:
 
     void bind() const;
 private:
-    unsigned int m_id;
+    u32 m_id;
 };

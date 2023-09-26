@@ -16,7 +16,7 @@
 
 void
 Log::automatic
-(const std::string& file, unsigned int line, unsigned int severity, const std::string& message)
+(const str& file, u32 line, u32 severity, const str& message)
 {
     switch (severity)
     {
@@ -36,7 +36,7 @@ Log::automatic
     }
 }
 
-static std::string
+static str
 now()
 {
     std::time_t epoch    = std::time(nullptr);
@@ -55,9 +55,9 @@ now()
     return ss.str();
 }
 
-static std::string
+static str
 header
-(const std::string& file, unsigned int line)
+(const str& file, u32 line)
 {
     std::stringstream ss;
 
@@ -73,7 +73,7 @@ header
 
 void
 Log::info
-(const std::string& file, unsigned int line, const std::string& message)
+(const str& file, u32 line, const str& message)
 {
     std::cout << BLUE
               << header(file, line)
@@ -84,7 +84,7 @@ Log::info
 
 void
 Log::warn
-(const std::string& file, unsigned int line, const std::string& message)
+(const str& file, u32 line, const str& message)
 {
     std::cout << YELLOW
               << header(file, line)
@@ -95,7 +95,7 @@ Log::warn
 
 void
 Log::error
-(const std::string& file, unsigned int line, const std::string& message)
+(const str& file, u32 line, const str& message)
 {
     std::cout << RED 
               << header(file, line) 
@@ -106,7 +106,7 @@ Log::error
 
 void
 Log::fatal
-(const std::string& file, unsigned int line, const std::string& message)
+(const str& file, u32 line, const str& message)
 {
     std::cerr << RED
               << header(file, line)
