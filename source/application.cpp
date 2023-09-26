@@ -17,15 +17,19 @@ namespace Asagao
     void
     Application::run() const
     {
-        Shader      shader("atlas.glsl");
         SpriteAtlas atlas("kenney-pixel-platformer.png", 18);
+
+        Shader shader("atlas.glsl");
+        shader.use();
+        shader.set_int("u_texture", atlas.texture->get_slot());
 
         Rect quad(rect_size, uv_fraction);
 
-        VertexBuffer       vb(quad);
         VertexBufferLayout layout;
         layout.push(2, GL_FLOAT);  // position
         layout.push(2, GL_FLOAT);  // texcoord
+
+        VertexBuffer vb(quad);
 
         VertexArray va;
         va.add_vertex_buffer(vb, layout);
@@ -34,12 +38,9 @@ namespace Asagao
 
         Renderer.set_background_color({0.875f, 0.965f, 0.961f, 1.0f});
 
-        shader.use();
-        shader.set_int("u_texture", atlas.texture->get_slot());
+        Window.resize();
 
         unsigned int animation_time;
-
-        Window.resize();
 
         while (Window.is_open())
         {
@@ -52,7 +53,8 @@ namespace Asagao
 
                 for (const GameObject& obj : scene->objects)
                 {
-                    if (!obj.visible) continue;
+                    if (!obj.visible)
+                        continue;
 
                     shader.set_mat4("u_mvp",     Camera.get_mvp(obj));
                     shader.set_vec2("u_tile_uv", obj.get_uv(animation_time));

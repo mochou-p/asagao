@@ -31,8 +31,7 @@ namespace Asagao
         static void init();
 
         void clear() const;
-        void draw(const VertexArray& va, const IndexBuffer& ib,
-            const Shader& shader) const;
+        void draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const;
         void set_background_color(const glm::vec4& color) const;
 
         float zoom = 1.0f;

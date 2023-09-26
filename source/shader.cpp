@@ -14,10 +14,7 @@
 
 static unsigned int
 create_shader
-(
- const std::string& code,
-       int          stage
-)
+(const std::string& code, int stage)
 {
     unsigned int id = glCreateShader(stage);
     const char* code_cstr = code.c_str();
@@ -36,10 +33,7 @@ struct stage
 
 static void
 parse_shader
-(
- const std::string& filepath,
-       unsigned int shader
-)
+(const std::string& filepath, unsigned int shader)
 {
     static const std::vector<stage> stages
     {
@@ -78,7 +72,8 @@ parse_shader
     }
 }
 
-Shader::Shader(const std::string& filepath)
+Shader::Shader
+(const std::string& filepath)
 {
     m_id = glCreateProgram();
     parse_shader(filepath, m_id);
@@ -97,7 +92,8 @@ Shader::use() const
 }
 
 int
-Shader::get_uniform_location(const std::string& name)
+Shader::get_uniform_location
+(const std::string& name)
 {
     if (m_uniform_location_cache.find(name) != m_uniform_location_cache.end())
         return m_uniform_location_cache[name];
@@ -116,30 +112,21 @@ Shader::get_uniform_location(const std::string& name)
 
 void
 Shader::set_int
-(
- const std::string& name,
-       int          value
-)
+(const std::string& name, int value)
 {
     glUniform1i(get_uniform_location(name), value);
 }
 
 void
 Shader::set_mat4
-(
- const std::string& name,
- const glm::mat4&   value
-)
+(const std::string& name, const glm::mat4& value)
 {
     glUniformMatrix4fv(get_uniform_location(name), 1, GL_FALSE, &value[0][0]);
 }
 
 void
 Shader::set_vec2
-(
- const std::string& name,
- const glm::vec2&   value
-)
+(const std::string& name, const glm::vec2& value)
 {
     glUniform2f(get_uniform_location(name), value.x, value.y);
 }

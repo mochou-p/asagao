@@ -31,7 +31,7 @@ namespace Asagao
         void run() const;
 
         const float rect_size       = 100.0f;
-        float       animation_speed =   1.7f;
+        float       animation_speed =   1.0f;
         glm::vec2   uv_fraction;
 
         std::unique_ptr<Scene> scene;

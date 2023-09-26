@@ -35,13 +35,13 @@ struct GameObject
 
      const std::vector<glm::vec2>& sprite_offsets
     )
-    : name{name}
-    , position{position}
-    , depth{depth}
-    , scale{scale}
-    , rotation{rotation}
-    , visible{visible}
-    , sprite_count{sprite_count}
+    :           name{name}
+    ,       position{position}
+    ,          depth{depth}
+    ,          scale{scale}
+    ,       rotation{rotation}
+    ,        visible{visible}
+    ,   sprite_count{sprite_count}
     , sprite_offsets{sprite_offsets}
     {}
 };

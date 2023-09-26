@@ -11,19 +11,16 @@
 #define DEFAULT_TEXTURE "texture/default.png"
 
 Texture::Texture
-(
- const std::string& filepath,
-       bool         flip_y
-)
+(const std::string& filepath, bool flip_y)
 {
     if (count >= 32)
         LOG_FATAL("maximum number of textures exceeded (32)");
     
     Image image(TEXTURE_PATH + filepath, flip_y);
 
-    unsigned char* data   = image.get_data();
-    int            width  = image.get_width();
-    int            height = image.get_height();
+    auto data   = image.get_data();
+    auto width  = image.get_width();
+    auto height = image.get_height();
 
     if (!data)
     {
@@ -32,6 +29,7 @@ Texture::Texture
             LOG_WARN("cannot find " + filepath);
 
             *this = Texture(DEFAULT_TEXTURE);
+
             return;
         }
 
@@ -67,8 +65,7 @@ Texture::Texture
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
-        GL_UNSIGNED_BYTE, data);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
 }
 

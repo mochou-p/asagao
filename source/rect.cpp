@@ -3,7 +3,8 @@
 
 #include "rect.hpp"
 
-Rect::Rect(const float size, const glm::vec2& uv_fraction)
+Rect::Rect
+(const float size, const glm::vec2& uv_fraction)
 {
     const float half_of_rect = size * 0.5f;
 
@@ -34,4 +35,4 @@ Rect::Rect(const float size, const glm::vec2& uv_fraction)
     m_indices[3] = 2;  // 3-2
     m_indices[4] = 3;  // |/
     m_indices[5] = 0;  // 0
-};
+}

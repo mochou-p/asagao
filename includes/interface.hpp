@@ -33,7 +33,6 @@ namespace Asagao
 
 
     public:
-
         inline const unsigned char get_view() { return current_view; }
 
         void draw();

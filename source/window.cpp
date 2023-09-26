@@ -19,11 +19,7 @@
 
 static void
 framebuffer_size_callback
-(
- GLFWwindow* window,
- int         width,
- int         height
-)
+(GLFWwindow* window, int width, int height)
 {
     Asagao::Window.size = {width, height};
 
@@ -39,11 +35,7 @@ static inline bool sign(float value) { return value >= 0.0f; }
 
 static void
 scroll_callback
-(
- GLFWwindow* window,
- double      xoffset,
- double      yoffset
-)
+(GLFWwindow* window, double xoffset, double yoffset)
 {
     if (!yoffset || Asagao::Interface.get_view() != SCENE_VIEW || !Asagao::Window.mouse_hovers_scene())
         return;
@@ -69,12 +61,7 @@ scroll_callback
 
 static void
 mouse_button_callback
-(
- GLFWwindow* window,
- int         button,
- int         action,
- int         mods
-)
+(GLFWwindow* window, int button, int action, int mods)
 {
     if (button != GLFW_MOUSE_BUTTON_LEFT || Asagao::Interface.get_view() != SCENE_VIEW)
         return;
@@ -91,11 +78,7 @@ mouse_button_callback
 
 static void
 cursor_position_callback
-(
- GLFWwindow* window,
- double      xpos,
- double      ypos
-)
+(GLFWwindow* window, double xpos, double ypos)
 {
     if (Asagao::Interface.get_view() != SCENE_VIEW)
         return;
@@ -114,11 +97,7 @@ cursor_position_callback
 namespace Asagao
 {
     Window::Window
-    (
-    const std::string& title,
-        int            width,
-        int            height
-    )
+    (const std::string& title, int width, int height)
     {
         init(title, width, height);
         Renderer.init();
@@ -127,7 +106,6 @@ namespace Asagao
     Window::~Window()
     {
         glfwDestroyWindow(handle);
-
         glfwTerminate();
     }
 
@@ -163,11 +141,7 @@ namespace Asagao
 
     void
     Window::init
-    (
-    const std::string& title,
-        int          width,
-        int          height
-    )
+    (const std::string& title, int width, int height)
     {
         if (handle)
             LOG_FATAL("only one instance of window is allowed");
@@ -180,8 +154,7 @@ namespace Asagao
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_VER_MINOR);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-        handle = glfwCreateWindow(width, height, title.c_str(), nullptr,
-            nullptr);
+        handle = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
 
         assert(handle);
 
@@ -233,10 +206,10 @@ namespace Asagao
 
         return
         (
-            top_left.x < mouse_pos.x &&
-            mouse_pos.x < bottom_right.x &&
-            top_left.y < mouse_pos.y &&
-            mouse_pos.y < bottom_right.y
+            top_left.x < mouse_pos.x
+            && mouse_pos.x < bottom_right.x
+            && top_left.y < mouse_pos.y
+            && mouse_pos.y < bottom_right.y
         );
     }
 }  // Asagao::

@@ -16,12 +16,7 @@
 
 void
 Log::automatic
-(
- const std::string& file,
-       unsigned int line,
-       unsigned int severity,
- const std::string& message
-)
+(const std::string& file, unsigned int line, unsigned int severity, const std::string& message)
 {
     switch (severity)
     {
@@ -48,6 +43,7 @@ now()
     std::tm*    time_now = std::localtime(&epoch);
 
     std::stringstream ss;
+
     ss << "["
        << LEADING_ZEROS(time_now->tm_hour)
        << ":"
@@ -61,12 +57,10 @@ now()
 
 static std::string
 header
-(
- const std::string& file,
-       unsigned int line
-)
+(const std::string& file, unsigned int line)
 {
     std::stringstream ss;
+
     ss << now()
        << " ["
        << file
@@ -79,46 +73,46 @@ header
 
 void
 Log::info
-(
- const std::string& file,
-       unsigned int line,
- const std::string& message
-)
+(const std::string& file, unsigned int line, const std::string& message)
 {
-    std::cout << BLUE << header(file, line) << message << WHITE << std::endl;
+    std::cout << BLUE
+              << header(file, line)
+              << message
+              << WHITE
+              << std::endl;
 }
 
 void
 Log::warn
-(
- const std::string& file,
-       unsigned int line,
- const std::string& message
-)
+(const std::string& file, unsigned int line, const std::string& message)
 {
-    std::cout << YELLOW << header(file, line) << message << WHITE << std::endl;
+    std::cout << YELLOW
+              << header(file, line)
+              << message
+              << WHITE
+              << std::endl;
 }
 
 void
 Log::error
-(
- const std::string& file,
-       unsigned int line,
- const std::string& message
-)
+(const std::string& file, unsigned int line, const std::string& message)
 {
-    std::cout << RED << header(file, line) << message << WHITE << std::endl;
+    std::cout << RED 
+              << header(file, line) 
+              << message 
+              << WHITE 
+              << std::endl;
 }
 
 void
 Log::fatal
-(
- const std::string& file,
-       unsigned int line,
- const std::string& message
-)
+(const std::string& file, unsigned int line, const std::string& message)
 {
-    std::cerr << RED << header(file, line) << message << WHITE << std::endl;
+    std::cerr << RED
+              << header(file, line)
+              << message
+              << WHITE
+              << std::endl;
 
     exit(EXIT_FAILURE);
 }

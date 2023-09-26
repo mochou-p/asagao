@@ -17,15 +17,7 @@ load_opengl_functions()
 
 static void GLAPIENTRY
 debug_message_callback
-(
-       unsigned int source,
-       unsigned int type,
-       unsigned int id,
-       unsigned int severity,
-       int          length,
- const char*        message,
- const void*        param
-)
+(unsigned int source, unsigned int type, unsigned int id, unsigned int severity, int length, const char* message, const void* param)
 {
     LOG_AUTO(severity, message);
 }
@@ -53,11 +45,7 @@ namespace Asagao
 
     void
     Renderer::draw
-    (
-    const VertexArray& va,
-    const IndexBuffer& ib,
-    const Shader&      shader
-    ) const
+    (const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const
     {
         shader.use();
         va.bind();
@@ -67,7 +55,8 @@ namespace Asagao
     }
 
     void
-    Renderer::set_background_color(const glm::vec4& color) const
+    Renderer::set_background_color
+    (const glm::vec4& color) const
     {
         glClearColor(color.r, color.g, color.b, color.a);
     }

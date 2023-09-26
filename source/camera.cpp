@@ -17,7 +17,8 @@ namespace Asagao
     }
 
     const glm::mat4
-    Camera::get_mvp(const GameObject& obj)
+    Camera::get_mvp
+    (const GameObject& obj)
     {
         update_object(&obj);
 
@@ -25,13 +26,15 @@ namespace Asagao
     }
 
     void
-    Camera::set_position(const glm::vec3& position)
+    Camera::set_position
+    (const glm::vec3& position)
     {
         m_position = position;
     }
 
     void
-    Camera::move(const glm::vec3& delta)
+    Camera::move
+    (const glm::vec3& delta)
     {
         m_position += delta;
     }
@@ -45,13 +48,11 @@ namespace Asagao
     }
 
     void
-    Camera::update_object(const GameObject* obj)
+    Camera::update_object
+    (const GameObject* obj)
     {
-        m_view = glm::translate
-        (
-            mat4_identity,
-            m_position - (m_position * obj->depth * 0.08f)
-        );
+        m_view  = glm::translate(mat4_identity, m_position - (m_position * obj->depth * 0.08f));
+        //                                                                       temp ^^^^^^^
 
         m_model = glm::translate(mat4_identity, obj->position);
         m_model = glm::rotate(m_model, glm::radians(obj->rotation), z_axis);

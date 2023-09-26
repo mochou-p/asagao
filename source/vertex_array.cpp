@@ -23,28 +23,21 @@ VertexArray::bind() const
 
 void
 VertexArray::add_vertex_buffer
-(
- const VertexBuffer&       vb,
- const VertexBufferLayout& layout
-) const
+(const VertexBuffer& vb, const VertexBufferLayout& layout) const
 {
     bind();
     vb.bind();
 
-    const    auto& attributes = layout.get_attributes();
-    unsigned int   offset     = 0;
-    unsigned char  i          = 0;
+    const auto& attributes = layout.get_attributes();
+    const auto  stride     = layout.get_stride();
+
+    size_t        offset = 0;
+    unsigned char i      = 0;
 
     for (const VertexAttribute& va : attributes)
     {
         glEnableVertexAttribArray(i);
-        glVertexAttribPointer
-        (
-            i,
-            va.count, va.type, va.normalized,
-            layout.get_stride(),
-            (const void*) (size_t) offset
-        );
+        glVertexAttribPointer(i, va.count, va.type, va.normalized, stride, (const void*) offset);
 
         offset += va.count * VertexAttribute::get_size_of_type(va.type);
 

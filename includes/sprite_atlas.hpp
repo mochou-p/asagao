@@ -14,7 +14,6 @@ class SpriteAtlas
 {
 public:
     SpriteAtlas(const std::string& filepath, unsigned int sprite_size);
-    ~SpriteAtlas() {}
 
     std::unique_ptr<Texture> texture;
 };

@@ -19,9 +19,10 @@
 // temp
 // expecting that users did not "corrupt" the scene file
 // or atleast kept the same format and logic as Scene::save
-Scene::Scene(const std::string& name)
+Scene::Scene
+(const std::string& name)
 : selected{nullptr}
-, name{name}
+,     name{name}
 {
     std::ifstream file(SCENE_PATH + ("/" + name) + SCENE_EXT);
 
@@ -122,6 +123,7 @@ Scene::Scene(const std::string& name)
     }
 
     Asagao::Camera.set_position({0.0f, 0.0f, 0.0f});
+    Asagao::Application.animation_speed = 1.0f;
 }
 
 void
@@ -149,12 +151,14 @@ Scene::save() const
         file << std::endl
              << "name: " << obj.name
              << std::endl
-             << "position: " << (obj.position.x / Asagao::Application.rect_size) << ","
+             << "position: " << (obj.position.x / Asagao::Application.rect_size)
+                             << ","
                              << (obj.position.y / Asagao::Application.rect_size)
              << std::endl
              << "depth: " << obj.depth
              << std::endl
-             << "scale: " << obj.scale.x << ","
+             << "scale: " << obj.scale.x
+                          << ","
                           << obj.scale.y
              << std::endl
              << "rotation: " << obj.rotation
@@ -166,9 +170,12 @@ Scene::save() const
              << "sprite_offsets: ";
 
         i = 0;
+
         for (const glm::vec2& ofs : obj.sprite_offsets)
         {
-            if (i++) file << ",";
+            if (i++)
+                file << ",";
+
             file << ofs.x / Asagao::Application.uv_fraction.x << ","
                  << ofs.y / Asagao::Application.uv_fraction.y;
         }

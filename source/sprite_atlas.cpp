@@ -9,10 +9,7 @@
 #define ATLAS_PATH "atlases/"
 
 SpriteAtlas::SpriteAtlas
-(
- const std::string& filepath,
-       unsigned int sprite_size
-)
+(const std::string& filepath, unsigned int sprite_size)
 {
     texture = std::make_unique<Texture>(ATLAS_PATH + filepath);
 

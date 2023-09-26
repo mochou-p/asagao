@@ -127,10 +127,11 @@ namespace Asagao
 {
     Interface::Interface()
     //        wow
-    : m_views{
-            [this]() { this->startup_view(); },
-            [this]() { this->scene_view();   }
-            }
+    : m_views
+      {
+          [this]() { this->startup_view(); },
+          [this]() { this->scene_view();   }
+      }
     {
         IMGUI_CHECKVERSION();
 
@@ -143,6 +144,7 @@ namespace Asagao
         LOG_INFO(std::string("ImGui ") + IMGUI_VERSION);
 
         GetIO().IniFilename = nullptr;
+
         set_theme();
         load_fonts();
     }

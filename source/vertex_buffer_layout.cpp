@@ -9,7 +9,8 @@ VertexBufferLayout::VertexBufferLayout()
 {}
 
 static bool
-get_type_normalisation(unsigned int type)
+get_type_normalisation
+(unsigned int type)
 {
     switch (type)
     {
@@ -25,11 +26,9 @@ get_type_normalisation(unsigned int type)
 
 void
 VertexBufferLayout::push
-(
- unsigned int count,
- unsigned int type
-)
+(unsigned int count, unsigned int type)
 {
     m_attributes.push_back({count, type, get_type_normalisation(type)});
+
     m_stride += count * VertexAttribute::get_size_of_type(type);
 }
