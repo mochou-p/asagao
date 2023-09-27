@@ -7,6 +7,7 @@
 #include "vertex_buffer.hpp"
 #include "vertex_buffer_layout.hpp"
 
+
 VertexArray::VertexArray()
 {
     glGenVertexArrays(1, &m_id);

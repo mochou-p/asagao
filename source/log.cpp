@@ -5,12 +5,14 @@
 
 #include "log.hpp"
 
+
 #define WHITE "\033[0m"
 #define RED "\033[31m"
 #define YELLOW "\033[33m"
 #define BLUE "\033[34m"
 
 #define LEADING_ZEROS(x) (x < 10 ? "0" : "") << x
+
 
 void
 Log::automatic

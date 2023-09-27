@@ -3,11 +3,13 @@
 
 #pragma once
 
+
 #define LOG_AUTO(s, m) Log::automatic(__FILE__, __LINE__, s, m)
 #define LOG_INFO(m) Log::info(__FILE__, __LINE__, m)
 #define LOG_WARN(m) Log::warn(__FILE__, __LINE__, m)
 #define LOG_ERROR(m) Log::error(__FILE__, __LINE__, m)
 #define LOG_FATAL(m) Log::fatal(__FILE__, __LINE__, m)
+
 
 class Log
 {

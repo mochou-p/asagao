@@ -12,6 +12,7 @@
 #include "index_buffer.hpp"
 #include "game_object.hpp"
 
+
 namespace Asagao
 {
     void

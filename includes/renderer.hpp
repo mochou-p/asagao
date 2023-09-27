@@ -3,6 +3,7 @@
 
 #pragma once
 
+
 namespace Asagao
 {
     class Renderer

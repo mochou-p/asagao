@@ -3,9 +3,11 @@
 
 #pragma once
 
+
 #define APP_TITLE "Asagao"
 #define WINDOW_WIDTH 1600
 #define WINDOW_HEIGHT 900
+
 
 namespace Asagao
 {

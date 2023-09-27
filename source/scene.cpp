@@ -7,11 +7,13 @@
 #include "application.hpp"
 #include "log.hpp"
 
+
 #define SCENE_PATH "resources/scenes"
 #define SCENE_EXT ".asagao"
 #define SCENE_VER "0.0.1"
 #define SCENE_HEADER_TOP "### Asagao Scene File ###"
 #define SCENE_HEADER_OBJ "--- Scene Objects -------"
+
 
 // temp
 // expecting that users did not "corrupt" the scene file

@@ -6,6 +6,7 @@
 #include "vertex_buffer.hpp"
 #include "rect.hpp"
 
+
 VertexBuffer::VertexBuffer
 (const Rect& quad)
 {

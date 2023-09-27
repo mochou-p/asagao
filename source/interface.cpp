@@ -7,9 +7,12 @@
 #include "log.hpp"
 #include "style.hpp"
 
+
 #define FONT_SIZE 18.0f
 
+
 using namespace ImGui;
+
 
 static void
 set_theme()

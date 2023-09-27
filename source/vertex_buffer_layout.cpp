@@ -6,6 +6,7 @@
 #include "vertex_buffer_layout.hpp"
 #include "log.hpp"
 
+
 VertexBufferLayout::VertexBufferLayout()
 : m_stride(0)
 {}

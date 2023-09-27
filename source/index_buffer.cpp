@@ -6,6 +6,7 @@
 #include "index_buffer.hpp"
 #include "rect.hpp"
 
+
 IndexBuffer::IndexBuffer
 (const Rect& quad)
 : m_count(quad.get_indices_count())

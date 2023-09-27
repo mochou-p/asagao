@@ -3,11 +3,13 @@
 
 #pragma once
 
+
 struct layout
 {
     v2 pos;
     v2 size;
 };
+
 
 class Layout
 {

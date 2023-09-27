@@ -6,7 +6,9 @@
 #include "sprite_atlas.hpp"
 #include "application.hpp"
 
+
 #define ATLAS_PATH "atlases/"
+
 
 SpriteAtlas::SpriteAtlas
 (const str& filepath, u32 sprite_size)

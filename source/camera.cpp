@@ -7,6 +7,7 @@
 #include "game_object.hpp"
 #include "style.hpp"
 
+
 namespace Asagao
 {
     Camera::Camera()

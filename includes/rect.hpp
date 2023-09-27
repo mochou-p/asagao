@@ -3,10 +3,12 @@
 
 #pragma once
 
+
 // 2 triangles
 #define INDEX_COUNT 6
 // 4 * (position(x, y), texcoord(u, v))
 #define VERTEX_COUNT 16
+
 
 class Rect
 {

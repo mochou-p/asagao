@@ -3,7 +3,9 @@
 
 #pragma once
 
+
 #include "log.hpp"
+
 
 struct VertexAttribute
 {

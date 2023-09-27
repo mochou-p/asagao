@@ -3,6 +3,7 @@
 
 #pragma once
 
+
 struct GameObject
 {
     str  name;

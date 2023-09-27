@@ -3,6 +3,7 @@
 
 #pragma once
 
+
 #include "stdafx.h"
 
 #include "application.hpp"
@@ -10,6 +11,7 @@
 #include "renderer.hpp"
 #include "window.hpp"
 #include "interface.hpp"
+
 
 namespace Asagao
 {

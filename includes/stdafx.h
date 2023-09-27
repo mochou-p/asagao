@@ -3,7 +3,8 @@
 
 #pragma once
 
-// standard libraries
+
+// standard library
 #include <functional>
 #include <map>
 #include <memory>
@@ -22,7 +23,7 @@
 #include <ctime>
 
 
-// libraries
+// other libraries
 #include "glad/glad.h"
 
 #include "glfw3.h"

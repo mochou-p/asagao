@@ -3,7 +3,9 @@
 
 #pragma once
 
+
 #include "texture.hpp"
+
 
 class SpriteAtlas
 {

@@ -9,6 +9,7 @@
 #include "vertex_array.hpp"
 #include "index_buffer.hpp"
 
+
 static void
 load_opengl_functions()
 {

@@ -7,11 +7,13 @@
 #include "log.hpp"
 #include "style.hpp"
 
+
 #define VSYNC 1
 #define OPENGL_VER_MAJOR 4
 #define OPENGL_VER_MINOR 6
 #define WINDOW_ICON_PATH "resources/branding/"
 #define ICON_COUNT 5
+
 
 static void
 framebuffer_size_callback

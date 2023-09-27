@@ -6,9 +6,11 @@
 #include "shader.hpp"
 #include "log.hpp"
 
+
 #define SHADER_PATH "resources/shaders/"
 #define SHADER_STAGE_TAG_START "#stage "
 #define SHADER_STAGE_TAG_END "#endstage"
+
 
 static u32
 create_shader

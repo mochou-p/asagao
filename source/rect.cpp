@@ -5,6 +5,7 @@
 
 #include "rect.hpp"
 
+
 Rect::Rect
 (const f32 size, const v2& uv_fraction)
 {

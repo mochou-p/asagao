@@ -7,8 +7,10 @@
 #include "log.hpp"
 #include "image.hpp"
 
+
 #define TEXTURE_PATH "resources/"
 #define DEFAULT_TEXTURE "texture/default.png"
+
 
 Texture::Texture
 (const str& filepath, bool flip_y)
