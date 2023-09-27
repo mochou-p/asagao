@@ -6,12 +6,15 @@
 #include "log.hpp"
 
 
-#define WHITE "\033[0m"
-#define RED "\033[31m"
+#define WHITE  "\033[0m"
+#define RED    "\033[31m"
 #define YELLOW "\033[33m"
-#define BLUE "\033[34m"
+#define BLUE   "\033[34m"
 
 #define LEADING_ZEROS(x) (x < 10 ? "0" : "") << x
+
+
+static str header(const str& file, u32 line);
 
 
 void
@@ -34,41 +37,6 @@ Log::automatic
             warn(file, line, "unknown log severity level");
             break;
     }
-}
-
-static str
-now()
-{
-    std::time_t epoch    = std::time(nullptr);
-    std::tm*    time_now = std::localtime(&epoch);
-
-    std::stringstream ss;
-
-    ss << "["
-       << LEADING_ZEROS(time_now->tm_hour)
-       << ":"
-       << LEADING_ZEROS(time_now->tm_min)
-       << ":"
-       << LEADING_ZEROS(time_now->tm_sec)
-       << "]";
-
-    return ss.str();
-}
-
-static str
-header
-(const str& file, u32 line)
-{
-    std::stringstream ss;
-
-    ss << now()
-       << " ["
-       << file
-       << ":"
-       << line
-       << "]\t";
-
-    return ss.str();
 }
 
 void
@@ -115,4 +83,40 @@ Log::fatal
               << std::endl;
 
     exit(EXIT_FAILURE);
+}
+
+
+static str
+now()
+{
+    std::time_t epoch    = std::time(nullptr);
+    std::tm*    time_now = std::localtime(&epoch);
+
+    std::stringstream ss;
+
+    ss << "["
+       << LEADING_ZEROS(time_now->tm_hour)
+       << ":"
+       << LEADING_ZEROS(time_now->tm_min)
+       << ":"
+       << LEADING_ZEROS(time_now->tm_sec)
+       << "]";
+
+    return ss.str();
+}
+
+static str
+header
+(const str& file, u32 line)
+{
+    std::stringstream ss;
+
+    ss << now()
+       << " ["
+       << file
+       << ":"
+       << line
+       << "]\t";
+
+    return ss.str();
 }

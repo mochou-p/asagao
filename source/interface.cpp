@@ -11,112 +11,16 @@
 #define FONT_SIZE 18.0f
 
 
+static void set_theme();
+static void load_fonts();
+static void new_frame();
+static void render_draw_data();
+
+static std::vector<str> get_scenes();
+
+
 using namespace ImGui;
 
-
-static void
-set_theme()
-{
-    ImGuiStyle& style = GetStyle();
-
-    style.WindowBorderSize = 0.0f;
-
-    ImVec4* colors = style.Colors;
-
-    colors[ImGuiCol_TitleBg]              = {0.13f, 0.13f, 0.13f, 1.0f};
-    colors[ImGuiCol_TitleBgActive]        = {0.13f, 0.13f, 0.13f, 1.0f};
-    colors[ImGuiCol_WindowBg]             = {0.00f, 0.00f, 0.00f, 1.0f};
-
-    colors[ImGuiCol_FrameBg]              = {0.15f, 0.15f, 0.15f, 1.0f};
-    colors[ImGuiCol_FrameBgHovered]       = {0.25f, 0.25f, 0.25f, 1.0f};
-    colors[ImGuiCol_FrameBgActive]        = {0.35f, 0.35f, 0.35f, 1.0f};
-
-    colors[ImGuiCol_Text]                 = {1.00f, 1.00f, 1.00f, 1.0f};
-    colors[ImGuiCol_CheckMark]            = {1.00f, 1.00f, 1.00f, 1.0f};
-
-    colors[ImGuiCol_Button]               = {0.15f, 0.15f, 0.15f, 1.0f};
-    colors[ImGuiCol_ButtonHovered]        = {0.25f, 0.25f, 0.25f, 1.0f};
-    colors[ImGuiCol_ButtonActive]         = {0.35f, 0.35f, 0.35f, 1.0f};
-
-    colors[ImGuiCol_ScrollbarGrab]        = {0.20f, 0.20f, 0.20f, 1.0f};
-    colors[ImGuiCol_ScrollbarGrabHovered] = {0.30f, 0.30f, 0.30f, 1.0f};
-    colors[ImGuiCol_ScrollbarGrabActive]  = {0.40f, 0.40f, 0.40f, 1.0f};
-
-    colors[ImGuiCol_HeaderHovered]        = {0.15f, 0.15f, 0.15f, 1.0f};
-    colors[ImGuiCol_HeaderActive]         = {0.25f, 0.25f, 0.25f, 1.0f};
-
-    colors[ImGuiCol_SliderGrab]           = {0.35f, 0.35f, 0.35f, 1.0f};
-    colors[ImGuiCol_SliderGrabActive]     = {0.45f, 0.45f, 0.45f, 1.0f};
-}
-
-static void
-load_fonts()
-{
-    ImGuiIO& io = GetIO();
-
-    io.Fonts->Clear();
-
-    io.Fonts->AddFontFromFileTTF
-    (
-        "resources\\fonts\\adobe\\SourceCodePro-Regular.ttf",
-        FONT_SIZE
-    );
-
-    f32 icon_size = FONT_SIZE * 2.0f / 3.0f;
-
-    ImFontConfig icon_config;
-    icon_config.MergeMode        = true;
-    icon_config.PixelSnapH       = true;
-    icon_config.GlyphMinAdvanceX = FONT_SIZE;
-    icon_config.GlyphOffset.y    = 0.75f;
-
-    static const ImWchar icon_range[] = {ICON_MIN_FA, ICON_MAX_16_FA, 0};
-
-    io.Fonts->AddFontFromFileTTF
-    (
-        "resources\\fonts\\FA6\\" FONT_ICON_FILE_NAME_FAS,
-        FONT_SIZE,
-        &icon_config,
-        icon_range
-    );
-}
-
-static void
-new_frame()
-{
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    NewFrame();
-}
-
-static void
-render_draw_data()
-{
-    Render();
-    ImGui_ImplOpenGL3_RenderDrawData(GetDrawData());
-}
-
-static std::vector<str>
-get_scenes()
-{
-    namespace fs = std::filesystem;
-
-    static const fs::path directory = "resources/scenes";
-    static const str      extension = ".asagao";
-
-    std::vector<str> scenes;
-
-    for (const auto& entry : fs::directory_iterator(directory))
-    {
-        if (entry.is_regular_file() && entry.path().extension() == extension)
-            scenes.emplace_back(entry.path().stem().string());
-    }
-
-    if (!scenes.size())
-        LOG_WARN("no scenes found");
-
-    return scenes;
-}
 
 namespace Asagao
 {
@@ -478,3 +382,108 @@ namespace Asagao
         components();
     }
 }  // Asagao::
+
+
+static void
+set_theme()
+{
+    ImGuiStyle& style = GetStyle();
+
+    style.WindowBorderSize = 0.0f;
+
+    ImVec4* colors = style.Colors;
+
+    colors[ImGuiCol_TitleBg]              = {0.13f, 0.13f, 0.13f, 1.0f};
+    colors[ImGuiCol_TitleBgActive]        = {0.13f, 0.13f, 0.13f, 1.0f};
+    colors[ImGuiCol_WindowBg]             = {0.00f, 0.00f, 0.00f, 1.0f};
+
+    colors[ImGuiCol_FrameBg]              = {0.15f, 0.15f, 0.15f, 1.0f};
+    colors[ImGuiCol_FrameBgHovered]       = {0.25f, 0.25f, 0.25f, 1.0f};
+    colors[ImGuiCol_FrameBgActive]        = {0.35f, 0.35f, 0.35f, 1.0f};
+
+    colors[ImGuiCol_Text]                 = {1.00f, 1.00f, 1.00f, 1.0f};
+    colors[ImGuiCol_CheckMark]            = {1.00f, 1.00f, 1.00f, 1.0f};
+
+    colors[ImGuiCol_Button]               = {0.15f, 0.15f, 0.15f, 1.0f};
+    colors[ImGuiCol_ButtonHovered]        = {0.25f, 0.25f, 0.25f, 1.0f};
+    colors[ImGuiCol_ButtonActive]         = {0.35f, 0.35f, 0.35f, 1.0f};
+
+    colors[ImGuiCol_ScrollbarGrab]        = {0.20f, 0.20f, 0.20f, 1.0f};
+    colors[ImGuiCol_ScrollbarGrabHovered] = {0.30f, 0.30f, 0.30f, 1.0f};
+    colors[ImGuiCol_ScrollbarGrabActive]  = {0.40f, 0.40f, 0.40f, 1.0f};
+
+    colors[ImGuiCol_HeaderHovered]        = {0.15f, 0.15f, 0.15f, 1.0f};
+    colors[ImGuiCol_HeaderActive]         = {0.25f, 0.25f, 0.25f, 1.0f};
+
+    colors[ImGuiCol_SliderGrab]           = {0.35f, 0.35f, 0.35f, 1.0f};
+    colors[ImGuiCol_SliderGrabActive]     = {0.45f, 0.45f, 0.45f, 1.0f};
+}
+
+static void
+load_fonts()
+{
+    ImGuiIO& io = GetIO();
+
+    io.Fonts->Clear();
+
+    io.Fonts->AddFontFromFileTTF
+    (
+        "resources\\fonts\\adobe\\SourceCodePro-Regular.ttf",
+        FONT_SIZE
+    );
+
+    f32 icon_size = FONT_SIZE * 2.0f / 3.0f;
+
+    ImFontConfig icon_config;
+    icon_config.MergeMode        = true;
+    icon_config.PixelSnapH       = true;
+    icon_config.GlyphMinAdvanceX = FONT_SIZE;
+    icon_config.GlyphOffset.y    = 0.75f;
+
+    static const ImWchar icon_range[] = {ICON_MIN_FA, ICON_MAX_16_FA, 0};
+
+    io.Fonts->AddFontFromFileTTF
+    (
+        "resources\\fonts\\FA6\\" FONT_ICON_FILE_NAME_FAS,
+        FONT_SIZE,
+        &icon_config,
+        icon_range
+    );
+}
+
+static void
+new_frame()
+{
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    NewFrame();
+}
+
+static void
+render_draw_data()
+{
+    Render();
+    ImGui_ImplOpenGL3_RenderDrawData(GetDrawData());
+}
+
+static std::vector<str>
+get_scenes()
+{
+    namespace fs = std::filesystem;
+
+    static const fs::path directory = "resources/scenes";
+    static const str      extension = ".asagao";
+
+    std::vector<str> scenes;
+
+    for (const auto& entry : fs::directory_iterator(directory))
+    {
+        if (entry.is_regular_file() && entry.path().extension() == extension)
+            scenes.emplace_back(entry.path().stem().string());
+    }
+
+    if (!scenes.size())
+        LOG_WARN("no scenes found");
+
+    return scenes;
+}

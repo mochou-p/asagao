@@ -8,89 +8,18 @@
 #include "style.hpp"
 
 
-#define VSYNC 1
 #define OPENGL_VER_MAJOR 4
 #define OPENGL_VER_MINOR 6
+#define VSYNC            1
+#define ICON_COUNT       5
 #define WINDOW_ICON_PATH "resources/branding/"
-#define ICON_COUNT 5
 
 
-static void
-framebuffer_size_callback
-(GLFWwindow* window, i32 width, i32 height)
-{
-    Asagao::Window.size = {width, height};
+static void framebuffer_size_callback(GLFWwindow* window, i32 width,   i32 height);
+static void           scroll_callback(GLFWwindow* window, f64 xoffset, f64 yoffset);
+static void     mouse_button_callback(GLFWwindow* window, i32 button,  i32 action, i32 mods);
+static void  cursor_position_callback(GLFWwindow* window, f64 xpos,    f64 ypos);
 
-    v2 pos  = {Asagao::Window.size * Layout::scene.pos };
-    v2 size = {Asagao::Window.size * Layout::scene.size};
-
-    glViewport(pos.x, pos.y, size.x, size.y);
-
-    Asagao::Camera.update_projection();
-}
-
-static inline bool sign(f32 value) { return value >= 0.0f; }
-
-static void
-scroll_callback
-(GLFWwindow* window, f64 xoffset, f64 yoffset)
-{
-    if (!yoffset || Asagao::Interface.get_view() != SCENE_VIEW || !Asagao::Window.mouse_hovers_scene())
-        return;
-
-    v2 mouse_pos_frac  = Asagao::Window.mouse_pos / Asagao::Window.size;
-    mouse_pos_frac    *= -2;
-    mouse_pos_frac    +=  1;
-    mouse_pos_frac    /= Layout::scene.size;
-    mouse_pos_frac.y  *= -1;
-    mouse_pos_frac    *= yoffset / abs(yoffset);
-
-    v2 offset  = mouse_pos_frac;
-    offset    *= Asagao::Window.size;
-    offset    *= Asagao::Renderer.zoom;
-    offset    *= 0.05f;
-
-    Asagao::Camera.move({offset.x, offset.y, 0.0f});
-
-    Asagao::Renderer.zoom += Asagao::Renderer.zoom / (sign(yoffset) ? -20 : 19);
-
-    Asagao::Camera.update_projection();
-}
-
-static void
-mouse_button_callback
-(GLFWwindow* window, i32 button, i32 action, i32 mods)
-{
-    if (button != GLFW_MOUSE_BUTTON_LEFT || Asagao::Interface.get_view() != SCENE_VIEW)
-        return;
-
-    if (!action)
-    {
-        Asagao::Window.moving_view = false;
-        return;
-    }
-
-    if (Asagao::Window.mouse_hovers_scene())
-        Asagao::Window.moving_view = true;
-}
-
-static void
-cursor_position_callback
-(GLFWwindow* window, f64 xpos, f64 ypos)
-{
-    if (Asagao::Interface.get_view() != SCENE_VIEW)
-        return;
-
-    if (Asagao::Window.moving_view)
-    {
-        v2 diff = {(Asagao::Window.mouse_pos - v2(xpos, ypos))
-            * (Asagao::Renderer.zoom * 2)};
-
-        Asagao::Camera.move({-diff.x, diff.y, 0.0f});
-    }
-
-    Asagao::Window.mouse_pos = {xpos, ypos};
-}
 
 namespace Asagao
 {
@@ -211,3 +140,81 @@ namespace Asagao
         );
     }
 }  // Asagao::
+
+
+static void
+framebuffer_size_callback
+(GLFWwindow* window, i32 width, i32 height)
+{
+    Asagao::Window.size = {width, height};
+
+    v2 pos  = {Asagao::Window.size * Layout::scene.pos };
+    v2 size = {Asagao::Window.size * Layout::scene.size};
+
+    glViewport(pos.x, pos.y, size.x, size.y);
+
+    Asagao::Camera.update_projection();
+}
+
+static inline bool sign(f32 value) { return value >= 0.0f; }
+
+static void
+scroll_callback
+(GLFWwindow* window, f64 xoffset, f64 yoffset)
+{
+    if (!yoffset || Asagao::Interface.get_view() != SCENE_VIEW || !Asagao::Window.mouse_hovers_scene())
+        return;
+
+    v2 mouse_pos_frac  = Asagao::Window.mouse_pos / Asagao::Window.size;
+    mouse_pos_frac    *= -2;
+    mouse_pos_frac    +=  1;
+    mouse_pos_frac    /= Layout::scene.size;
+    mouse_pos_frac.y  *= -1;
+    mouse_pos_frac    *= yoffset / abs(yoffset);
+
+    v2 offset  = mouse_pos_frac;
+    offset    *= Asagao::Window.size;
+    offset    *= Asagao::Renderer.zoom;
+    offset    *= 0.05f;
+
+    Asagao::Camera.move({offset.x, offset.y, 0.0f});
+
+    Asagao::Renderer.zoom += Asagao::Renderer.zoom / (sign(yoffset) ? -20 : 19);
+
+    Asagao::Camera.update_projection();
+}
+
+static void
+mouse_button_callback
+(GLFWwindow* window, i32 button, i32 action, i32 mods)
+{
+    if (button != GLFW_MOUSE_BUTTON_LEFT || Asagao::Interface.get_view() != SCENE_VIEW)
+        return;
+
+    if (!action)
+    {
+        Asagao::Window.moving_view = false;
+        return;
+    }
+
+    if (Asagao::Window.mouse_hovers_scene())
+        Asagao::Window.moving_view = true;
+}
+
+static void
+cursor_position_callback
+(GLFWwindow* window, f64 xpos, f64 ypos)
+{
+    if (Asagao::Interface.get_view() != SCENE_VIEW)
+        return;
+
+    if (Asagao::Window.moving_view)
+    {
+        v2 diff = {(Asagao::Window.mouse_pos - v2(xpos, ypos))
+            * (Asagao::Renderer.zoom * 2)};
+
+        Asagao::Camera.move({-diff.x, diff.y, 0.0f});
+    }
+
+    Asagao::Window.mouse_pos = {xpos, ypos};
+}

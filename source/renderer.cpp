@@ -10,20 +10,10 @@
 #include "index_buffer.hpp"
 
 
-static void
-load_opengl_functions()
-{
-    assert(gladLoadGLLoader((GLADloadproc) glfwGetProcAddress));
+static void load_opengl_functions();
 
-    LOG_INFO(str("OpenGL ") + (c_cstr) glGetString(GL_VERSION));
-}
+static void GLAPIENTRY debug_message_callback(u32 source, u32 type, u32 id, u32 severity, i32 length, c_cstr message, const void* param);
 
-static void GLAPIENTRY
-debug_message_callback
-(u32 source, u32 type, u32 id, u32 severity, i32 length, c_cstr message, const void* param)
-{
-    LOG_AUTO(severity, message);
-}
 
 namespace Asagao
 {
@@ -64,3 +54,19 @@ namespace Asagao
         glClearColor(color.r, color.g, color.b, color.a);
     }
 }  // Asagao::
+
+
+static void
+load_opengl_functions()
+{
+    assert(gladLoadGLLoader((GLADloadproc) glfwGetProcAddress));
+
+    LOG_INFO(str("OpenGL ") + (c_cstr) glGetString(GL_VERSION));
+}
+
+static void GLAPIENTRY
+debug_message_callback
+(u32 source, u32 type, u32 id, u32 severity, i32 length, c_cstr message, const void* param)
+{
+    LOG_AUTO(severity, message);
+}

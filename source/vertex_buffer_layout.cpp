@@ -7,9 +7,22 @@
 #include "log.hpp"
 
 
+static bool get_type_normalisation(u32 type);
+
+
 VertexBufferLayout::VertexBufferLayout()
 : m_stride(0)
 {}
+
+void
+VertexBufferLayout::push
+(u32 count, u32 type)
+{
+    m_attributes.push_back({count, type, get_type_normalisation(type)});
+
+    m_stride += count * VertexAttribute::get_size_of_type(type);
+}
+
 
 static bool
 get_type_normalisation
@@ -25,13 +38,4 @@ get_type_normalisation
     }
 
     return false;
-}
-
-void
-VertexBufferLayout::push
-(u32 count, u32 type)
-{
-    m_attributes.push_back({count, type, get_type_normalisation(type)});
-
-    m_stride += count * VertexAttribute::get_size_of_type(type);
 }

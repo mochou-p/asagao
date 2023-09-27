@@ -8,7 +8,7 @@
 #include "image.hpp"
 
 
-#define TEXTURE_PATH "resources/"
+#define TEXTURE_PATH    "resources/"
 #define DEFAULT_TEXTURE "texture/default.png"
 
 

@@ -7,23 +7,14 @@
 #include "log.hpp"
 
 
-#define SHADER_PATH "resources/shaders/"
+#define SHADER_PATH            "resources/shaders/"
 #define SHADER_STAGE_TAG_START "#stage "
-#define SHADER_STAGE_TAG_END "#endstage"
+#define SHADER_STAGE_TAG_END   "#endstage"
 
 
-static u32
-create_shader
-(const str& code, u32 stage)
-{
-    u32 id = glCreateShader(stage);
-    c_cstr code_cstr = code.c_str();
+static u32  create_shader(const str& code,     u32 stage);
+static void  parse_shader(const str& filepath, u32 shader);
 
-    glShaderSource(id, 1, &code_cstr, nullptr);
-    glCompileShader(id);
-
-    return id;
-}
 
 struct stage
 {
@@ -31,46 +22,6 @@ struct stage
     u32 type;
 };
 
-static void
-parse_shader
-(const str& filepath, u32 shader)
-{
-    static const std::vector<stage> stages
-    {
-        {"vertex",   GL_VERTEX_SHADER  },
-        {"fragment", GL_FRAGMENT_SHADER}
-    };
-
-    std::ifstream ifs(SHADER_PATH + filepath);
-    str code, line;
-
-    while (std::getline(ifs, line))
-    {
-        if (line.find(SHADER_STAGE_TAG_START) == str::npos)
-            continue;
-
-        for (const stage& stage : stages)
-        {
-            if (line.find(stage.tag) == str::npos)
-                continue;
-
-            while (std::getline(ifs, line))
-            {
-                if (line.find(SHADER_STAGE_TAG_END) != str::npos)
-                    break;
-
-                code += line + "\n";
-            }
-
-            u32 shader_stage = create_shader(code, stage.type);
-            glAttachShader(shader, shader_stage);
-            glDeleteShader(shader_stage);
-
-            code.clear();
-            break;
-        }
-    }
-}
 
 Shader::Shader
 (const str& filepath)
@@ -129,4 +80,59 @@ Shader::set_vec2
 (const str& name, const v2& value)
 {
     glUniform2f(get_uniform_location(name), value.x, value.y);
+}
+
+
+static u32
+create_shader
+(const str& code, u32 stage)
+{
+    u32 id = glCreateShader(stage);
+    c_cstr code_cstr = code.c_str();
+
+    glShaderSource(id, 1, &code_cstr, nullptr);
+    glCompileShader(id);
+
+    return id;
+}
+
+static void
+parse_shader
+(const str& filepath, u32 shader)
+{
+    static const std::vector<stage> stages
+    {
+        {"vertex",   GL_VERTEX_SHADER  },
+        {"fragment", GL_FRAGMENT_SHADER}
+    };
+
+    std::ifstream ifs(SHADER_PATH + filepath);
+    str code, line;
+
+    while (std::getline(ifs, line))
+    {
+        if (line.find(SHADER_STAGE_TAG_START) == str::npos)
+            continue;
+
+        for (const stage& stage : stages)
+        {
+            if (line.find(stage.tag) == str::npos)
+                continue;
+
+            while (std::getline(ifs, line))
+            {
+                if (line.find(SHADER_STAGE_TAG_END) != str::npos)
+                    break;
+
+                code += line + "\n";
+            }
+
+            u32 shader_stage = create_shader(code, stage.type);
+            glAttachShader(shader, shader_stage);
+            glDeleteShader(shader_stage);
+
+            code.clear();
+            break;
+        }
+    }
 }
