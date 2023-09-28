@@ -12,7 +12,7 @@
 #define OPENGL_VER_MINOR 6
 #define VSYNC            1
 #define ICON_COUNT       5
-#define WINDOW_ICON_PATH "resources/branding/"
+#define WINDOW_ICON_PATH "branding/"
 
 
 static void framebuffer_size_callback(GLFWwindow* window, i32 width,   i32 height);

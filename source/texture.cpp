@@ -8,8 +8,7 @@
 #include "image.hpp"
 
 
-#define TEXTURE_PATH    "resources/"
-#define DEFAULT_TEXTURE "texture/default.png"
+#define DEFAULT_TEXTURE "textures/default.png"
 
 
 Texture::Texture
@@ -18,7 +17,7 @@ Texture::Texture
     if (count >= 32)
         LOG_FATAL("maximum number of textures exceeded (32)");
     
-    Image image(TEXTURE_PATH + filepath, flip_y);
+    Image image(filepath, flip_y);
 
     auto data   = image.get_data();
     auto width  = image.get_width();
@@ -28,7 +27,7 @@ Texture::Texture
     {
         if (filepath != DEFAULT_TEXTURE)
         {
-            LOG_WARN("cannot find " + filepath);
+            LOG_WARN(IMAGE_PATH + ("cannot find " + filepath));
 
             *this = Texture(DEFAULT_TEXTURE);
 

@@ -4,6 +4,9 @@
 #pragma once
 
 
+#define IMAGE_PATH "resources/"
+
+
 class Image
 {
 public:
