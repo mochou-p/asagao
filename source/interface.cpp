@@ -83,10 +83,7 @@ namespace Asagao
         for (const str& scene : scenes)
         {
             if (Button((ICON_FA_MOUNTAIN_SUN " " + scene).c_str()))
-            {
                 Application.scene = std::make_unique<Scene>(scene);
-                current_view       = SCENE_VIEW;
-            }
             if (IsItemHovered())
                 SetMouseCursor(ImGuiMouseCursor_Hand);
         }
@@ -181,8 +178,7 @@ namespace Asagao
 
         if (Button((ICON_FA_MOUNTAIN_SUN " " + Application.scene->name).c_str()))
         {
-            Application.scene = nullptr;
-            current_view       = STARTUP_VIEW;
+            Application.scene->unload();
 
             End();
 

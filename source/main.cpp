@@ -7,11 +7,14 @@
 
 
 int
-main()
+main
+(int argc, char* argv[])
 {
     try
     {
-        Asagao::Application.run();
+        argc == 2
+            ? Asagao::Application.run(argv[1])
+            : Asagao::Application.run();
     }
     catch (const std::exception& error)
     {

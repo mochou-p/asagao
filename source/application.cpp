@@ -16,7 +16,7 @@
 namespace Asagao
 {
     void
-    Application::run() const
+    Application::run(const str& argv_scene)
     {
         SpriteAtlas atlas("kenney-pixel-platformer.png", 18);
 
@@ -42,6 +42,9 @@ namespace Asagao
         Window.resize();
 
         u32 animation_time;
+
+        if (argv_scene != str())
+            scene = std::make_unique<Scene>(argv_scene);
 
         while (Window.is_open())
         {

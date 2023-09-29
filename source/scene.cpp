@@ -121,8 +121,11 @@ Scene::Scene
         std::getline(file, line);
     }
 
-    Asagao::Camera.set_position({0.0f, 0.0f, 0.0f});
     Asagao::Application.animation_speed = 1.0f;
+
+    Asagao::Camera.set_position({0.0f, 0.0f, 0.0f});
+
+    Asagao::Interface.current_view = SCENE_VIEW;
 }
 
 void
@@ -183,4 +186,12 @@ Scene::save() const
     }
 
     file.close();
+}
+
+void
+Scene::unload()
+{
+    Asagao::Interface.current_view = STARTUP_VIEW;
+
+    Asagao::Application.scene = nullptr;
 }

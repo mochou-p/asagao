@@ -13,6 +13,7 @@ public:
     Scene(const str& filepath);
 
     void save() const;
+    void unload();
 
     std::vector<GameObject> objects;
     GameObject*             selected;
