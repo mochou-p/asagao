@@ -4,8 +4,6 @@
 #pragma once
 
 
-#include "stdafx.h"
-
 #include "application.hpp"
 #include "camera.hpp"
 #include "renderer.hpp"

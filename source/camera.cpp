@@ -1,6 +1,8 @@
 // asagao/source/camera.cpp
 
 
+#include "stdafx.h"
+
 #include "asagao.hpp"
 
 #include "camera.hpp"

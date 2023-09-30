@@ -1,11 +1,14 @@
 // asagao/source/interface.cpp
 
 
+#include "stdafx.h"
+
 #include "asagao.hpp"
 
 #include "game_object.hpp"
 #include "log.hpp"
 #include "style.hpp"
+#include "benchmark.hpp"
 
 
 #define FONT_SIZE 18.0f
@@ -58,6 +61,8 @@ namespace Asagao
     void
     Interface::draw()
     {
+        Benchmark _("Interface render");
+
         new_frame();
         m_views[current_view]();
         render_draw_data();

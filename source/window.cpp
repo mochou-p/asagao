@@ -1,6 +1,8 @@
 // asagao/source/window.cpp
 
 
+#include "stdafx.h"
+
 #include "asagao.hpp"
 
 #include "image.hpp"

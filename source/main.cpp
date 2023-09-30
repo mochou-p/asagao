@@ -1,6 +1,8 @@
 // asagao/source/main.cpp
 
 
+#include "stdafx.h"
+
 #include "asagao.hpp"
 
 #include "log.hpp"

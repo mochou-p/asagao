@@ -1,6 +1,8 @@
 // asagao/source/application.cpp
 
 
+#include "stdafx.h"
+
 #include "asagao.hpp"
 
 #include "shader.hpp"
@@ -11,6 +13,7 @@
 #include "vertex_array.hpp"
 #include "index_buffer.hpp"
 #include "game_object.hpp"
+#include "benchmark.hpp"
 
 
 namespace Asagao
@@ -53,6 +56,8 @@ namespace Asagao
 
             if (scene)
             {
+                Benchmark _("Scene render");
+
                 animation_time = Window.get_time() * animation_speed;
 
                 for (const GameObject& obj : scene->objects)
