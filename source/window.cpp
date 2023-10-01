@@ -14,8 +14,10 @@
 #define OPENGL_VER_MINOR 6
 #define VSYNC            1
 #define ICON_COUNT       5
+#define WINDOW_WIDTH     1600
+#define WINDOW_HEIGHT    900
+#define WINDOW_TITLE     "Asagao"
 #define WINDOW_ICON_PATH "branding/"
-
 
 static void framebuffer_size_callback(GLFWwindow* window, i32 width,   i32 height);
 static void           scroll_callback(GLFWwindow* window, f64 xoffset, f64 yoffset);
@@ -25,10 +27,9 @@ static void  cursor_position_callback(GLFWwindow* window, f64 xpos,    f64 ypos)
 
 namespace Asagao
 {
-    Window::Window
-    (const str& title, u16 width, u16 height)
+    Window::Window()
     {
-        init(title, width, height);
+        init(WINDOW_TITLE, WINDOW_WIDTH, WINDOW_HEIGHT);
         Renderer.init();
     }
 

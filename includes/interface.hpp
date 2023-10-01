@@ -4,6 +4,9 @@
 #pragma once
 
 
+#include "singleton.hpp"
+
+
 #define STARTUP_VIEW 0
 #define SCENE_VIEW   1
 #define VIEW_COUNT   2
@@ -16,20 +19,7 @@ namespace Asagao
 {
     class Interface
     {
-    public:
-        static Interface& get_instance()
-        {
-            static Interface instance;
-
-            return instance;
-        }
-    private:
-        Interface();
-        ~Interface();
-
-        Interface           (const Interface&) = delete;
-        Interface& operator=(const Interface&) = delete;
-
+    SINGLETON_CD(Interface)
 
     public:
         inline const u8 get_view() { return current_view; }

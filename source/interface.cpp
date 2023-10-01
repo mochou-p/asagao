@@ -61,7 +61,7 @@ namespace Asagao
     void
     Interface::draw()
     {
-        Benchmark _("Interface render");
+        // Benchmark _("Interface render");
 
         new_frame();
         m_views[current_view]();

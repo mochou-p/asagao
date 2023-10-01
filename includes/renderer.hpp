@@ -4,23 +4,14 @@
 #pragma once
 
 
+#include "singleton.hpp"
+
+
 namespace Asagao
 {
     class Renderer
     {
-    public:
-        static Renderer& get_instance()
-        {
-            static Renderer instance;
-
-            return instance;
-        }
-    private:
-        Renderer() {}
-
-        Renderer           (const Renderer&) = delete;
-        Renderer& operator=(const Renderer&) = delete;
-
+    SINGLETON(Renderer)
 
     public:
         static void init();

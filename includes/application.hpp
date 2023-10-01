@@ -5,25 +5,14 @@
 
 
 #include "scene.hpp"
+#include "singleton.hpp"
 
 
 namespace Asagao
 {
     class Application
     {
-    public:
-        static Application& get_instance()
-        {
-            static Application instance;
-
-            return instance;
-        }
-    private:
-        Application() {}
-
-        Application           (const Application&) = delete;
-        Application& operator=(const Application&) = delete;
-
+    SINGLETON(Application)
 
     public:
         void run(const str& argv_scene = "");

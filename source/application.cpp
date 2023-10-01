@@ -40,7 +40,7 @@ namespace Asagao
 
         IndexBuffer ib(quad);
 
-        Renderer.set_background_color({0.875f, 0.965f, 0.961f, 1.0f});
+        Renderer.set_background_color({0.875f, 0.965f, 0.961f, 1.000f});
 
         Window.resize();
 
@@ -56,7 +56,7 @@ namespace Asagao
 
             if (scene)
             {
-                Benchmark _("Scene render");
+                // Benchmark _("Scene render");
 
                 animation_time = Window.get_time() * animation_speed;
 

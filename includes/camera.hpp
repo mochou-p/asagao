@@ -4,23 +4,14 @@
 #pragma once
 
 
+#include "singleton.hpp"
+
+
 namespace Asagao
 {
     class Camera
     {
-    public:
-        static Camera& get_instance()
-        {
-            static Camera instance;
-
-            return instance;
-        }
-    private:
-        Camera();
-
-        Camera           (const Camera&) = delete;
-        Camera& operator=(const Camera&) = delete;
-
+    SINGLETON_C(Camera)
 
     public:
         const m4 get_mvp(const GameObject& obj);
