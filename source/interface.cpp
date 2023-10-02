@@ -74,7 +74,8 @@ namespace Asagao
         static c_cstr title = " " ICON_FA_FOLDER_OPEN "  Select a scene";
         static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove
             | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
-        static const ImVec2           pos   = {0.0f, 0.0f};
+        static const ImVec2 pad = {0.0f, 0.0f};
+        static const ImVec2 pos = {0.0f, 0.0f};
         static bool hover;
 
         static const std::vector<str> scenes = get_scenes();
@@ -85,6 +86,16 @@ namespace Asagao
         Begin(title, nullptr, flags);
 
         PushStyleVar(ImGuiStyleVar_FramePadding, {20.0f, 15.0f});
+
+        if (Button((ICON_FA_SQUARE_PLUS " New scene")))
+            Application.scene = std::make_unique<Scene>();
+        if (IsItemHovered())
+            SetMouseCursor(ImGuiMouseCursor_Hand);
+
+        Dummy(pad);
+        Separator();
+        Dummy(pad);
+
         for (const str& scene : scenes)
         {
             if (Button((ICON_FA_MOUNTAIN_SUN " " + scene).c_str()))
@@ -92,6 +103,7 @@ namespace Asagao
             if (IsItemHovered())
                 SetMouseCursor(ImGuiMouseCursor_Hand);
         }
+
         PopStyleVar();
 
         End();
@@ -159,7 +171,7 @@ namespace Asagao
     {
         static c_cstr title = "Details";
         static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove;
-        static const f32    button_height    = GetItemRectSize().y;
+        static const f32    button_height   = GetItemRectSize().y;
         static const ImVec2 window_padding  = {0.00f, 0.00f};
         static const ImVec4 button_color    = {0.15f, 0.15f, 0.15f, 1.0f};
         static v2 camera_pos, mouse_pos, world_pos, tile_pos;
@@ -238,6 +250,8 @@ namespace Asagao
             tile_pos    /= Application.rect_size * 0.5f;
             tile_pos    += 0.5f;
 
+            tile_pos = {std::floor(tile_pos.x), std::floor(tile_pos.y)};
+
             SameLine();
             TextDisabled("|");
             SameLine();
@@ -274,9 +288,9 @@ namespace Asagao
             (
                 (
                     ICON_FA_SQUARE " "
-                    + std::to_string((i32) std::floor(tile_pos.x))
+                    + std::to_string((i32) tile_pos.x)
                     + ", "
-                    + std::to_string((i32) std::floor(tile_pos.y))
+                    + std::to_string((i32) tile_pos.y)
                 ).c_str()
             );
         }

@@ -10,6 +10,7 @@
 class Scene
 {
 public:
+    Scene();
     Scene(const str& filepath);
 
     void save() const;

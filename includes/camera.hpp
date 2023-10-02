@@ -4,9 +4,6 @@
 #pragma once
 
 
-#include "singleton.hpp"
-
-
 namespace Asagao
 {
     class Camera

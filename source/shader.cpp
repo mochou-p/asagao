@@ -29,17 +29,13 @@ Shader::Shader
     m_id = glCreateProgram();
     parse_shader(filepath, m_id);
     glLinkProgram(m_id);
+
+    glUseProgram(m_id);
 }
 
 Shader::~Shader()
 {
     glDeleteProgram(m_id);
-}
-
-void
-Shader::use() const
-{
-    glUseProgram(m_id);
 }
 
 i32

@@ -4,9 +4,6 @@
 #pragma once
 
 
-#include "singleton.hpp"
-
-
 namespace Asagao
 {
     class Renderer
@@ -17,7 +14,7 @@ namespace Asagao
         static void init();
 
         void clear() const;
-        void draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const;
+        void draw()  const;
         void set_background_color(const v4& color) const;
 
         f32 zoom = 1.0f;

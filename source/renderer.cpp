@@ -8,6 +8,7 @@
 #include "shader.hpp"
 #include "vertex_array.hpp"
 #include "index_buffer.hpp"
+#include "rect.hpp"
 
 
 static void load_opengl_functions();
@@ -37,14 +38,9 @@ namespace Asagao
     }
 
     void
-    Renderer::draw
-    (const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const
+    Renderer::draw() const
     {
-        shader.use();
-        va.bind();
-        ib.bind();
-
-        glDrawElements(GL_TRIANGLES, ib.get_count(), GL_UNSIGNED_INT, nullptr);
+        glDrawElements(GL_TRIANGLES, INDEX_COUNT, GL_UNSIGNED_INT, nullptr);
     }
 
     void

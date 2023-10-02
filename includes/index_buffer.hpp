@@ -11,7 +11,6 @@ public:
     ~IndexBuffer();
 
     inline u32 get_count() const { return m_count; }
-    void bind() const;
 private:
     u32 m_id;
     u32 m_count;

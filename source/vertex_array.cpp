@@ -11,6 +11,8 @@
 VertexArray::VertexArray()
 {
     glGenVertexArrays(1, &m_id);
+
+    glBindVertexArray(m_id);
 }
 
 VertexArray::~VertexArray()
@@ -19,18 +21,9 @@ VertexArray::~VertexArray()
 }
 
 void
-VertexArray::bind() const
-{
-    glBindVertexArray(m_id);
-}
-
-void
 VertexArray::add_vertex_buffer
-(const VertexBuffer& vb, const VertexBufferLayout& layout) const
+(const VertexBufferLayout& layout) const
 {
-    bind();
-    vb.bind();
-
     const auto& attributes = layout.get_attributes();
     const auto  stride     = layout.get_stride();
 

@@ -43,6 +43,10 @@
 #include "IconsFontAwesome6.h"
 
 
+// asagao
+#include "singleton.hpp"
+
+
 // typedefs
 typedef char                   i8;
 typedef unsigned char          u8;

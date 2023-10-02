@@ -5,7 +5,6 @@
 
 #include "asagao.hpp"
 
-#include "shader.hpp"
 #include "sprite_atlas.hpp"
 #include "rect.hpp"
 #include "vertex_buffer.hpp"
@@ -23,9 +22,8 @@ namespace Asagao
     {
         SpriteAtlas atlas("kenney-pixel-platformer.png", 18);
 
-        Shader shader("atlas.glsl");
-        shader.use();
-        shader.set_int("u_texture", atlas.texture->get_slot());
+        shader = std::make_unique<Shader>("atlas.glsl");
+        shader->set_int("u_texture", atlas.texture->get_slot());
 
         Rect quad(rect_size, uv_fraction);
 
@@ -36,7 +34,7 @@ namespace Asagao
         VertexBuffer vb(quad);
 
         VertexArray va;
-        va.add_vertex_buffer(vb, layout);
+        va.add_vertex_buffer(layout);
 
         IndexBuffer ib(quad);
 
@@ -65,10 +63,10 @@ namespace Asagao
                     if (!obj.visible)
                         continue;
 
-                    shader.set_mat4("u_mvp",     Camera.get_mvp(obj));
-                    shader.set_vec2("u_tile_uv", obj.get_uv(animation_time));
+                    shader->set_mat4("u_mvp",     Camera.get_mvp(obj));
+                    shader->set_vec2("u_tile_uv", obj.get_uv(animation_time));
 
-                    Renderer.draw(va, ib, shader);
+                    Renderer.draw();
                 }
             }
 

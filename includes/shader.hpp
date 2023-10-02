@@ -10,7 +10,6 @@ public:
     Shader(const str& filepath);
     ~Shader();
 
-    void use() const;
     void set_int(const str& name, i32 value);
     void set_mat4(const str& name, const m4& value);
     void set_vec2(const str& name, const v2& value);

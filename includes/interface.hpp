@@ -4,9 +4,6 @@
 #pragma once
 
 
-#include "singleton.hpp"
-
-
 #define STARTUP_VIEW 0
 #define SCENE_VIEW   1
 #define VIEW_COUNT   2

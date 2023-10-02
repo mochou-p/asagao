@@ -1,6 +1,8 @@
 // asagao/source/sprite_atlas.cpp
 
 
+#include "stdafx.h"
+
 #include "asagao.hpp"
 
 #include "sprite_atlas.hpp"

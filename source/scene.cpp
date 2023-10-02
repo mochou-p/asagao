@@ -1,6 +1,8 @@
 // asagao/source/scene.cpp
 
 
+#include "stdafx.h"
+
 #include "asagao.hpp"
 
 #include "scene.hpp"
@@ -14,6 +16,16 @@
 #define SCENE_HEADER_TOP "### Asagao Scene File ###"
 #define SCENE_HEADER_OBJ "--- Scene Objects -------"
 
+
+static void default_config();
+
+
+Scene::Scene()
+: selected{nullptr}
+,     name{"Untitled scene"}
+{
+    default_config();
+}
 
 // temp
 // expecting that users did not "corrupt" the scene file
@@ -121,11 +133,7 @@ Scene::Scene
         std::getline(file, line);
     }
 
-    Asagao::Application.animation_speed = 1.0f;
-
-    Asagao::Camera.set_position({0.0f, 0.0f, 0.0f});
-
-    Asagao::Interface.current_view = SCENE_VIEW;
+    default_config();
 }
 
 void
@@ -194,4 +202,17 @@ Scene::unload()
     Asagao::Interface.current_view = STARTUP_VIEW;
 
     Asagao::Application.scene = nullptr;
+}
+
+
+static void
+default_config()
+{
+    Asagao::Application.animation_speed = 1.0f;
+
+    Asagao::Renderer.zoom = 1.0f;
+
+    Asagao::Camera.set_position({0.0f, 0.0f, 0.0f});
+
+    Asagao::Interface.current_view = SCENE_VIEW;
 }

@@ -4,8 +4,8 @@
 #pragma once
 
 
+#include "shader.hpp"
 #include "scene.hpp"
-#include "singleton.hpp"
 
 
 namespace Asagao
@@ -21,6 +21,7 @@ namespace Asagao
         f32 animation_speed = 1.0f;
         v2  uv_fraction;
 
-        std::unique_ptr<Scene> scene;
+        std::unique_ptr<Shader> shader;
+        std::unique_ptr<Scene>  scene;
     };
 }  // Asagao::
