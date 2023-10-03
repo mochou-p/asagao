@@ -24,6 +24,63 @@ Scene::Scene()
 : selected{nullptr}
 ,     name{"Untitled scene"}
 {
+    // temp ----
+    Asagao::Application.atlas = std::make_unique<SpriteAtlas>("tiny-wonder-forest-summer.png", 16);
+    Asagao::Application.shader->set_vec2("u_uv_frac", Asagao::Application.uv_fraction);
+    Asagao::Application.shader->set_int("u_texture", Asagao::Application.atlas->texture->get_slot());
+    Asagao::Renderer.set_background_color({114.0f/255.0f, 215.0f/255.0f, 59.0f/255.0f, 1.0f});
+    Asagao::Application.animation_speed = 4.0f;
+
+    for (u8 y = 0; y < 3; ++y)
+    {
+        for (u8 x = 0; x < 3; ++x)
+        {
+            objects.emplace_back
+            (
+                GameObject
+                (
+                    std::to_string(x) + "," + std::to_string(y),
+                    v3
+                    (
+                        (x - 1) *  Asagao::Application.rect_size,
+                        (y - 1) * -Asagao::Application.rect_size,
+                        0.0f
+                    ),
+                    0.0f,
+                    v3(1.0f),
+                    0.0f,
+                    true,
+                    1,
+                    {{
+                        (5 + x) * Asagao::Application.uv_fraction.x,
+                        (7 - y) * Asagao::Application.uv_fraction.y
+                    }}
+                )
+            );
+        }
+    }
+
+    objects.emplace_back
+    (
+        GameObject
+        (
+            "Lilypad",
+            v3(0.0f),
+            0.0f,
+            v3(1.0f),
+            0.0f,
+            true,
+            4,
+            {
+                {8 * Asagao::Application.uv_fraction.x, 4 * Asagao::Application.uv_fraction.y},
+                {8 * Asagao::Application.uv_fraction.x, 5 * Asagao::Application.uv_fraction.y},
+                {8 * Asagao::Application.uv_fraction.x, 6 * Asagao::Application.uv_fraction.y},
+                {8 * Asagao::Application.uv_fraction.x, 7 * Asagao::Application.uv_fraction.y}
+            }
+        )
+    );
+    // ---------
+
     default_config();
 }
 
@@ -35,6 +92,14 @@ Scene::Scene
 : selected{nullptr}
 ,     name{name}
 {
+    // temp ----
+    Asagao::Application.atlas = std::make_unique<SpriteAtlas>("kenney-pixel-platformer.png", 18);
+    Asagao::Application.shader->set_vec2("u_uv_frac", Asagao::Application.uv_fraction);
+    Asagao::Application.shader->set_int("u_texture", Asagao::Application.atlas->texture->get_slot());
+    Asagao::Renderer.set_background_color({0.875f, 0.965f, 0.961f, 1.000f});
+    Asagao::Application.animation_speed = 1.7f;
+    // ---------
+
     std::ifstream file(SCENE_PATH + ("/" + name) + SCENE_EXT);
 
     if (!file.is_open())
@@ -208,8 +273,6 @@ Scene::unload()
 static void
 default_config()
 {
-    Asagao::Application.animation_speed = 1.0f;
-
     Asagao::Renderer.zoom = 1.0f;
 
     Asagao::Camera.set_position({0.0f, 0.0f, 0.0f});

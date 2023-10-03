@@ -13,7 +13,7 @@
 class Rect
 {
 public:
-    Rect(const f32 size, const v2& uv_fraction);
+    Rect(const f32 size);
 
     inline const f32* get_vertices() const
     { return m_vertices; }

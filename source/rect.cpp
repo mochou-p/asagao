@@ -7,7 +7,7 @@
 
 
 Rect::Rect
-(const f32 size, const v2& uv_fraction)
+(const f32 size)
 {
     const f32 half_of_rect = size * 0.5f;
 
@@ -18,18 +18,18 @@ Rect::Rect
 
     m_vertices[ 4] =  half_of_rect;
     m_vertices[ 5] = -half_of_rect;
-    m_vertices[ 6] = uv_fraction.x;
+    m_vertices[ 6] = 1.0f;
     m_vertices[ 7] = 0.0f;
 
     m_vertices[ 8] =  half_of_rect;
     m_vertices[ 9] = half_of_rect;
-    m_vertices[10] = uv_fraction.x;
-    m_vertices[11] = uv_fraction.y;
+    m_vertices[10] = 1.0f;
+    m_vertices[11] = 1.0f;
 
     m_vertices[12] = -half_of_rect;
     m_vertices[13] = half_of_rect;
     m_vertices[14] = 0.0f;
-    m_vertices[15] = uv_fraction.y;
+    m_vertices[15] = 1.0f;
 
     m_indices[0] = 0;  //   2
     m_indices[1] = 1;  //  /|

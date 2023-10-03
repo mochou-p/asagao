@@ -8,6 +8,7 @@ layout (location = 0) in vec4 position;
 layout (location = 1) in vec2 texcoord;
 
 uniform mat4 u_mvp;
+uniform vec2 u_uv_frac;
 uniform vec2 u_tile_uv;
 
 out vec2 v_texcoord;
@@ -15,7 +16,7 @@ out vec2 v_texcoord;
 void main()
 {
     gl_Position = u_mvp    * position;
-    v_texcoord  = texcoord + u_tile_uv;
+    v_texcoord  = texcoord * u_uv_frac + u_tile_uv;
 }
 #endstage
 

@@ -5,7 +5,6 @@
 
 #include "asagao.hpp"
 
-#include "sprite_atlas.hpp"
 #include "rect.hpp"
 #include "vertex_buffer.hpp"
 #include "vertex_buffer_layout.hpp"
@@ -20,12 +19,9 @@ namespace Asagao
     void
     Application::run(const str& argv_scene)
     {
-        SpriteAtlas atlas("kenney-pixel-platformer.png", 18);
-
         shader = std::make_unique<Shader>("atlas.glsl");
-        shader->set_int("u_texture", atlas.texture->get_slot());
 
-        Rect quad(rect_size, uv_fraction);
+        Rect quad(rect_size);
 
         VertexBufferLayout layout;
         layout.push(2, GL_FLOAT);  // position
@@ -37,8 +33,6 @@ namespace Asagao
         va.add_vertex_buffer(layout);
 
         IndexBuffer ib(quad);
-
-        Renderer.set_background_color({0.875f, 0.965f, 0.961f, 1.000f});
 
         Window.resize();
 
