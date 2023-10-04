@@ -13,6 +13,10 @@
 
 #define FONT_SIZE 18.0f
 
+#define CURSOR(x) \
+if (IsItemHovered()) \
+    SetMouseCursor(x);
+
 
 static void set_theme();
 static void load_fonts();
@@ -89,8 +93,7 @@ namespace Asagao
 
         if (Button((ICON_FA_SQUARE_PLUS " New scene")))
             Application.scene = std::make_unique<Scene>();
-        if (IsItemHovered())
-            SetMouseCursor(ImGuiMouseCursor_Hand);
+        CURSOR(ImGuiMouseCursor_Hand)
 
         Dummy(pad);
         Separator();
@@ -100,8 +103,7 @@ namespace Asagao
         {
             if (Button((ICON_FA_MOUNTAIN_SUN " " + scene).c_str()))
                 Application.scene = std::make_unique<Scene>(scene);
-            if (IsItemHovered())
-                SetMouseCursor(ImGuiMouseCursor_Hand);
+            CURSOR(ImGuiMouseCursor_Hand)
         }
 
         PopStyleVar();
@@ -156,8 +158,8 @@ namespace Asagao
             {
                 Application.scene->selected = &obj;
             }
-            if (!is_selected && IsItemHovered())
-                SetMouseCursor(ImGuiMouseCursor_Hand);
+            if (!is_selected)
+                CURSOR(ImGuiMouseCursor_Hand)
 
             if (!obj.visible)
                 PopStyleColor();
@@ -204,8 +206,7 @@ namespace Asagao
 
             return;
         }
-        if (IsItemHovered())
-            SetMouseCursor(ImGuiMouseCursor_Hand);
+        CURSOR(ImGuiMouseCursor_Hand)
 
         SameLine();
         TextDisabled("|");
@@ -314,9 +315,12 @@ namespace Asagao
         static const f32    close_btn = CalcTextSize("   ").x;
         static const ImVec2 row      = {0.0f, 10.0f};
         static bool hover;
+        static GameObject* obj;
 
         if (!Application.scene)
             return;
+
+        obj = Application.scene->selected;
 
         SetNextWindowPos
         ({
@@ -329,13 +333,11 @@ namespace Asagao
             Layout::components.size.y * Window.size.y
         });
 
-        if (!Application.scene->selected)
+        if (!obj)
         {
             Begin(titles[0], nullptr, flags);
-            DragFloat("Anim speed", &Application.animation_speed, 0.1f,
-                0.0f, 100.0f);
-            if (IsItemHovered())
-                SetMouseCursor(ImGuiMouseCursor_ResizeEW);
+            DragFloat("Anim speed", &Application.animation_speed, 0.1f, 0.0f, 100.0f);
+            CURSOR(ImGuiMouseCursor_ResizeEW)
 
             End();
             return;
@@ -343,9 +345,9 @@ namespace Asagao
 
         Begin(titles[1], nullptr, flags);
 
-        Checkbox("##visible", &Application.scene->selected->visible);
+        Checkbox("##visible", &obj->visible);
         SameLine();
-        InputText("##name", &Application.scene->selected->name);
+        InputText("##name", &obj->name);
         SameLine(GetWindowContentRegionMax().x - close_btn);
 
         if (Button(ICON_FA_XMARK))
@@ -355,69 +357,54 @@ namespace Asagao
             End();
             return;
         }
-        if (IsItemHovered())
-            SetMouseCursor(ImGuiMouseCursor_Hand);
+        CURSOR(ImGuiMouseCursor_Hand)
 
         Dummy(row);
 
         Text(ICON_FA_SLIDERS " Position");
-        DragFloat(ICON_FA_LEFT_RIGHT "##pos", &Application.scene->selected->position.x, 1.0f);
-        if (IsItemHovered())
-            SetMouseCursor(ImGuiMouseCursor_ResizeEW);
-        DragFloat(ICON_FA_UP_DOWN    "##pos", &Application.scene->selected->position.y, 1.0f);
-        if (IsItemHovered())
-            SetMouseCursor(ImGuiMouseCursor_ResizeEW);
-        DragFloat(ICON_FA_LAYER_GROUP,        &Application.scene->selected->depth,      0.2f);
-        if (IsItemHovered())
-            SetMouseCursor(ImGuiMouseCursor_ResizeEW);
-        if (Application.scene->selected->depth != 0.0f)
+        DragFloat(ICON_FA_LEFT_RIGHT "##pos", &obj->position.x, 1.0f); CURSOR(ImGuiMouseCursor_ResizeEW)
+        DragFloat(ICON_FA_UP_DOWN    "##pos", &obj->position.y, 1.0f); CURSOR(ImGuiMouseCursor_ResizeEW)
+        DragFloat(ICON_FA_LAYER_GROUP,        &obj->depth,      0.2f); CURSOR(ImGuiMouseCursor_ResizeEW)
+        if (obj->depth != 0.0f)
         {
             SameLine();
             if (Button(ICON_FA_ROTATE_LEFT "##depth"))
-                Application.scene->selected->depth = 0.0f;
-            if (IsItemHovered())
-                SetMouseCursor(ImGuiMouseCursor_Hand);
+                obj->depth = 0.0f;
+            CURSOR(ImGuiMouseCursor_Hand)
         }
 
         Dummy(row);
 
         Text(ICON_FA_SLIDERS " Size");
-        DragFloat(ICON_FA_LEFT_RIGHT "##size", &Application.scene->selected->scale.x, 0.01f);
-        if (IsItemHovered())
-            SetMouseCursor(ImGuiMouseCursor_ResizeEW);
-        if (Application.scene->selected->scale.x != 1.0f)
+        DragFloat(ICON_FA_LEFT_RIGHT "##size", &obj->scale.x, 0.01f); CURSOR(ImGuiMouseCursor_ResizeEW)
+        if (obj->scale.x != 1.0f)
         {
             SameLine();
             if (Button(ICON_FA_ROTATE_LEFT "##size.x"))
-                Application.scene->selected->scale.x = 1.0f;
-            if (IsItemHovered())
-                SetMouseCursor(ImGuiMouseCursor_Hand);
+                obj->scale.x = 1.0f;
+            CURSOR(ImGuiMouseCursor_Hand)
         }
 
-        DragFloat(ICON_FA_UP_DOWN    "##size", &Application.scene->selected->scale.y, 0.01f);
-        if (IsItemHovered())
-            SetMouseCursor(ImGuiMouseCursor_ResizeEW);
-        if (Application.scene->selected->scale.y != 1.0f)
+        DragFloat(ICON_FA_UP_DOWN "##size", &obj->scale.y, 0.01f); CURSOR(ImGuiMouseCursor_ResizeEW)
+        if (obj->scale.y != 1.0f)
         {
             SameLine();
             if (Button(ICON_FA_ROTATE_LEFT "##size.y"))
-                Application.scene->selected->scale.y = 1.0f;
-            if (IsItemHovered())
-                SetMouseCursor(ImGuiMouseCursor_Hand);
+                obj->scale.y = 1.0f;
+            CURSOR(ImGuiMouseCursor_Hand)
         }
 
 
         Dummy(row);
 
         Text(ICON_FA_SLIDERS " Rotation");
-        SliderFloat(ICON_FA_ROTATE, &Application.scene->selected->rotation, 0.0f, 360.0f);
-        if (Application.scene->selected->rotation != 0.0f)
+        SliderFloat(ICON_FA_ROTATE, &obj->rotation, 0.0f, 360.0f);
+        if (obj->rotation != 0.0f)
         {
             SameLine();
             if (Button(ICON_FA_ROTATE_LEFT "##rotation"))
-                Application.scene->selected->rotation = 0.0f;
-            if (IsItemHovered())
-                SetMouseCursor(ImGuiMouseCursor_Hand);
+                obj->rotation = 0.0f;
+            CURSOR(ImGuiMouseCursor_Hand)
         }
 
         End();
