@@ -370,6 +370,14 @@ namespace Asagao
         DragFloat(ICON_FA_LAYER_GROUP,        &Application.scene->selected->depth,      0.2f);
         if (IsItemHovered())
             SetMouseCursor(ImGuiMouseCursor_ResizeEW);
+        if (Application.scene->selected->depth != 0.0f)
+        {
+            SameLine();
+            if (Button(ICON_FA_ROTATE_LEFT "##depth"))
+                Application.scene->selected->depth = 0.0f;
+            if (IsItemHovered())
+                SetMouseCursor(ImGuiMouseCursor_Hand);
+        }
 
         Dummy(row);
 
@@ -377,14 +385,40 @@ namespace Asagao
         DragFloat(ICON_FA_LEFT_RIGHT "##size", &Application.scene->selected->scale.x, 0.01f);
         if (IsItemHovered())
             SetMouseCursor(ImGuiMouseCursor_ResizeEW);
+        if (Application.scene->selected->scale.x != 1.0f)
+        {
+            SameLine();
+            if (Button(ICON_FA_ROTATE_LEFT "##size.x"))
+                Application.scene->selected->scale.x = 1.0f;
+            if (IsItemHovered())
+                SetMouseCursor(ImGuiMouseCursor_Hand);
+        }
+
         DragFloat(ICON_FA_UP_DOWN    "##size", &Application.scene->selected->scale.y, 0.01f);
         if (IsItemHovered())
             SetMouseCursor(ImGuiMouseCursor_ResizeEW);
+        if (Application.scene->selected->scale.y != 1.0f)
+        {
+            SameLine();
+            if (Button(ICON_FA_ROTATE_LEFT "##size.y"))
+                Application.scene->selected->scale.y = 1.0f;
+            if (IsItemHovered())
+                SetMouseCursor(ImGuiMouseCursor_Hand);
+        }
+
 
         Dummy(row);
 
         Text(ICON_FA_SLIDERS " Rotation");
         SliderFloat(ICON_FA_ROTATE, &Application.scene->selected->rotation, 0.0f, 360.0f);
+        if (Application.scene->selected->rotation != 0.0f)
+        {
+            SameLine();
+            if (Button(ICON_FA_ROTATE_LEFT "##rotation"))
+                Application.scene->selected->rotation = 0.0f;
+            if (IsItemHovered())
+                SetMouseCursor(ImGuiMouseCursor_Hand);
+        }
 
         End();
     }
