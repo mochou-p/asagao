@@ -22,6 +22,7 @@ static void set_theme();
 static void load_fonts();
 static void new_frame();
 static void render_draw_data();
+static void tilemap(const v2& hovered_tile);
 
 static std::vector<str> get_scenes();
 
@@ -169,14 +170,15 @@ namespace Asagao
     }
 
     void
-    Interface::details()
+    Interface::details
+    (v2& hovered_tile)
     {
         static c_cstr title = "Details";
         static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove;
         static const f32    button_height   = GetItemRectSize().y;
         static const ImVec2 window_padding  = {0.00f, 0.00f};
         static const ImVec4 button_color    = {0.15f, 0.15f, 0.15f, 1.0f};
-        static v2 camera_pos, mouse_pos, world_pos, tile_pos;
+        static v2 camera_pos, mouse_pos, world_pos;
         static bool hover;
 
         SetNextWindowPos
@@ -240,18 +242,18 @@ namespace Asagao
         if (Window.mouse_hovers_scene())
         {
             // todo: zoom
-            mouse_pos    = Window.mouse_pos;
-            mouse_pos   -= Window.size * 0.5f;
+            mouse_pos  = Window.mouse_pos;
+            mouse_pos -= Window.size * 0.5f;
 
             world_pos    = mouse_pos;
             world_pos   -= camera_pos * 0.5f;
             world_pos.y += camera_pos.y;  // workaround(?)
 
-            tile_pos     = world_pos;
-            tile_pos    /= Application.rect_size * 0.5f;
-            tile_pos    += 0.5f;
+            hovered_tile  = world_pos;
+            hovered_tile /= Application.rect_size * 0.5f;
+            hovered_tile += 0.5f;
 
-            tile_pos = {std::floor(tile_pos.x), std::floor(tile_pos.y)};
+            hovered_tile = {std::floor(hovered_tile.x), std::floor(hovered_tile.y)};
 
             SameLine();
             TextDisabled("|");
@@ -289,9 +291,9 @@ namespace Asagao
             (
                 (
                     ICON_FA_SQUARE " "
-                    + std::to_string((i32) tile_pos.x)
+                    + std::to_string((i32) hovered_tile.x)
                     + ", "
-                    + std::to_string((i32) tile_pos.y)
+                    + std::to_string((i32) hovered_tile.y)
                 ).c_str()
             );
         }
@@ -413,9 +415,14 @@ namespace Asagao
     void
     Interface::scene_view()
     {
+        static v2 tile;
+
         objects();
-        details();
+        details(tile);
         components();
+
+        // temp
+        tilemap(tile);
     }
 }  // Asagao::
 
@@ -522,4 +529,66 @@ get_scenes()
         LOG_WARN("no scenes found");
 
     return scenes;
+}
+
+struct pair_hash
+{
+    template<class T1, class T2>
+    u64 operator()
+    (const std::pair<T1, T2>& p) const
+    {
+        return std::hash<T1>{}(p.first) ^ std::hash<T2>{}(p.second);  
+    }
+};
+
+static void
+tilemap
+(const v2& hovered_tile)
+{
+    using Tile    = std::pair<i32, i32>;
+    using TileMap = std::unordered_map<Tile, bool, pair_hash>;
+    // later a specific tiletype bitmask int ^^^^
+
+    static TileMap           tiles;
+    static TileMap::iterator it;
+    static Tile              pair;
+
+    static v2 last_dragged_tile(0.5f);  // not round for the first comparison
+
+    static GameObject tile_obj
+    (
+        "----",
+        v3(0.0f),
+        0.0f,
+        v3(1.0f),
+        0.0f,
+        true,
+        1,
+        {{
+            1 * Asagao::Application.uv_fraction.x,
+            3 * Asagao::Application.uv_fraction.y
+        }}
+    );
+
+    if (IsMouseDown(ImGuiMouseButton_Right) && hovered_tile != last_dragged_tile)
+    {
+        pair = std::make_pair(hovered_tile.x, hovered_tile.y);
+        it   = tiles.find(pair);
+
+        if (it == tiles.end())
+            tiles[pair] ^= 1;
+
+        last_dragged_tile = hovered_tile;
+    }
+
+    for (const auto& kv : tiles)
+    {
+        tile_obj.position.x = kv.first.first  *  Asagao::Application.rect_size;
+        tile_obj.position.y = kv.first.second * -Asagao::Application.rect_size;
+
+        Asagao::Application.shader->set_mat4("u_mvp",     Asagao::Camera.get_mvp(tile_obj));
+        Asagao::Application.shader->set_vec2("u_tile_uv", tile_obj.get_uv(0));
+
+        Asagao::Renderer.draw();
+    }
 }

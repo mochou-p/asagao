@@ -25,61 +25,11 @@ Scene::Scene()
 ,     name{"Untitled scene"}
 {
     // temp ----
-    Asagao::Application.atlas = std::make_unique<SpriteAtlas>("tiny-wonder-forest-summer.png", 16);
+    Asagao::Application.atlas = std::make_unique<SpriteAtlas>("test-ruled-tiles.png", 8);
     Asagao::Application.shader->set_vec2("u_uv_frac", Asagao::Application.uv_fraction);
     Asagao::Application.shader->set_int("u_texture", Asagao::Application.atlas->texture->get_slot());
-    Asagao::Renderer.set_background_color({114.0f/255.0f, 215.0f/255.0f, 59.0f/255.0f, 1.0f});
-    Asagao::Application.animation_speed = 4.0f;
-
-    for (u8 y = 0; y < 3; ++y)
-    {
-        for (u8 x = 0; x < 3; ++x)
-        {
-            objects.emplace_back
-            (
-                GameObject
-                (
-                    std::to_string(x) + "," + std::to_string(y),
-                    v3
-                    (
-                        (x - 1) *  Asagao::Application.rect_size,
-                        (y - 1) * -Asagao::Application.rect_size,
-                        0.0f
-                    ),
-                    0.0f,
-                    v3(1.0f),
-                    0.0f,
-                    true,
-                    1,
-                    {{
-                        (5 + x) * Asagao::Application.uv_fraction.x,
-                        (7 - y) * Asagao::Application.uv_fraction.y
-                    }}
-                )
-            );
-        }
-    }
-
-    objects.emplace_back
-    (
-        GameObject
-        (
-            "Lilypad",
-            v3(0.0f),
-            0.0f,
-            v3(1.0f),
-            0.0f,
-            true,
-            4,
-            {
-                {8 * Asagao::Application.uv_fraction.x, 4 * Asagao::Application.uv_fraction.y},
-                {8 * Asagao::Application.uv_fraction.x, 5 * Asagao::Application.uv_fraction.y},
-                {8 * Asagao::Application.uv_fraction.x, 6 * Asagao::Application.uv_fraction.y},
-                {8 * Asagao::Application.uv_fraction.x, 7 * Asagao::Application.uv_fraction.y}
-            }
-        )
-    );
-    // ---------
+    Asagao::Renderer.set_background_color({13.0f/255.0f, 43.0f/255.0f, 69.0f/255.0f, 1.0f});
+    Asagao::Application.animation_speed = 1.0f;
 
     default_config();
 }

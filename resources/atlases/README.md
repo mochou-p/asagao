@@ -3,5 +3,4 @@
 
 # Assets credits
 
-[Kenney](https://www.kenney.nl/) \
-[Butter Milk](https://butterymilk.carrd.co/)
+[Kenney](https://www.kenney.nl/)

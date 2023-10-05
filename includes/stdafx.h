@@ -7,8 +7,10 @@
 // standard library
 #include <functional>
 #include <map>
+#include <unordered_map>
 #include <memory>
 #include <vector>
+#include <utility>
 
 #include <exception>
 
