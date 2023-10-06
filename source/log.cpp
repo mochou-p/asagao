@@ -23,19 +23,19 @@ Log::automatic
 {
     switch (severity)
     {
-        case GL_DEBUG_SEVERITY_NOTIFICATION:
-            info(file, line, message);
-            break;  
-        case GL_DEBUG_SEVERITY_LOW:
-        case GL_DEBUG_SEVERITY_MEDIUM:
-            warn(file, line, message);
-            break;
-        case GL_DEBUG_SEVERITY_HIGH:
-            fatal(file, line, message);
-            break;
-        default:
-            warn(file, line, "unknown log severity level");
-            break;
+    case GL_DEBUG_SEVERITY_NOTIFICATION:
+        info(file, line, message);
+        break;  
+    case GL_DEBUG_SEVERITY_LOW:
+    case GL_DEBUG_SEVERITY_MEDIUM:
+        warn(file, line, message);
+        break;
+    case GL_DEBUG_SEVERITY_HIGH:
+        fatal(file, line, message);
+        break;
+    default:
+        warn(file, line, "unknown log severity level");
+        break;
     }
 }
 

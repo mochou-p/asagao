@@ -531,6 +531,10 @@ get_scenes()
     return scenes;
 }
 
+// temp ----
+
+#define UV(u, v) v2(u, v) * Asagao::Application.uv_fraction
+
 struct pair_hash
 {
     template<class T1, class T2>
@@ -541,17 +545,215 @@ struct pair_hash
     }
 };
 
+using TileUV = v2;
+
+static TileUV
+get_tile_rule
+(const u8 mask)
+{
+    switch (mask)
+    {
+    // ┌  ─  ┐
+    case 208:
+    case 209:
+    case 212:
+    case 213:
+    case 240:
+    case 241:
+    case 244:
+    case 245:
+        return UV(0, 3);
+    case 248:
+    case 249:
+    case 252:
+    case 253:
+        return UV(1, 3);
+    case 104:
+    case 105:
+    case 108:
+    case 109:
+    case 232:
+    case 233:
+    case 236:
+    case 237:
+        return UV(2, 3);
+
+    // │     │
+    case 214:
+    case 215:
+    case 246:
+    case 247:
+        return UV(0, 2);
+    case 255:
+        return UV(1, 2);
+    case 107:
+    case 111:
+    case 235:
+    case 239:
+        return UV(2, 2);
+
+    // └  ─  ┘
+    case  22:
+    case  23:
+    case  54:
+    case  55:
+    case 150:
+    case 151:
+    case 182:
+    case 183:
+        return UV(0, 1);
+    case  31:
+    case  63:
+    case 159:
+    case 191:
+        return UV(1, 1);
+    case  11:
+    case  15:
+    case  43:
+    case  47:
+    case 139:
+    case 143:
+    case 171:
+    case 175:
+        return UV(2, 1);
+
+    // []
+    case   0:
+    case   1:
+    case   4:
+    case   5:
+    case  32:
+    case  33:
+    case  36:
+    case  37:
+    case 128:
+    case 129:
+    case 132:
+    case 133:
+    case 160:
+    case 161:
+    case 164:
+    case 165:
+        return UV(3, 1);
+    // [
+    case  16:
+    case  17:
+    case  20:
+    case  21:
+    case  48:
+    case  49:
+    case  52:
+    case  53:
+    case 144:
+    case 145:
+    case 148:
+    case 149:
+    case 176:
+    case 177:
+    case 180:
+    case 181:
+        return UV(2, 0);
+    // ]
+    case   8:
+    case   9:
+    case  12:
+    case  13:
+    case  40:
+    case  41:
+    case  44:
+    case  45:
+    case 136:
+    case 137:
+    case 140:
+    case 141:
+    case 168:
+    case 169:
+    case 172:
+    case 173:
+        return UV(3, 0);
+    // ┌─┐
+    case  64:
+    case  65:
+    case  68:
+    case  69:
+    case  96:
+    case  97:
+    case 100:
+    case 101:
+    case 192:
+    case 193:
+    case 196:
+    case 197:
+    case 224:
+    case 225:
+    case 228:
+    case 229:
+        return UV(4, 1);
+    // └─┘
+    case   2:
+    case   3:
+    case   6:
+    case   7:
+    case  34:
+    case  35:
+    case  38:
+    case  39:
+    case 130:
+    case 131:
+    case 134:
+    case 135:
+    case 162:
+    case 163:
+    case 166:
+    case 167:
+        return UV(4, 0);
+
+    // =
+    case 24:
+        return UV(0, 0);
+    // ||
+    case 66:
+        return UV(1, 0);
+
+    // ┌┐
+    // └┘
+    case  80:
+    case  81:
+    case  85:
+    case 113:
+    case 116:
+    case 117:
+        return UV(3, 3);
+    case  72:
+        return UV(4, 3);
+    case  18:
+        return UV(3, 2);
+    case  10:
+        return UV(4, 2);
+
+
+    // ┴
+    // ┬
+    // ├
+    // ┼
+    // ┤
+
+    default:
+        LOG_WARN(std::to_string(mask));
+        return UV(10, 0);
+    }
+}
+
 static void
 tilemap
 (const v2& hovered_tile)
 {
-    using Tile    = std::pair<i32, i32>;
-    using TileMap = std::unordered_map<Tile, bool, pair_hash>;
-    // later a specific tiletype bitmask int ^^^^
+    using TilePos = std::pair<i32, i32>;
+    
+    using TileMap = std::unordered_map<TilePos, TileUV, pair_hash>;
 
-    static TileMap           tiles;
-    static TileMap::iterator it;
-    static Tile              pair;
+    static TileMap tiles;
+    static TilePos pair;
 
     static v2 last_dragged_tile(0.5f);  // not round for the first comparison
 
@@ -564,19 +766,37 @@ tilemap
         0.0f,
         true,
         1,
-        {{
-            1 * Asagao::Application.uv_fraction.x,
-            3 * Asagao::Application.uv_fraction.y
-        }}
+        {{0, 0}}
     );
 
     if (IsMouseDown(ImGuiMouseButton_Right) && hovered_tile != last_dragged_tile)
     {
         pair = std::make_pair(hovered_tile.x, hovered_tile.y);
-        it   = tiles.find(pair);
 
-        if (it == tiles.end())
-            tiles[pair] ^= 1;
+        if (tiles.find(pair) == tiles.end())
+        {
+            u8 z             = 0;
+            u8 neighbour_sum = 0;
+
+            // todo optimise
+            for (i8 y = -1; y <= 1; ++y)
+            {
+                for (i8 x = -1; x <= 1; ++x)
+                {
+                    if (x || y)
+                    {
+                        auto _pair = std::make_pair(hovered_tile.x + x, hovered_tile.y + y);
+
+                        if (tiles.find(_pair) != tiles.end())
+                            neighbour_sum += std::pow(2, z);
+
+                        ++z;
+                    }
+                }
+            }
+
+            tiles[pair] = get_tile_rule(neighbour_sum);
+        }
 
         last_dragged_tile = hovered_tile;
     }
@@ -585,6 +805,9 @@ tilemap
     {
         tile_obj.position.x = kv.first.first  *  Asagao::Application.rect_size;
         tile_obj.position.y = kv.first.second * -Asagao::Application.rect_size;
+
+        tile_obj.sprite_offsets[0].x = kv.second.x;
+        tile_obj.sprite_offsets[0].y = kv.second.y;
 
         Asagao::Application.shader->set_mat4("u_mvp",     Asagao::Camera.get_mvp(tile_obj));
         Asagao::Application.shader->set_vec2("u_tile_uv", tile_obj.get_uv(0));

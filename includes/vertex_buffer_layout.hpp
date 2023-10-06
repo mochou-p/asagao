@@ -19,11 +19,11 @@ struct VertexAttribute
     {
         switch (type)
         {
-            case GL_FLOAT:
-                return 4;
-            default:
-                LOG_WARN("unsupported type");
-                break;
+        case GL_FLOAT:
+            return 4;
+        default:
+            LOG_WARN("unsupported type");
+            break;
         }
 
         return 0;

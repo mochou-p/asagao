@@ -30,11 +30,11 @@ get_type_normalisation
 {
     switch (type)
     {
-        case GL_FLOAT:
-            return GL_FALSE;
-        default:
-            LOG_WARN("unsupported type");
-            break;
+    case GL_FLOAT:
+        return GL_FALSE;
+    default:
+        LOG_WARN("unsupported type");
+        break;
     }
 
     return false;
