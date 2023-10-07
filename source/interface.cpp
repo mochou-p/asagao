@@ -546,6 +546,8 @@ struct pair_hash
 };
 
 using TileUV = v2;
+using TilePos = std::pair<i32, i32>;
+using TileMap = std::unordered_map<TilePos, TileUV, pair_hash>;
 
 static TileUV
 get_tile_rule
@@ -874,14 +876,37 @@ get_tile_rule
     // no need for a default case
 }
 
+static u8
+neighbour_mask
+(const v2& tile, const TileMap& tiles)
+{
+    u8 power = 0;
+    u8 mask  = 0;
+
+    // can be optimised
+    for (i8 y = -1; y <= 1; ++y)
+    {
+        for (i8 x = -1; x <= 1; ++x)
+        {
+            if (x || y)
+            {
+                auto pair = std::make_pair(tile.x + x, tile.y + y);
+
+                if (tiles.find(pair) != tiles.end())
+                    mask += std::pow(2, power);
+
+                ++power;
+            }
+        }
+    }
+
+    return mask;
+}
+
 static void
 tilemap
 (const v2& hovered_tile)
 {
-    using TilePos = std::pair<i32, i32>;
-    
-    using TileMap = std::unordered_map<TilePos, TileUV, pair_hash>;
-
     static TileMap tiles;
     static TilePos pair;
 
@@ -905,27 +930,26 @@ tilemap
 
         if (tiles.find(pair) == tiles.end())
         {
-            u8 z             = 0;
-            u8 neighbour_sum = 0;
+            tiles[pair] = get_tile_rule(neighbour_mask(hovered_tile, tiles));
 
-            // todo optimise
+            // for now updating all NOT EMPTY tiles around
+            // can be optimised for only those who should change
+            //     (for example, some dont change with diagonal updates)
+            // and can be cached to not recalculate neighbours
+
             for (i8 y = -1; y <= 1; ++y)
             {
                 for (i8 x = -1; x <= 1; ++x)
                 {
                     if (x || y)
                     {
-                        auto _pair = std::make_pair(hovered_tile.x + x, hovered_tile.y + y);
+                        pair = std::make_pair(hovered_tile.x + x, hovered_tile.y + y);
 
-                        if (tiles.find(_pair) != tiles.end())
-                            neighbour_sum += std::pow(2, z);
-
-                        ++z;
+                        if (tiles.find(pair) != tiles.end())
+                            tiles[pair] = get_tile_rule(neighbour_mask(hovered_tile + v2(x, y), tiles));
                     }
                 }
             }
-
-            tiles[pair] = get_tile_rule(neighbour_sum);
         }
 
         last_dragged_tile = hovered_tile;

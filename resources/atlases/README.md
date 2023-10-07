@@ -1,6 +1,14 @@
-<!-- asagao/resources/atlases/CREDITS.md -->
+<!-- asagao/resources/atlases/README.md -->
 
 
-# Assets credits
+# Credits
 
-[Kenney](https://www.kenney.nl/)
+### Assets
+
+- [Kenney](https://www.kenney.nl/)
+    - [Pixel Platformer](https://www.kenney.nl/assets/pixel-platformer)
+
+### Color schemes
+
+- [solosalsero](https://www.solosalsero.com/)
+    - [SLSO8](https://lospec.com/palette-list/slso8)
