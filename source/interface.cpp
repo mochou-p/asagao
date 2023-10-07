@@ -553,7 +553,6 @@ get_tile_rule
 {
     switch (mask)
     {
-    // ┌  ─  ┐
     case 208:
     case 209:
     case 212:
@@ -578,7 +577,6 @@ get_tile_rule
     case 237:
         return UV(2, 3);
 
-    // │     │
     case 214:
     case 215:
     case 246:
@@ -592,7 +590,6 @@ get_tile_rule
     case 239:
         return UV(2, 2);
 
-    // └  ─  ┘
     case  22:
     case  23:
     case  54:
@@ -617,7 +614,6 @@ get_tile_rule
     case 175:
         return UV(2, 1);
 
-    // []
     case   0:
     case   1:
     case   4:
@@ -635,7 +631,6 @@ get_tile_rule
     case 164:
     case 165:
         return UV(3, 1);
-    // [
     case  16:
     case  17:
     case  20:
@@ -653,7 +648,6 @@ get_tile_rule
     case 180:
     case 181:
         return UV(2, 0);
-    // ]
     case   8:
     case   9:
     case  12:
@@ -671,7 +665,6 @@ get_tile_rule
     case 172:
     case 173:
         return UV(3, 0);
-    // ┌─┐
     case  64:
     case  65:
     case  68:
@@ -689,7 +682,6 @@ get_tile_rule
     case 228:
     case 229:
         return UV(4, 1);
-    // └─┘
     case   2:
     case   3:
     case   6:
@@ -708,40 +700,178 @@ get_tile_rule
     case 167:
         return UV(4, 0);
 
-    // =
-    case 24:
+    case  24:
+    case  25:
+    case  28:
+    case  29:
+    case  56:
+    case  57:
+    case  60:
+    case  61:
+    case 152:
+    case 153:
+    case 189:
+    case 184:
+    case 185:
+    case 156:
+    case 188:
+    case 157:
         return UV(0, 0);
-    // ||
-    case 66:
+    case  66:
+    case  67:
+    case  70:
+    case  71:
+    case  98:
+    case  99:
+    case 102:
+    case 103:
+    case 194:
+    case 195:
+    case 198:
+    case 199:
+    case 226:
+    case 227:
+    case 230:
+    case 231:
         return UV(1, 0);
 
-    // ┌┐
-    // └┘
     case  80:
     case  81:
+    case  84:
     case  85:
+    case 112:
     case 113:
     case 116:
     case 117:
         return UV(3, 3);
     case  72:
+    case  73:
+    case  76:
+    case  77:
+    case 200:
+    case 201:
+    case 204:
+    case 205:
         return UV(4, 3);
     case  18:
+    case  19:
+    case  50:
+    case  51:
+    case 146:
+    case 147:
+    case 178:
+    case 179:
         return UV(3, 2);
     case  10:
+    case  14:
+    case  42:
+    case  46:
+    case 138:
+    case 142:
+    case 170:
+    case 174:
         return UV(4, 2);
 
+    case 120:
+    case 121:
+    case 124:
+    case 125:
+        return UV(5, 3);
+    case 216:
+    case 217:
+    case 220:
+    case 221:
+        return UV(6, 3);
+    case  27:
+    case  59:
+    case 155:
+    case 187:
+        return UV(5, 2);
+    case  30:
+    case  62:
+    case 158:
+    case 190:
+        return UV(6, 2);
 
-    // ┴
-    // ┬
-    // ├
-    // ┼
-    // ┤
+    case  86:
+    case  87:
+    case 118:
+    case 119:
+        return UV(5, 1);
+    case  75:
+    case  79:
+    case 203:
+    case 207:
+        return UV(6, 1);
+    case 210:
+    case 211:
+    case 242:
+    case 243:
+        return UV(5, 0);
+    case 106:
+    case 110:
+    case 234:
+    case 238:
+        return UV(6, 0);
 
-    default:
-        LOG_WARN(std::to_string(mask));
-        return UV(10, 0);
+    case 122:
+        return UV(7, 3);
+    case 218:
+        return UV(8, 3);
+    case  91:
+        return UV(7, 2);
+    case  94:
+        return UV(8, 2);
+
+    case  82:
+    case  83:
+    case 114:
+    case 115:
+        return UV(7, 1);
+    case  88:
+    case  89:
+    case  92:
+    case  93:
+        return UV(8, 1);
+    case  26:
+    case  58:
+    case 154:
+    case 186:
+        return UV(7, 0);
+    case  74:
+    case  78:
+    case 202:
+    case 206:
+        return UV(8, 0);
+
+    case 127:
+        return UV(11, 3);
+    case 223:
+        return UV(12, 3);
+    case 251:
+        return UV(11, 2);
+    case 254:
+        return UV(12, 2);
+
+    case  90:
+        return UV(10, 1);
+
+    case  95:
+        return UV(9, 3);
+    case 222:
+        return UV(10, 3);
+    case 123:
+        return UV(9, 2);
+    case 250:
+        return UV(10, 2);
+
+    case 126:
+        return UV(9, 1);
+    case 219:
+        return UV(9, 0);
     }
+
+    // no need for a default case
 }
 
 static void
