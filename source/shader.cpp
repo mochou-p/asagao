@@ -110,7 +110,7 @@ parse_shader
         if (line.find(SHADER_STAGE_TAG_START) == str::npos)
             continue;
 
-        for (const stage& stage : stages)
+        for (const auto& stage : stages)
         {
             if (line.find(stage.tag) == str::npos)
                 continue;

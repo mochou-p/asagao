@@ -15,6 +15,7 @@ public:
 
     void save() const;
     void unload();
+    void draw() const;
 
     std::vector<GameObject> objects;
     GameObject*             selected;

@@ -30,7 +30,7 @@ VertexArray::add_vertex_buffer
     u64 offset = 0;
     u8  i      = 0;
 
-    for (const VertexAttribute& va : attributes)
+    for (const auto& va : attributes)
     {
         glEnableVertexAttribArray(i);
         glVertexAttribPointer(i, va.count, va.type, va.normalized, stride, (const void*) offset);

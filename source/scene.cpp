@@ -171,7 +171,7 @@ Scene::save() const
 
     u16 i;
 
-    for (const GameObject& obj : objects)
+    for (const auto& obj : objects)
     {
         file << std::endl
              << "name: " << obj.name
@@ -196,7 +196,7 @@ Scene::save() const
 
         i = 0;
 
-        for (const v2& ofs : obj.sprite_offsets)
+        for (const auto& ofs : obj.sprite_offsets)
         {
             if (i++)
                 file << ",";
@@ -217,6 +217,18 @@ Scene::unload()
     Asagao::Interface.current_view = STARTUP_VIEW;
 
     Asagao::Application.scene = nullptr;
+}
+
+void
+Scene::draw() const
+{
+    // Benchmark _("Scene render");
+
+    for (const auto& obj : objects)
+    {
+        if (obj.visible)
+            Asagao::Renderer.draw(obj);
+    }
 }
 
 

@@ -14,7 +14,7 @@ namespace Asagao
         static void init();
 
         void clear() const;
-        void draw()  const;
+        void draw(const GameObject& obj) const;
         void set_background_color(const v4& color) const;
 
         f32 zoom = 1.0f;

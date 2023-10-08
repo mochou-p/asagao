@@ -100,7 +100,7 @@ namespace Asagao
         Separator();
         Dummy(pad);
 
-        for (const str& scene : scenes)
+        for (const auto& scene : scenes)
         {
             if (Button((ICON_FA_MOUNTAIN_SUN " " + scene).c_str()))
                 Application.scene = std::make_unique<Scene>(scene);
@@ -963,9 +963,6 @@ tilemap
         tile_obj.sprite_offsets[0].x = kv.second.x;
         tile_obj.sprite_offsets[0].y = kv.second.y;
 
-        Asagao::Application.shader->set_mat4("u_mvp",     Asagao::Camera.get_mvp(tile_obj));
-        Asagao::Application.shader->set_vec2("u_tile_uv", tile_obj.get_uv(0));
-
-        Asagao::Renderer.draw();
+        Asagao::Renderer.draw(tile_obj);
     }
 }
