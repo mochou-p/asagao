@@ -10,14 +10,13 @@
 #include "vertex_buffer_layout.hpp"
 #include "vertex_array.hpp"
 #include "index_buffer.hpp"
-#include "game_object.hpp"
-#include "benchmark.hpp"
 
 
 namespace Asagao
 {
     void
-    Application::run(const str& argv_scene)
+    Application::run
+    (const str& argv_scene)
     {
         shader = std::make_unique<Shader>("atlas.glsl");
 

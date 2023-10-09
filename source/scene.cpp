@@ -28,7 +28,7 @@ Scene::Scene()
     Asagao::Application.atlas = std::make_unique<SpriteAtlas>("test-ruled-tiles.png", 8);
     Asagao::Application.shader->set_vec2("u_uv_frac", Asagao::Application.uv_fraction);
     Asagao::Application.shader->set_int("u_texture", Asagao::Application.atlas->texture->get_slot());
-    Asagao::Renderer.set_background_color({13.0f/255.0f, 43.0f/255.0f, 69.0f/255.0f, 1.0f});
+    Asagao::Renderer.set_background_color({195.0f / 255.0f, 223.0f / 255.0f, 224.0f / 255.0f, 1.0f});
     Asagao::Application.animation_speed = 1.0f;
 
     default_config();

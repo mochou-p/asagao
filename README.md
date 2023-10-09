@@ -2,19 +2,17 @@
 
 
 # Asagao - 2D Game Engine
+###### *Under development, more features coming soon!*
 
 ![Asagao Icon](resources/branding/asagao-banner.png "Logo")
 &nbsp;
 ![Asagao Editor](resources/branding/screenshots/asagao-editor.png "Preview")
 
-###### *Currently in its early stage of development, with many features having temporary implementations
-
 ---
 
 ### Features
 
-- Memory efficient (4 vertices)
-- Fast rendering (1 texture atlas)
+- Ruled tilesets
 - Animated sprites
 - Scene loading
 

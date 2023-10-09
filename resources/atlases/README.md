@@ -10,5 +10,5 @@
 
 ### Color schemes
 
-- [solosalsero](https://www.solosalsero.com/)
-    - [SLSO8](https://lospec.com/palette-list/slso8)
+- [Hanapix](https://twitter.com/mieatra)
+    - [video](https://youtu.be/G87yLTDrrIk)
