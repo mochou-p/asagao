@@ -18,7 +18,7 @@ namespace Asagao
     Application::run
     (const str& argv_scene)
     {
-        shader = std::make_unique<Shader>("atlas.glsl");
+        shader = std::make_unique<Shader>("tile.glsl");
 
         Rect quad(rect_size);
 

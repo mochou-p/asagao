@@ -16,8 +16,8 @@ struct GameObject
 
     std::vector<v2> sprite_offsets;
 
-    inline const v2& get_uv(const u32 animation_time) const
-    { return sprite_offsets[animation_time % sprite_count]; }
+    inline const v2& get_uv(const u32 frame) const
+    { return sprite_offsets[frame % sprite_count]; }
 
     GameObject
     (

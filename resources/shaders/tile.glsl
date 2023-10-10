@@ -1,4 +1,4 @@
-// asagao/resources/shaders/atlas.glsl
+// asagao/resources/shaders/tile.glsl
 
 
 #stage vertex

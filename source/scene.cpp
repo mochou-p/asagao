@@ -25,9 +25,9 @@ Scene::Scene()
 ,     name{"Untitled scene"}
 {
     // temp ----
-    Asagao::Application.atlas = std::make_unique<SpriteAtlas>("test-ruled-tiles.png", 8);
+    Asagao::Application.tileset = std::make_unique<TileSet>("test-ruled-tiles.png", 8);
     Asagao::Application.shader->set_vec2("u_uv_frac", Asagao::Application.uv_fraction);
-    Asagao::Application.shader->set_int("u_texture", Asagao::Application.atlas->texture->get_slot());
+    Asagao::Application.shader->set_int("u_texture", Asagao::Application.tileset->texture->get_slot());
     Asagao::Renderer.set_background_color({195.0f / 255.0f, 223.0f / 255.0f, 224.0f / 255.0f, 1.0f});
     Asagao::Application.animation_speed = 1.0f;
 
@@ -43,9 +43,9 @@ Scene::Scene
 ,     name{name}
 {
     // temp ----
-    Asagao::Application.atlas = std::make_unique<SpriteAtlas>("kenney-pixel-platformer.png", 18);
+    Asagao::Application.tileset = std::make_unique<TileSet>("kenney-pixel-platformer.png", 18);
     Asagao::Application.shader->set_vec2("u_uv_frac", Asagao::Application.uv_fraction);
-    Asagao::Application.shader->set_int("u_texture", Asagao::Application.atlas->texture->get_slot());
+    Asagao::Application.shader->set_int("u_texture", Asagao::Application.tileset->texture->get_slot());
     Asagao::Renderer.set_background_color({0.875f, 0.965f, 0.961f, 1.000f});
     Asagao::Application.animation_speed = 1.7f;
     // ---------

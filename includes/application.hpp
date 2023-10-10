@@ -4,7 +4,7 @@
 #pragma once
 
 
-#include "sprite_atlas.hpp"
+#include "tileset.hpp"
 #include "shader.hpp"
 #include "scene.hpp"
 
@@ -22,8 +22,8 @@ namespace Asagao
         f32 animation_speed = 1.0f;
         v2  uv_fraction;
 
-        std::unique_ptr<SpriteAtlas> atlas;
-        std::unique_ptr<Shader>      shader;
-        std::unique_ptr<Scene>       scene;
+        std::unique_ptr<TileSet> tileset;
+        std::unique_ptr<Shader>  shader;
+        std::unique_ptr<Scene>   scene;
     };
 }  // Asagao::
