@@ -40,4 +40,12 @@ struct GameObject
     ,   sprite_count{sprite_count}
     , sprite_offsets{sprite_offsets}
     {}
+
+    static str
+    get_new_number()
+    {
+        static u16 i = 0;
+
+        return std::to_string(++i);
+    }
 };

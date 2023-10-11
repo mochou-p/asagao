@@ -50,15 +50,17 @@
 
 
 // typedefs
-typedef char                   i8;
-typedef unsigned char          u8;
-typedef short                 i16;
-typedef unsigned short        u16;
-typedef int                   i32;
-typedef unsigned int          u32;
+//                                                            min |                        max
+//                                     ---------------------------+---------------------------
+typedef char                   i8;  //                       -127 |                        127
+typedef unsigned char          u8;  //                          0 |                        255
+typedef short                 i16;  //                    -32,768 |                     32,767
+typedef unsigned short        u16;  //                          0 |                     65,535
+typedef int                   i32;  //             -2,147,483,648 |              2,147,483,647
+typedef unsigned int          u32;  //                          0 |              4,294,967,295
+typedef long long             i64;  // -9,223,372,036,854,775,808 |  9,223,372,036,854,775,807
+typedef unsigned long long    u64;  //                          0 | 18,446,744,073,709,551,615
 typedef float                 f32;
-typedef long long             i64;
-typedef unsigned long long    u64;
 typedef double                f64;
 typedef char*                cstr;
 typedef const char*        c_cstr;
