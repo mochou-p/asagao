@@ -21,8 +21,9 @@ static void default_config();
 
 
 Scene::Scene()
-: selected{nullptr}
-,     name{"Untitled scene"}
+:        selected{nullptr}
+,            name{"Untitled scene"}
+, current_tilemap{0}
 {
     // temp ----
     Asagao::Application.tileset = std::make_unique<TileSet>("test-ruled-tiles.png", 8);
@@ -39,8 +40,9 @@ Scene::Scene()
 // or atleast kept the same format and logic as Scene::save
 Scene::Scene
 (const str& name)
-: selected{nullptr}
-,     name{name}
+:        selected{nullptr}
+,            name{name}
+, current_tilemap{0}
 {
     // temp ----
     Asagao::Application.tileset = std::make_unique<TileSet>("kenney-pixel-platformer.png", 18);
@@ -223,6 +225,9 @@ void
 Scene::draw() const
 {
     // Benchmark _("Scene render");
+
+    for (const auto& tm : tilemaps)
+        tm.draw();
 
     for (const auto& obj : objects)
     {

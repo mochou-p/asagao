@@ -19,8 +19,9 @@ namespace Asagao
         void run(const str& argv_scene = "");
 
         const f32 rect_size = 100.0f;
-        f32 animation_speed = 1.0f;
-        v2  uv_fraction;
+        f32  animation_speed = 1.0f;
+        v2   uv_fraction;
+        bool is_painting_tiles;
 
         std::unique_ptr<TileSet> tileset;
         std::unique_ptr<Shader>  shader;

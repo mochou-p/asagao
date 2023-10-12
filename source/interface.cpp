@@ -120,7 +120,9 @@ namespace Asagao
 
         static const ImVec4 darkened  = {1.00f, 1.00f, 1.00f, 0.4f};
         static const f32    close_btn = CalcTextSize("   ").x;
+        static const ImVec2 row       = {0.0f, 10.0f};
         static bool is_selected;
+        static u16  i;
 
         SetNextWindowPos
         ({
@@ -135,61 +137,16 @@ namespace Asagao
 
         Begin(title, nullptr, flags);
 
-        if (Application.scene->objects.size() && CollapsingHeader("GameObjects"))
+        if (Application.scene->current_tilemap)
         {
-            for (GameObject& obj : Application.scene->objects)
-            {
-                is_selected = (&obj == Application.scene->selected);
+            Text("Editing '%s'", Application.scene->tilemaps[Application.scene->current_tilemap - 1].name.c_str());
+            Dummy(row);
 
-                if (!obj.visible)
-                    PushStyleColor(ImGuiCol_Text, darkened);
+            if (Button("Exit TileSet painting mode"))
+                Application.scene->current_tilemap = 0;
 
-                if
-                (
-                    Selectable
-                    (
-                        (
-                            ICON_FA_CUBE " "
-                            + obj.name
-                            + (is_selected ? "(*)" : "")
-                        ).c_str()
-                    )
-                    &&
-                    !is_selected
-                )
-                {
-                    Application.scene->selected = &obj;
-                }
-                if (!is_selected)
-                    CURSOR(ImGuiMouseCursor_Hand)
-            }
-        }
-
-        is_selected = false;
-
-        if (Application.scene->tilemaps.size() && CollapsingHeader("TileSet Layers"))
-        {
-            for (TileSetLayer& tsl : Application.scene->tilemaps)
-            {
-                is_selected = (&tsl == Application.scene->selected);
-
-                if
-                (
-                    Selectable
-                    (
-                        (
-                            ICON_FA_TABLE_CELLS " "
-                            + tsl.name
-                            + (is_selected ? "(*)" : "")
-                        ).c_str()
-                    )
-                )
-                {
-                    Application.scene->selected = &tsl;
-                }
-                if (!is_selected)
-                    CURSOR(ImGuiMouseCursor_Hand)
-            }
+            End();
+            return;
         }
 
         if (BeginPopupContextWindow("new object menu", ImGuiPopupFlags_MouseButtonRight))
@@ -227,6 +184,76 @@ namespace Asagao
             }
 
             EndPopup();
+        }
+
+        if (Application.scene->objects.size() && CollapsingHeader("GameObjects"))
+        {
+            for (auto& obj : Application.scene->objects)
+            {
+                is_selected = (&obj == Application.scene->selected);
+
+                if (!obj.visible)
+                    PushStyleColor(ImGuiCol_Text, darkened);
+
+                if
+                (
+                    Selectable
+                    (
+                        (
+                            ICON_FA_CUBE " "
+                            + obj.name
+                            + (is_selected ? "(*)" : "")
+                        ).c_str()
+                    )
+                    &&
+                    !is_selected
+                )
+                {
+                    Application.scene->selected = &obj;
+                }
+                if (!is_selected)
+                    CURSOR(ImGuiMouseCursor_Hand)
+            }
+        }
+
+        is_selected = false;
+        i           = 1;
+
+        if (Application.scene->tilemaps.size() && CollapsingHeader("TileSet Layers"))
+        {
+            for (auto& tm : Application.scene->tilemaps)
+            {
+                is_selected = (&tm == Application.scene->selected);
+
+                if
+                (
+                    Selectable
+                    (
+                        (
+                            ICON_FA_TABLE_CELLS " "
+                            + tm.name
+                            + (is_selected ? "(*)" : "")
+                        ).c_str()
+                    )
+                )
+                {
+                    Application.scene->selected = &tm;
+                }
+
+                if (BeginPopupContextItem(std::to_string(i).c_str(), ImGuiPopupFlags_MouseButtonRight))
+                {
+                    if (Button("Edit"))
+                    {
+                        Application.scene->current_tilemap = i;
+
+                        CloseCurrentPopup();
+                    }
+
+                    EndPopup();
+                }
+
+                ++i;
+            }
         }
 
         End();
@@ -378,7 +405,7 @@ namespace Asagao
         static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove
             | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
         static const f32    close_btn = CalcTextSize("   ").x;
-        static const ImVec2 row      = {0.0f, 10.0f};
+        static const ImVec2 row       = {0.0f, 10.0f};
         static bool hover;
         static void* obj;
 
@@ -486,9 +513,15 @@ namespace Asagao
         details(hovered_tile);
         components();
 
-        if (IsMouseDown(ImGuiMouseButton_Right) && hovered_tile != last_dragged_tile)
+        // todo
+        if
+        (
+            Application.scene->current_tilemap
+            && IsMouseDown(ImGuiMouseButton_Right)
+            && hovered_tile != last_dragged_tile
+        )
         {
-            // todo
+            Application.scene->tilemaps[Application.scene->current_tilemap - 1].paint(hovered_tile);
 
             last_dragged_tile = hovered_tile;
         }

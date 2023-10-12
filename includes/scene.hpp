@@ -23,4 +23,5 @@ public:
 
     void* selected;
     str   name;
+    u16   current_tilemap;
 };
