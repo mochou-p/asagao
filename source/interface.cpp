@@ -13,9 +13,14 @@
 
 #define FONT_SIZE 18.0f
 
-#define CURSOR(x) \
-if (IsItemHovered()) \
-    SetMouseCursor(x);
+#define CURSOR(cursor) \
+if (IsItemHovered()) SetMouseCursor(cursor);
+
+#define SELECTABLE(name, condition) \
+Selectable(((name + (condition ? "(*)" : "")).c_str())) && !condition
+
+#define GRAYSCALE(value) \
+{value, value, value, 1.0f}
 
 
 static void set_theme();
@@ -114,7 +119,7 @@ namespace Asagao
     void
     Interface::objects()
     {
-        static c_cstr title = " " ICON_FA_LIST_UL "  Objects";
+        static c_cstr title = " " ICON_FA_LIST_UL "  Scene Objects";
         static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove
             | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
 
@@ -135,11 +140,11 @@ namespace Asagao
             Layout::objects.size.y * Window.size.y
         });
 
-        Begin(title, nullptr, flags);
-
         if (Application.scene->current_tilemap)
         {
-            Text("Editing '%s'", Application.scene->tilemaps[Application.scene->current_tilemap - 1].name.c_str());
+            Begin(" " ICON_FA_PAINTBRUSH "  TileSet Layer Editor", nullptr, flags);
+
+            Text(Application.scene->tilemaps[Application.scene->current_tilemap - 1].name.c_str());
             Dummy(row);
 
             if (Button("Exit TileSet painting mode"))
@@ -148,6 +153,8 @@ namespace Asagao
             End();
             return;
         }
+
+        Begin(title, nullptr, flags);
 
         if (BeginPopupContextWindow("new object menu", ImGuiPopupFlags_MouseButtonRight))
         {
@@ -186,73 +193,75 @@ namespace Asagao
             EndPopup();
         }
 
+        i = 0;
+
         if (Application.scene->objects.size() && CollapsingHeader("GameObjects"))
         {
-            for (auto& obj : Application.scene->objects)
+            for (auto go_it = Application.scene->objects.begin(); go_it != Application.scene->objects.end();)
             {
-                is_selected = (&obj == Application.scene->selected);
+                is_selected = (&(*go_it) == Application.scene->selected);
 
-                if (!obj.visible)
-                    PushStyleColor(ImGuiCol_Text, darkened);
+                if (SELECTABLE(ICON_FA_CUBE " " + go_it->name, is_selected))
+                    Application.scene->selected = &(*go_it);
 
-                if
-                (
-                    Selectable
-                    (
-                        (
-                            ICON_FA_CUBE " "
-                            + obj.name
-                            + (is_selected ? "(*)" : "")
-                        ).c_str()
-                    )
-                    &&
-                    !is_selected
-                )
+                if (BeginPopupContextItem(("go" + std::to_string(i++)).c_str(), ImGuiPopupFlags_MouseButtonRight))
                 {
-                    Application.scene->selected = &obj;
+                    if (Button("Delete"))
+                    {
+                        if (is_selected)
+                            Application.scene->selected = nullptr;
+
+                        go_it = Application.scene->objects.erase(go_it);
+
+                        CloseCurrentPopup();
+                    }
+                    else
+                        ++go_it;
+
+                    EndPopup();
                 }
-                if (!is_selected)
-                    CURSOR(ImGuiMouseCursor_Hand)
+                else
+                    ++go_it;
             }
         }
 
-        is_selected = false;
-        i           = 1;
+        i = 0;
 
         if (Application.scene->tilemaps.size() && CollapsingHeader("TileSet Layers"))
         {
-            for (auto& tm : Application.scene->tilemaps)
+            for (auto tm_it = Application.scene->tilemaps.begin(); tm_it != Application.scene->tilemaps.end();)
             {
-                is_selected = (&tm == Application.scene->selected);
+                is_selected = (&(*tm_it) == Application.scene->selected);
 
-                if
-                (
-                    Selectable
-                    (
-                        (
-                            ICON_FA_TABLE_CELLS " "
-                            + tm.name
-                            + (is_selected ? "(*)" : "")
-                        ).c_str()
-                    )
-                )
-                {
-                    Application.scene->selected = &tm;
-                }
+                if (SELECTABLE(ICON_FA_TABLE_CELLS " " + tm_it->name, is_selected))
+                    Application.scene->selected = &(*tm_it);
 
-                if (BeginPopupContextItem(std::to_string(i).c_str(), ImGuiPopupFlags_MouseButtonRight))
+                if (BeginPopupContextItem(("tm" + std::to_string(i++)).c_str(), ImGuiPopupFlags_MouseButtonRight))
                 {
                     if (Button("Edit"))
                     {
+                        // yes, i after i++, here the index goes from 1, so it can be used as a boolean
                         Application.scene->current_tilemap = i;
 
                         CloseCurrentPopup();
                     }
 
+                    if (Button("Delete"))
+                    {
+                        if (is_selected)
+                            Application.scene->selected = nullptr;
+
+                        tm_it = Application.scene->tilemaps.erase(tm_it);
+
+                        CloseCurrentPopup();
+                    }
+                    else
+                        ++tm_it;
+
                     EndPopup();
                 }
-
-                ++i;
+                else
+                    ++tm_it;
             }
         }
 
@@ -532,36 +541,37 @@ namespace Asagao
 static void
 set_theme()
 {
-    ImGuiStyle& style = GetStyle();
+    auto& style = GetStyle();
 
     style.WindowBorderSize = 0.0f;
 
-    ImVec4* colors = style.Colors;
+    auto colors = style.Colors;
 
-    colors[ImGuiCol_TitleBg]              = {0.13f, 0.13f, 0.13f, 1.0f};
-    colors[ImGuiCol_TitleBgActive]        = {0.13f, 0.13f, 0.13f, 1.0f};
-    colors[ImGuiCol_WindowBg]             = {0.00f, 0.00f, 0.00f, 1.0f};
+    colors[ImGuiCol_TitleBg]              = GRAYSCALE(0.13f);
+    colors[ImGuiCol_TitleBgActive]        = GRAYSCALE(0.13f);
+    colors[ImGuiCol_WindowBg]             = GRAYSCALE(0.00f);
 
-    colors[ImGuiCol_FrameBg]              = {0.15f, 0.15f, 0.15f, 1.0f};
-    colors[ImGuiCol_FrameBgHovered]       = {0.25f, 0.25f, 0.25f, 1.0f};
-    colors[ImGuiCol_FrameBgActive]        = {0.35f, 0.35f, 0.35f, 1.0f};
+    colors[ImGuiCol_FrameBg]              = GRAYSCALE(0.15f);
+    colors[ImGuiCol_FrameBgHovered]       = GRAYSCALE(0.25f);
+    colors[ImGuiCol_FrameBgActive]        = GRAYSCALE(0.35f);
 
-    colors[ImGuiCol_Text]                 = {1.00f, 1.00f, 1.00f, 1.0f};
-    colors[ImGuiCol_CheckMark]            = {1.00f, 1.00f, 1.00f, 1.0f};
+    colors[ImGuiCol_Text]                 = GRAYSCALE(1.00f);
+    colors[ImGuiCol_CheckMark]            = GRAYSCALE(1.00f);
 
-    colors[ImGuiCol_Button]               = {0.15f, 0.15f, 0.15f, 1.0f};
-    colors[ImGuiCol_ButtonHovered]        = {0.25f, 0.25f, 0.25f, 1.0f};
-    colors[ImGuiCol_ButtonActive]         = {0.35f, 0.35f, 0.35f, 1.0f};
+    colors[ImGuiCol_Button]               = GRAYSCALE(0.15f);
+    colors[ImGuiCol_ButtonHovered]        = GRAYSCALE(0.25f);
+    colors[ImGuiCol_ButtonActive]         = GRAYSCALE(0.35f);
 
-    colors[ImGuiCol_ScrollbarGrab]        = {0.20f, 0.20f, 0.20f, 1.0f};
-    colors[ImGuiCol_ScrollbarGrabHovered] = {0.30f, 0.30f, 0.30f, 1.0f};
-    colors[ImGuiCol_ScrollbarGrabActive]  = {0.40f, 0.40f, 0.40f, 1.0f};
+    colors[ImGuiCol_ScrollbarGrab]        = GRAYSCALE(0.20f);
+    colors[ImGuiCol_ScrollbarGrabHovered] = GRAYSCALE(0.30f);
+    colors[ImGuiCol_ScrollbarGrabActive]  = GRAYSCALE(0.40f);
 
-    colors[ImGuiCol_HeaderHovered]        = {0.15f, 0.15f, 0.15f, 1.0f};
-    colors[ImGuiCol_HeaderActive]         = {0.25f, 0.25f, 0.25f, 1.0f};
+    colors[ImGuiCol_Header]               = GRAYSCALE(0.10f);
+    colors[ImGuiCol_HeaderHovered]        = GRAYSCALE(0.15f);
+    colors[ImGuiCol_HeaderActive]         = GRAYSCALE(0.25f);
 
-    colors[ImGuiCol_SliderGrab]           = {0.35f, 0.35f, 0.35f, 1.0f};
-    colors[ImGuiCol_SliderGrabActive]     = {0.45f, 0.45f, 0.45f, 1.0f};
+    colors[ImGuiCol_SliderGrab]           = GRAYSCALE(0.35f);
+    colors[ImGuiCol_SliderGrabActive]     = GRAYSCALE(0.45f);
 }
 
 static void
