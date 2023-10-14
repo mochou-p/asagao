@@ -85,9 +85,9 @@ TileUV
 TileSetLayer::get_uv
 (const v2& tile) const
 {
-    u8 power = 0,
-       mask  = 0,
-       x;
+    u8 power = 0;
+    u8 mask  = 0;
+    i8 x;
 
     // can be optimised
     for (i8 y = -1; y <= 1; ++y)

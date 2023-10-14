@@ -240,7 +240,7 @@ namespace Asagao
                 {
                     if (Button("Edit"))
                     {
-                        // yes, i after i++, here the index goes from 1, so it can be used as a boolean
+                        // yes, after i++, here the index goes from 1 so it can be used as a boolean
                         Application.scene->current_tilemap = i;
 
                         CloseCurrentPopup();
