@@ -17,7 +17,8 @@
 #define WINDOW_WIDTH     1600
 #define WINDOW_HEIGHT    900
 #define WINDOW_TITLE     "Asagao"
-#define WINDOW_ICON_PATH "branding/"
+#define WINDOW_ICON_PATH "branding/icons/"
+
 
 static void framebuffer_size_callback(GLFWwindow* window, i32 width,   i32 height);
 static void           scroll_callback(GLFWwindow* window, f64 xoffset, f64 yoffset);
