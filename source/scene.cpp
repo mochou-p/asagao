@@ -31,6 +31,7 @@ Scene::Scene()
     Asagao::Application.shader->set_int("u_texture", Asagao::Application.tileset->texture->get_slot());
     Asagao::Renderer.set_background_color({195.0f / 255.0f, 223.0f / 255.0f, 224.0f / 255.0f, 1.0f});
     Asagao::Application.animation_speed = 1.0f;
+    Asagao::Window.set_title(name);
 
     default_config();
 }
@@ -50,7 +51,8 @@ Scene::Scene
     Asagao::Application.shader->set_int("u_texture", Asagao::Application.tileset->texture->get_slot());
     Asagao::Renderer.set_background_color({0.875f, 0.965f, 0.961f, 1.000f});
     Asagao::Application.animation_speed = 1.7f;
-    // ---------
+    Asagao::Window.set_title(name);
+
 
     std::ifstream file(SCENE_PATH + ("/" + name) + SCENE_EXT);
 
@@ -217,6 +219,7 @@ void
 Scene::unload()
 {
     Asagao::Interface.current_view = STARTUP_VIEW;
+    Asagao::Window.set_title("");
 
     Asagao::Application.scene = nullptr;
 }

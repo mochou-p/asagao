@@ -22,6 +22,7 @@ namespace Asagao
         bool mouse_hovers_scene() const;
         f64  get_time()           const;
         void resize();
+        void set_title(const str& title);
 
         GLFWwindow* handle;
         v2          size;

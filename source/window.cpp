@@ -71,6 +71,19 @@ namespace Asagao
     }
 
     void
+    Window::set_title
+    (const str& title)
+    {
+        glfwSetWindowTitle
+        (
+            handle,
+            title.empty()
+                ? WINDOW_TITLE
+                : (WINDOW_TITLE " - " + title).c_str()
+        );
+    }
+
+    void
     Window::init
     (const str& title, u16 width, u16 height)
     {
