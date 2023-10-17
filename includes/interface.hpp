@@ -25,6 +25,7 @@ namespace Asagao
 
         u8 current_view = 0;
     private:
+        void load_fonts();
         void startup_view();
         void objects();
         void assets();
@@ -32,6 +33,7 @@ namespace Asagao
         void components();
         void scene_view();
 
+        ImGuiIO* io;
         std::function<void()> m_views[VIEW_COUNT];
     };
 }  // Asagao::
