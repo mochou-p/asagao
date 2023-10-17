@@ -27,7 +27,7 @@ Texture::Texture
     {
         if (filepath != DEFAULT_TEXTURE)
         {
-            LOG_WARN(IMAGE_PATH + ("cannot find " + filepath));
+            LOG_WARN("cannot find " + (IMAGE_PATH + filepath));
 
             *this = Texture(DEFAULT_TEXTURE);
 

@@ -27,6 +27,7 @@ namespace Asagao
     private:
         void startup_view();
         void objects();
+        void assets();
         void details(v2& hovered_tile);
         void components();
         void scene_view();

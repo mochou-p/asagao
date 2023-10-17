@@ -144,7 +144,7 @@ namespace Asagao
         {
             Begin(" " ICON_FA_PAINTBRUSH "  TileSet Layer Editor", nullptr, flags);
 
-            Text(Application.scene->tilemaps[Application.scene->current_tilemap - 1].name.c_str());
+            Text(Application.scene->objects.tile_set_layers[Application.scene->current_tilemap - 1].name.c_str());
             Dummy(row);
 
             if (Button("Exit TileSet painting mode"))
@@ -160,7 +160,7 @@ namespace Asagao
         {
             if (Button("New GameObject"))
             {
-                Application.scene->objects.emplace_back
+                Application.scene->objects.game_objects.emplace_back
                 (
                     GameObject
                     (
@@ -182,7 +182,7 @@ namespace Asagao
             }
             if (Button("New TileSet"))
             {
-                Application.scene->tilemaps.emplace_back
+                Application.scene->objects.tile_set_layers.emplace_back
                 (
                     TileSetLayer("TileSet Layer " + TileSetLayer::get_new_number())
                 );
@@ -195,9 +195,9 @@ namespace Asagao
 
         i = 0;
 
-        if (Application.scene->objects.size() && CollapsingHeader("GameObjects"))
+        if (Application.scene->objects.game_objects.size() && CollapsingHeader("GameObjects"))
         {
-            for (auto go_it = Application.scene->objects.begin(); go_it != Application.scene->objects.end();)
+            for (auto go_it = Application.scene->objects.game_objects.begin(); go_it != Application.scene->objects.game_objects.end();)
             {
                 is_selected = (&(*go_it) == Application.scene->selected);
 
@@ -211,7 +211,7 @@ namespace Asagao
                         if (is_selected)
                             Application.scene->selected = nullptr;
 
-                        go_it = Application.scene->objects.erase(go_it);
+                        go_it = Application.scene->objects.game_objects.erase(go_it);
 
                         CloseCurrentPopup();
                     }
@@ -227,9 +227,9 @@ namespace Asagao
 
         i = 0;
 
-        if (Application.scene->tilemaps.size() && CollapsingHeader("TileSet Layers"))
+        if (Application.scene->objects.tile_set_layers.size() && CollapsingHeader("TileSet Layers"))
         {
-            for (auto tm_it = Application.scene->tilemaps.begin(); tm_it != Application.scene->tilemaps.end();)
+            for (auto tm_it = Application.scene->objects.tile_set_layers.begin(); tm_it != Application.scene->objects.tile_set_layers.end();)
             {
                 is_selected = (&(*tm_it) == Application.scene->selected);
 
@@ -251,7 +251,7 @@ namespace Asagao
                         if (is_selected)
                             Application.scene->selected = nullptr;
 
-                        tm_it = Application.scene->tilemaps.erase(tm_it);
+                        tm_it = Application.scene->objects.tile_set_layers.erase(tm_it);
 
                         CloseCurrentPopup();
                     }
@@ -262,6 +262,78 @@ namespace Asagao
                 }
                 else
                     ++tm_it;
+            }
+        }
+
+        End();
+    }
+
+    void
+    Interface::assets()
+    {
+        static c_cstr title = " " ICON_FA_FILL_DRIP "  Assets";
+        static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove
+            | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
+        static bool is_selected;
+        static u16  i;
+
+        SetNextWindowPos
+        ({
+            Layout::assets.pos.x * Window.size.x,
+            Layout::assets.pos.y * Window.size.y
+        });
+        SetNextWindowSize
+        ({
+            Layout::assets.size.x * Window.size.x,
+            Layout::assets.size.y * Window.size.y
+        });
+
+        Begin(title, nullptr, flags);
+
+        if (BeginPopupContextWindow("new asset menu", ImGuiPopupFlags_MouseButtonRight))
+        {
+            if (Button("New TileSet"))
+            {
+                Application.scene->assets.tile_sets.emplace_back
+                (
+                    TileSet("test-ruled-tiles.png", 8)
+                );
+
+                CloseCurrentPopup();
+            }
+
+            EndPopup();
+        }
+
+        i = 0;
+
+        if (Application.scene->assets.tile_sets.size() && CollapsingHeader("TileSets"))
+        {
+            for (auto ts_it = Application.scene->assets.tile_sets.begin(); ts_it != Application.scene->assets.tile_sets.end();)
+            {
+                is_selected = (&(*ts_it) == Application.scene->selected);
+
+                if (SELECTABLE(ICON_FA_TABLE_CELLS " " + ts_it->name, is_selected))
+                    Application.scene->selected = &(*ts_it);
+
+                if (BeginPopupContextItem(("ts" + std::to_string(i++)).c_str(), ImGuiPopupFlags_MouseButtonRight))
+                {
+                    if (Button("Delete"))
+                    {
+                        if (is_selected)
+                            Application.scene->selected = nullptr;
+
+                        ts_it = Application.scene->assets.tile_sets.erase(ts_it);
+
+                        CloseCurrentPopup();
+                    }
+                    else
+                        ++ts_it;
+
+                    EndPopup();
+                }
+                else
+                    ++ts_it;
             }
         }
 
@@ -519,6 +591,7 @@ namespace Asagao
         static v2 hovered_tile;
 
         objects();
+        assets();
         details(hovered_tile);
         components();
 
@@ -530,7 +603,7 @@ namespace Asagao
             && hovered_tile != last_dragged_tile
         )
         {
-            Application.scene->tilemaps[Application.scene->current_tilemap - 1].paint(hovered_tile);
+            Application.scene->objects.tile_set_layers[Application.scene->current_tilemap - 1].paint(hovered_tile);
 
             last_dragged_tile = hovered_tile;
         }
@@ -547,8 +620,8 @@ set_theme()
 
     auto colors = style.Colors;
 
-    colors[ImGuiCol_TitleBg]              = GRAYSCALE(0.13f);
-    colors[ImGuiCol_TitleBgActive]        = GRAYSCALE(0.13f);
+    colors[ImGuiCol_TitleBg]              = GRAYSCALE(0.25f);
+    colors[ImGuiCol_TitleBgActive]        = GRAYSCALE(0.25f);
     colors[ImGuiCol_WindowBg]             = GRAYSCALE(0.00f);
 
     colors[ImGuiCol_FrameBg]              = GRAYSCALE(0.15f);

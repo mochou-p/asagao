@@ -8,6 +8,18 @@
 #include "tileset_layer.hpp"
 
 
+struct Objects
+{
+    std::vector<GameObject>   game_objects;
+    std::vector<TileSetLayer> tile_set_layers;
+};
+
+struct Assets
+{
+    std::vector<TileSet> tile_sets;
+};
+
+
 class Scene
 {
 public:
@@ -18,8 +30,8 @@ public:
     void unload();
     void draw() const;
 
-    std::vector<GameObject>   objects;
-    std::vector<TileSetLayer> tilemaps;
+    Objects objects;
+    Assets  assets;
 
     void* selected;
     str   name;

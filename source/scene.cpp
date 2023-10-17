@@ -137,7 +137,7 @@ Scene::Scene
             );
         }
 
-        objects.emplace_back
+        objects.game_objects.emplace_back
         (
             obj_name,
             obj_position,
@@ -175,7 +175,7 @@ Scene::save() const
 
     u16 i;
 
-    for (const auto& obj : objects)
+    for (const auto& obj : objects.game_objects)
     {
         file << std::endl
              << "name: " << obj.name
@@ -229,10 +229,10 @@ Scene::draw() const
 {
     // Benchmark _("Scene render");
 
-    for (const auto& tm : tilemaps)
+    for (const auto& tm : objects.tile_set_layers)
         tm.draw();
 
-    for (const auto& obj : objects)
+    for (const auto& obj : objects.game_objects)
     {
         if (obj.visible)
             Asagao::Renderer.draw(obj);
