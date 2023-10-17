@@ -22,6 +22,10 @@ Selectable(((name + (condition ? "(*)" : "")).c_str())) && !condition
 #define GRAYSCALE(value) \
 {value, value, value, 1.0f}
 
+#define NEXT_WINDOW_DIM(x) \
+SetNextWindowPos(LAYOUT_POS(x)); \
+SetNextWindowSize(LAYOUT_SIZE(x));
+
 
 static void set_theme();
 static void load_fonts();
@@ -89,8 +93,7 @@ namespace Asagao
 
         static const std::vector<str> scenes = get_scenes();
 
-        SetNextWindowPos(pos);
-        SetNextWindowSize({Window.size.x, Window.size.y});
+        NEXT_WINDOW_DIM(Layout::start)
 
         Begin(title, nullptr, flags);
 
@@ -129,16 +132,7 @@ namespace Asagao
         static bool is_selected;
         static u16  i;
 
-        SetNextWindowPos
-        ({
-            Layout::objects.pos.x * Window.size.x,
-            Layout::objects.pos.y * Window.size.y
-        });
-        SetNextWindowSize
-        ({
-            Layout::objects.size.x * Window.size.x,
-            Layout::objects.size.y * Window.size.y
-        });
+        NEXT_WINDOW_DIM(Layout::objects)
 
         if (Application.scene->current_tilemap)
         {
@@ -277,16 +271,7 @@ namespace Asagao
         static bool is_selected;
         static u16  i;
 
-        SetNextWindowPos
-        ({
-            Layout::assets.pos.x * Window.size.x,
-            Layout::assets.pos.y * Window.size.y
-        });
-        SetNextWindowSize
-        ({
-            Layout::assets.size.x * Window.size.x,
-            Layout::assets.size.y * Window.size.y
-        });
+        NEXT_WINDOW_DIM(Layout::assets)
 
         Begin(title, nullptr, flags);
 
@@ -495,16 +480,7 @@ namespace Asagao
 
         obj = Application.scene->selected;
 
-        SetNextWindowPos
-        ({
-            Layout::components.pos.x * Window.size.x,
-            Layout::components.pos.y * Window.size.y
-        });
-        SetNextWindowSize
-        ({
-            Layout::components.size.x * Window.size.x,
-            Layout::components.size.y * Window.size.y
-        });
+        NEXT_WINDOW_DIM(Layout::components)
 
         if (!obj)
         {
