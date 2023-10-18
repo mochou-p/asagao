@@ -225,7 +225,10 @@ namespace Asagao
                 is_selected = (&(*go_it) == Application.scene->selected);
 
                 if (SELECTABLE(ICON_FA_CUBE " " + go_it->name, is_selected))
-                    Application.scene->selected = &(*go_it);
+                {
+                    Application.scene->selected      = &(*go_it);
+                    Application.scene->selected_type = AsagaoType::GameObject;
+                }
 
                 if (BeginPopupContextItem(("go" + std::to_string(i++)).c_str(), ImGuiPopupFlags_MouseButtonRight))
                 {
@@ -257,7 +260,10 @@ namespace Asagao
                 is_selected = (&(*tm_it) == Application.scene->selected);
 
                 if (SELECTABLE(ICON_FA_TABLE_CELLS " " + tm_it->name, is_selected))
-                    Application.scene->selected = &(*tm_it);
+                {
+                    Application.scene->selected      = &(*tm_it);
+                    Application.scene->selected_type = AsagaoType::TileSetLayer;
+                }
 
                 if (BeginPopupContextItem(("tm" + std::to_string(i++)).c_str(), ImGuiPopupFlags_MouseButtonRight))
                 {
@@ -332,7 +338,10 @@ namespace Asagao
                 is_selected = (&(*ts_it) == Application.scene->selected);
 
                 if (SELECTABLE(ICON_FA_TABLE_CELLS " " + ts_it->name, is_selected))
-                    Application.scene->selected = &(*ts_it);
+                {
+                    Application.scene->selected      = &(*ts_it);
+                    Application.scene->selected_type = AsagaoType::TileSet;
+                }
 
                 if (BeginPopupContextItem(("ts" + std::to_string(i++)).c_str(), ImGuiPopupFlags_MouseButtonRight))
                 {
@@ -497,102 +506,64 @@ namespace Asagao
     }
 
     void
-    Interface::components()
+    Interface::settings()
     {
-        static c_cstr titles[2]
-        {
-            " " ICON_FA_GEAR "  Settings",
-            " " ICON_FA_PUZZLE_PIECE "  Components"
-        };
+        static c_cstr title = " " ICON_FA_GEAR "  Settings";
         static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove
             | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
-        static const f32    close_btn = CalcTextSize("   ").x;
-        static const ImVec2 row       = {0.0f, FONT_SIZE};
-        static bool hover;
-        static void* obj;
 
-        if (!Application.scene)
-            return;
+        Begin(title, nullptr, flags);
+        End();
+    }
+
+    void
+    Interface::inspector()
+    {
+        static c_cstr title = " " ICON_FA_PUZZLE_PIECE "  Inspector";
+        static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove
+            | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
+        static const f32 close_btn = CalcTextSize("   ").x;
+        static void* obj;
 
         obj = Application.scene->selected;
 
-        NEXT_WINDOW_DIM(Layout::components)
+        NEXT_WINDOW_DIM(Layout::inspector)
 
         if (!obj)
         {
-            Begin(titles[0], nullptr, flags);
-            DragFloat("Anim speed", &Application.animation_speed, 0.1f, 0.0f, 100.0f);
-            CURSOR(ImGuiMouseCursor_ResizeEW)
-
-            End();
+            settings();
             return;
         }
 
-        Begin(titles[1], nullptr, flags);
-        /*
-        Checkbox("##visible", &obj->visible);
-        SameLine();
-        InputText("##name", &obj->name);
-        SameLine(GetWindowContentRegionMax().x - close_btn);
+        Begin(title, nullptr, flags);
 
-        if (Button(ICON_FA_XMARK))
+        switch (Application.scene->selected_type)
         {
+            // c++20: using enum AsagaoTypes;
+        case AsagaoType::GameObject:
+            Text(static_cast<GameObject*>(obj)->name.c_str());
+            break;
+        case AsagaoType::TileSetLayer:
+            Text(static_cast<TileSetLayer*>(obj)->name.c_str());
+            break;
+        case AsagaoType::TileSet:
+            Text(static_cast<TileSet*>(obj)->name.c_str());
+            break;
+        default:
+            LOG_ERROR("unknown selected object type");
+
             Application.scene->selected = nullptr;
 
             End();
             return;
         }
+
+        SameLine(GetWindowContentRegionMax().x - close_btn);
+
+        if (Button(ICON_FA_XMARK))
+            Application.scene->selected = nullptr;
         CURSOR(ImGuiMouseCursor_Hand)
 
-        Dummy(row);
-
-        Text(ICON_FA_SLIDERS " Position");
-        DragFloat(ICON_FA_LEFT_RIGHT "##pos", &obj->position.x, 1.0f); CURSOR(ImGuiMouseCursor_ResizeEW)
-        DragFloat(ICON_FA_UP_DOWN    "##pos", &obj->position.y, 1.0f); CURSOR(ImGuiMouseCursor_ResizeEW)
-        DragFloat(ICON_FA_LAYER_GROUP,        &obj->depth,      0.2f); CURSOR(ImGuiMouseCursor_ResizeEW)
-        if (obj->depth != 0.0f)
-        {
-            SameLine();
-            if (Button(ICON_FA_ROTATE_LEFT "##depth"))
-                obj->depth = 0.0f;
-            CURSOR(ImGuiMouseCursor_Hand)
-        }
-
-        Dummy(row);
-
-        Text(ICON_FA_SLIDERS " Size");
-        DragFloat(ICON_FA_LEFT_RIGHT "##size", &obj->scale.x, 0.01f); CURSOR(ImGuiMouseCursor_ResizeEW)
-        if (obj->scale.x != 1.0f)
-        {
-            SameLine();
-            if (Button(ICON_FA_ROTATE_LEFT "##size.x"))
-                obj->scale.x = 1.0f;
-            CURSOR(ImGuiMouseCursor_Hand)
-        }
-
-        DragFloat(ICON_FA_UP_DOWN "##size", &obj->scale.y, 0.01f); CURSOR(ImGuiMouseCursor_ResizeEW)
-        if (obj->scale.y != 1.0f)
-        {
-            SameLine();
-            if (Button(ICON_FA_ROTATE_LEFT "##size.y"))
-                obj->scale.y = 1.0f;
-            CURSOR(ImGuiMouseCursor_Hand)
-        }
-
-
-        Dummy(row);
-
-        Text(ICON_FA_SLIDERS " Rotation");
-        SliderFloat(ICON_FA_ROTATE, &obj->rotation, 0.0f, 360.0f);
-        if (obj->rotation != 0.0f)
-        {
-            SameLine();
-            if (Button(ICON_FA_ROTATE_LEFT "##rotation"))
-                obj->rotation = 0.0f;
-            CURSOR(ImGuiMouseCursor_Hand)
-        }
-
-        */
         End();
     }
 
@@ -605,7 +576,12 @@ namespace Asagao
         objects();
         assets();
         details(hovered_tile);
-        components();
+
+        // here because details can unload the current scene
+        if (!Application.scene)
+            return;
+
+        inspector();
 
         // todo
         if
@@ -613,6 +589,7 @@ namespace Asagao
             Application.scene->current_tilemap
             && IsMouseDown(ImGuiMouseButton_Right)
             && hovered_tile != last_dragged_tile
+            && Window.mouse_hovers_scene()
         )
         {
             Application.scene->objects.tile_set_layers[Application.scene->current_tilemap - 1].paint(hovered_tile);

@@ -30,7 +30,8 @@ namespace Asagao
         void objects();
         void assets();
         void details(v2& hovered_tile);
-        void components();
+        void settings();
+        void inspector();
         void scene_view();
 
         ImGuiIO* io;

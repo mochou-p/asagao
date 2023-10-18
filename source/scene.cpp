@@ -22,8 +22,8 @@ static void default_config();
 
 Scene::Scene()
 :        selected{nullptr}
-,            name{"Untitled scene"}
 , current_tilemap{0}
+,            name{"Untitled scene"}
 {
     // temp ----
     Asagao::Application.tileset = std::make_unique<TileSet>("test-ruled-tiles.png", 8);
@@ -42,8 +42,8 @@ Scene::Scene()
 Scene::Scene
 (const str& name)
 :        selected{nullptr}
-,            name{name}
 , current_tilemap{0}
+,            name{name}
 {
     // temp ----
     Asagao::Application.tileset = std::make_unique<TileSet>("kenney-pixel-platformer.png", 18);

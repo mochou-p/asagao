@@ -8,6 +8,17 @@
 #include "tileset_layer.hpp"
 
 
+enum class AsagaoType
+{
+    // Objects
+    GameObject,
+    TileSetLayer,
+
+    // Assets
+    TileSet
+};
+
+
 struct Objects
 {
     std::vector<GameObject>   game_objects;
@@ -33,7 +44,9 @@ public:
     Objects objects;
     Assets  assets;
 
-    void* selected;
-    str   name;
-    u16   current_tilemap;
+    void*      selected;
+    AsagaoType selected_type;
+
+    str name;
+    u16 current_tilemap;
 };

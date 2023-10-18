@@ -29,7 +29,7 @@ _SINGLETON_START(Class) \
     Class(); \
 _SINGLETON_END(Class)
 
-// allow a custom constructor and destructor
+// allows a custom constructor and a destructor
 #define SINGLETON_CD(Class) \
 _SINGLETON_START(Class) \
     Class(); \
