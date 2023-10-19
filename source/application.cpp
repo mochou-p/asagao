@@ -19,6 +19,7 @@ namespace Asagao
     (const str& argv_scene)
     {
         shader = std::make_unique<Shader>("tile.glsl");
+        shader->set_int("u_texture", 0);  // GL_TEXTURE0 only
 
         Rect quad(rect_size);
 
@@ -35,8 +36,8 @@ namespace Asagao
 
         Window.resize();
 
-        if (argv_scene != str())
-            scene = std::make_unique<Scene>(argv_scene);
+        // if (argv_scene != str())
+        //     scene = std::make_unique<Scene>(argv_scene);
 
         while (Window.is_open())
         {

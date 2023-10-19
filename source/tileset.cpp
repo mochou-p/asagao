@@ -13,8 +13,9 @@
 
 
 TileSet::TileSet
-(const str& filepath, u32 tile_size)
-: name{filepath}
+(const str& filepath, u16 tile_size)
+:      name{filepath}
+, tile_size{tile_size}
 {
     texture = std::make_unique<Texture>(TILESET_PATH + filepath);
 

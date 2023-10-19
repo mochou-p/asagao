@@ -8,6 +8,9 @@
 #include "tileset_layer.hpp"
 
 
+#define DEFAULT_TILESET 0
+
+
 enum class AsagaoType
 {
     // Objects
@@ -19,12 +22,6 @@ enum class AsagaoType
 };
 
 
-struct Objects
-{
-    std::vector<GameObject>   game_objects;
-    std::vector<TileSetLayer> tile_set_layers;
-};
-
 struct Assets
 {
     std::vector<TileSet> tile_sets;
@@ -35,13 +32,10 @@ class Scene
 {
 public:
     Scene();
-    Scene(const str& filepath);
 
-    void save() const;
     void unload();
     void draw() const;
 
-    Objects objects;
     Assets  assets;
 
     void*      selected;

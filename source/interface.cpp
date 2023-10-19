@@ -121,7 +121,7 @@ namespace Asagao
         static const ImVec2 pos = {0.0f, 0.0f};
         static bool hover;
 
-        static const std::vector<str> scenes = get_scenes();
+        // static const std::vector<str> scenes = get_scenes();
 
         NEXT_WINDOW_DIM(Layout::start)
 
@@ -133,6 +133,7 @@ namespace Asagao
             Application.scene = std::make_unique<Scene>();
         CURSOR(ImGuiMouseCursor_Hand)
 
+        /*
         Dummy(pad);
         Separator();
         Dummy(pad);
@@ -143,6 +144,7 @@ namespace Asagao
                 Application.scene = std::make_unique<Scene>(scene);
             CURSOR(ImGuiMouseCursor_Hand)
         }
+        */
 
         PopStyleVar();
 
@@ -165,7 +167,7 @@ namespace Asagao
         {
             Begin(" " ICON_FA_PAINTBRUSH "  TileSet Layer Editor", nullptr, flags);
 
-            Text(Application.scene->objects.tile_set_layers[Application.scene->current_tilemap - 1].name.c_str());
+            Text("wip"); //Application.scene->assets..tile_set_layers[Application.scene->current_tilemap - 1].name.c_str());
             Dummy(row);
 
             if (Button("Exit TileSet painting mode"))
@@ -181,7 +183,7 @@ namespace Asagao
         {
             if (Button("New GameObject"))
             {
-                Application.scene->objects.game_objects.emplace_back
+                Application.scene->assets.tile_sets[DEFAULT_TILESET].game_objects.emplace_back
                 (
                     GameObject
                     (
@@ -192,10 +194,7 @@ namespace Asagao
                         0.0f,
                         true,
                         1,
-                        {{
-                            3 * Application.uv_fraction.x,
-                            1 * Application.uv_fraction.y
-                        }}
+                        {{0, 0}}
                     )
                 );
 
@@ -204,7 +203,7 @@ namespace Asagao
             }
             if (Button("New TileSet"))
             {
-                Application.scene->objects.tile_set_layers.emplace_back
+                Application.scene->assets.tile_sets[DEFAULT_TILESET].tile_set_layers.emplace_back
                 (
                     TileSetLayer("TileSet Layer " + TileSetLayer::get_new_number())
                 );
@@ -218,9 +217,10 @@ namespace Asagao
 
         i = 0;
 
-        if (Application.scene->objects.game_objects.size() && CollapsingHeader("GameObjects"))
+        // temp sorted only by tile sets (later use pointers/indices)
+        for (auto& ts : Application.scene->assets.tile_sets)
         {
-            for (auto go_it = Application.scene->objects.game_objects.begin(); go_it != Application.scene->objects.game_objects.end();)
+            for (auto go_it = ts.game_objects.begin(); go_it != ts.game_objects.end(); /**/)
             {
                 is_selected = (&(*go_it) == Application.scene->selected);
 
@@ -237,7 +237,7 @@ namespace Asagao
                         if (is_selected)
                             Application.scene->selected = nullptr;
 
-                        go_it = Application.scene->objects.game_objects.erase(go_it);
+                        go_it = ts.game_objects.erase(go_it);
 
                         CloseCurrentPopup();
                     }
@@ -253,9 +253,10 @@ namespace Asagao
 
         i = 0;
 
-        if (Application.scene->objects.tile_set_layers.size() && CollapsingHeader("TileSet Layers"))
+        // same here, also temp 2 loops over the same vector
+        for (auto& ts : Application.scene->assets.tile_sets)
         {
-            for (auto tm_it = Application.scene->objects.tile_set_layers.begin(); tm_it != Application.scene->objects.tile_set_layers.end();)
+            for (auto tm_it = ts.tile_set_layers.begin(); tm_it != ts.tile_set_layers.end(); /**/)
             {
                 is_selected = (&(*tm_it) == Application.scene->selected);
 
@@ -280,7 +281,7 @@ namespace Asagao
                         if (is_selected)
                             Application.scene->selected = nullptr;
 
-                        tm_it = Application.scene->objects.tile_set_layers.erase(tm_it);
+                        tm_it = ts.tile_set_layers.erase(tm_it);
 
                         CloseCurrentPopup();
                     }
@@ -319,7 +320,8 @@ namespace Asagao
             {
                 Application.scene->assets.tile_sets.emplace_back
                 (
-                    TileSet("test-ruled-tiles.png", 8)
+                    // temp, later from a filesystem dialog 
+                    TileSet("red-bubble.png", 8)
                 );
 
                 if (!io->KeyShift)
@@ -331,9 +333,11 @@ namespace Asagao
 
         i = 0;
 
-        if (Application.scene->assets.tile_sets.size() && CollapsingHeader("TileSets"))
+        // always >0 since there is a hidden default one
+        if (Application.scene->assets.tile_sets.size() - 1 && CollapsingHeader("TileSets"))
         {
-            for (auto ts_it = Application.scene->assets.tile_sets.begin(); ts_it != Application.scene->assets.tile_sets.end();)
+            // same reason    vvvvvvvvv
+            for (auto ts_it = std::next(Application.scene->assets.tile_sets.begin()); ts_it != Application.scene->assets.tile_sets.end(); /**/)
             {
                 is_selected = (&(*ts_it) == Application.scene->selected);
 
@@ -539,7 +543,7 @@ namespace Asagao
 
         switch (Application.scene->selected_type)
         {
-            // c++20: using enum AsagaoTypes;
+            // c++20: using enum AsagaoType;
         case AsagaoType::GameObject:
             Text(static_cast<GameObject*>(obj)->name.c_str());
             break;
@@ -592,7 +596,8 @@ namespace Asagao
             && Window.mouse_hovers_scene()
         )
         {
-            Application.scene->objects.tile_set_layers[Application.scene->current_tilemap - 1].paint(hovered_tile);
+            // tile set layer painting temp off
+            // Application.scene->objects.tile_set_layers[Application.scene->current_tilemap - 1].paint(hovered_tile);
 
             last_dragged_tile = hovered_tile;
         }
@@ -611,7 +616,7 @@ set_theme()
 
     colors[ImGuiCol_TitleBg]              = GRAYSCALE(0.25f);
     colors[ImGuiCol_TitleBgActive]        = GRAYSCALE(0.25f);
-    colors[ImGuiCol_WindowBg]             = GRAYSCALE(0.00f);
+    colors[ImGuiCol_WindowBg]             = GRAYSCALE(0.07f);
 
     colors[ImGuiCol_FrameBg]              = GRAYSCALE(0.15f);
     colors[ImGuiCol_FrameBgHovered]       = GRAYSCALE(0.25f);

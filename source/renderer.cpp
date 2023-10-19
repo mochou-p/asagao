@@ -33,6 +33,8 @@ namespace Asagao
 
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnable(GL_BLEND);
+
+        glActiveTexture(GL_TEXTURE0);
     }
 
     void

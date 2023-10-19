@@ -80,3 +80,4 @@ class Rect;
 class VertexBuffer;
 class VertexBufferLayout;
 class Interface;
+class TileSetLayer;

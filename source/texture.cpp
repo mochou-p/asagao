@@ -14,9 +14,6 @@
 Texture::Texture
 (const str& filepath, bool flip_y)
 {
-    if (count >= 32)
-        LOG_FATAL("maximum number of textures exceeded (32)");
-    
     Image image(filepath, flip_y);
 
     auto data   = image.get_data();
@@ -54,15 +51,11 @@ Texture::Texture
         std::memcpy(data, texels, size);
     }
 
-    m_slot = count;
     m_size = {width, height};
 
     glGenTextures(1, &m_id);
-    glActiveTexture(GL_TEXTURE0 + (count++));
-    glBindTexture(GL_TEXTURE_2D, m_id);
+    bind();  // maybe no
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,     GL_CLAMP_TO_BORDER);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,     GL_CLAMP_TO_BORDER);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
@@ -73,4 +66,10 @@ Texture::Texture
 Texture::~Texture()
 {
     glDeleteTextures(1, &m_id);
+}
+
+void
+Texture::bind() const
+{
+    glBindTexture(GL_TEXTURE_2D, m_id);
 }
