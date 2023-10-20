@@ -42,5 +42,4 @@ public:
     AsagaoType selected_type;
 
     str name;
-    u16 current_tilemap;
 };

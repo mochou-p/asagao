@@ -22,7 +22,6 @@ static void default_config();
 
 Scene::Scene()
 :        selected{nullptr}
-, current_tilemap{0}
 ,            name{"Untitled scene"}
 {
     Asagao::Window.set_title(name);
@@ -56,9 +55,7 @@ Scene::draw() const
         {
             if (!is_tex_bound)
             {
-                ts.texture->bind();
-                // and change uv fraction and do it on gpu,
-                // so we can keep GO numbers nice and do fractions based on currently bound tileset
+                ts.use();
 
                 is_tex_bound ^= 1;
             }
@@ -72,8 +69,7 @@ Scene::draw() const
             {
                 if (!is_tex_bound)
                 {
-                    ts.texture->bind();
-                    // ...
+                    ts.use();
 
                     is_tex_bound ^= 1;
                 }

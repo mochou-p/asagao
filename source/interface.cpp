@@ -46,6 +46,7 @@ namespace Asagao
           [this]() { this->startup_view(); },
           [this]() { this->scene_view();   }
       }
+    , painting_tilemap{0}
     {
         IMGUI_CHECKVERSION();
 
@@ -157,13 +158,13 @@ namespace Asagao
         static c_cstr title = " " ICON_FA_LIST_UL "  Scene Objects";
         static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove
             | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
-        static const ImVec2 row       = {0.0f, FONT_SIZE};
+        static const ImVec2 row = {0.0f, FONT_SIZE};
         static bool is_selected;
-        static u16  i;
+        static u16  i, j;
 
         NEXT_WINDOW_DIM(Layout::objects)
 
-        if (Application.scene->current_tilemap)
+        if (painting_tilemap)
         {
             Begin(" " ICON_FA_PAINTBRUSH "  TileSet Layer Editor", nullptr, flags);
 
@@ -171,7 +172,7 @@ namespace Asagao
             Dummy(row);
 
             if (Button("Exit TileSet painting mode"))
-                Application.scene->current_tilemap = 0;
+                painting_tilemap = 0;
 
             End();
             return;
@@ -194,7 +195,7 @@ namespace Asagao
                         0.0f,
                         true,
                         1,
-                        {{0, 0}}
+                        {{12, 0}}
                     )
                 );
 
@@ -251,11 +252,13 @@ namespace Asagao
             }
         }
 
-        i = 0;
+        j = 0;
 
         // same here, also temp 2 loops over the same vector
         for (auto& ts : Application.scene->assets.tile_sets)
         {
+            i = 0;
+
             for (auto tm_it = ts.tile_set_layers.begin(); tm_it != ts.tile_set_layers.end(); /**/)
             {
                 is_selected = (&(*tm_it) == Application.scene->selected);
@@ -271,7 +274,8 @@ namespace Asagao
                     if (Button("Edit"))
                     {
                         // yes, after i++, here the index goes from 1 so it can be used as a boolean
-                        Application.scene->current_tilemap = i;
+                        painting_tilemap = i;
+                        painting_tileset = j;  // screaming for a reimplementation
 
                         CloseCurrentPopup();
                     }
@@ -293,6 +297,8 @@ namespace Asagao
                 else
                     ++tm_it;
             }
+
+            ++j;
         }
 
         Dummy(row);
@@ -590,14 +596,13 @@ namespace Asagao
         // todo
         if
         (
-            Application.scene->current_tilemap
+            painting_tilemap
             && IsMouseDown(ImGuiMouseButton_Right)
             && hovered_tile != last_dragged_tile
             && Window.mouse_hovers_scene()
         )
         {
-            // tile set layer painting temp off
-            // Application.scene->objects.tile_set_layers[Application.scene->current_tilemap - 1].paint(hovered_tile);
+            Application.scene->assets.tile_sets[painting_tileset].tile_set_layers[painting_tilemap - 1].paint(hovered_tile);
 
             last_dragged_tile = hovered_tile;
         }

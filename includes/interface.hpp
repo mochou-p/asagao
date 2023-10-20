@@ -36,5 +36,8 @@ namespace Asagao
 
         ImGuiIO* io;
         std::function<void()> m_views[VIEW_COUNT];
+
+        u16 painting_tilemap;
+        u16 painting_tileset;
     };
 }  // Asagao::

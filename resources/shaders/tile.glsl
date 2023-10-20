@@ -15,8 +15,8 @@ out vec2 v_texcoord;
 
 void main()
 {
-    gl_Position = u_mvp    * position;
-    v_texcoord  = texcoord * u_uv_frac + u_tile_uv;
+    gl_Position = u_mvp * position;
+    v_texcoord  = (texcoord + u_tile_uv) * u_uv_frac;
 }
 #endstage
 

@@ -12,6 +12,8 @@ class TileSet
 public:
     TileSet(const str& filepath, u16 tile_size);
 
+    void use() const;
+
     std::unique_ptr<Texture> texture;
 
     std::vector<GameObject>   game_objects;
@@ -19,4 +21,5 @@ public:
 
     str name;
     u16 tile_size;
+    v2  uv_fraction;
 };

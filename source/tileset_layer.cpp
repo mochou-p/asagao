@@ -8,9 +8,6 @@
 #include "tileset_layer.hpp"
 
 
-#define UV(u, v) v2(u, v) * Asagao::Application.uv_fraction
-
-
 static TileUV get_tile_rule(const u8 mask);
 
 
@@ -122,12 +119,12 @@ get_tile_rule
     case 241:
     case 244:
     case 245:
-        return UV(0, 3);
+        return {0, 3};
     case 248:
     case 249:
     case 252:
     case 253:
-        return UV(1, 3);
+        return {1, 3};
     case 104:
     case 105:
     case 108:
@@ -136,20 +133,20 @@ get_tile_rule
     case 233:
     case 236:
     case 237:
-        return UV(2, 3);
+        return {2, 3};
 
     case 214:
     case 215:
     case 246:
     case 247:
-        return UV(0, 2);
+        return {0, 2};
     case 255:
-        return UV(1, 2);
+        return {1, 2};
     case 107:
     case 111:
     case 235:
     case 239:
-        return UV(2, 2);
+        return {2, 2};
 
     case  22:
     case  23:
@@ -159,12 +156,12 @@ get_tile_rule
     case 151:
     case 182:
     case 183:
-        return UV(0, 1);
+        return {0, 1};
     case  31:
     case  63:
     case 159:
     case 191:
-        return UV(1, 1);
+        return {1, 1};
     case  11:
     case  15:
     case  43:
@@ -173,7 +170,7 @@ get_tile_rule
     case 143:
     case 171:
     case 175:
-        return UV(2, 1);
+        return {2, 1};
 
     case   0:
     case   1:
@@ -191,7 +188,7 @@ get_tile_rule
     case 161:
     case 164:
     case 165:
-        return UV(3, 1);
+        return {3, 1};
     case  16:
     case  17:
     case  20:
@@ -208,7 +205,7 @@ get_tile_rule
     case 177:
     case 180:
     case 181:
-        return UV(2, 0);
+        return {2, 0};
     case   8:
     case   9:
     case  12:
@@ -225,7 +222,7 @@ get_tile_rule
     case 169:
     case 172:
     case 173:
-        return UV(3, 0);
+        return {3, 0};
     case  64:
     case  65:
     case  68:
@@ -242,7 +239,7 @@ get_tile_rule
     case 225:
     case 228:
     case 229:
-        return UV(4, 1);
+        return {4, 1};
     case   2:
     case   3:
     case   6:
@@ -259,7 +256,7 @@ get_tile_rule
     case 163:
     case 166:
     case 167:
-        return UV(4, 0);
+        return {4, 0};
 
     case  24:
     case  25:
@@ -277,7 +274,7 @@ get_tile_rule
     case 156:
     case 188:
     case 157:
-        return UV(0, 0);
+        return {0, 0};
     case  66:
     case  67:
     case  70:
@@ -294,7 +291,7 @@ get_tile_rule
     case 227:
     case 230:
     case 231:
-        return UV(1, 0);
+        return {1, 0};
 
     case  80:
     case  81:
@@ -304,7 +301,7 @@ get_tile_rule
     case 113:
     case 116:
     case 117:
-        return UV(3, 3);
+        return {3, 3};
     case  72:
     case  73:
     case  76:
@@ -313,7 +310,7 @@ get_tile_rule
     case 201:
     case 204:
     case 205:
-        return UV(4, 3);
+        return {4, 3};
     case  18:
     case  19:
     case  50:
@@ -322,7 +319,7 @@ get_tile_rule
     case 147:
     case 178:
     case 179:
-        return UV(3, 2);
+        return {3, 2};
     case  10:
     case  14:
     case  42:
@@ -331,105 +328,105 @@ get_tile_rule
     case 142:
     case 170:
     case 174:
-        return UV(4, 2);
+        return {4, 2};
 
     case 120:
     case 121:
     case 124:
     case 125:
-        return UV(5, 3);
+        return {5, 3};
     case 216:
     case 217:
     case 220:
     case 221:
-        return UV(6, 3);
+        return {6, 3};
     case  27:
     case  59:
     case 155:
     case 187:
-        return UV(5, 2);
+        return {5, 2};
     case  30:
     case  62:
     case 158:
     case 190:
-        return UV(6, 2);
+        return {6, 2};
 
     case  86:
     case  87:
     case 118:
     case 119:
-        return UV(5, 1);
+        return {5, 1};
     case  75:
     case  79:
     case 203:
     case 207:
-        return UV(6, 1);
+        return {6, 1};
     case 210:
     case 211:
     case 242:
     case 243:
-        return UV(5, 0);
+        return {5, 0};
     case 106:
     case 110:
     case 234:
     case 238:
-        return UV(6, 0);
+        return {6, 0};
 
     case 122:
-        return UV(7, 3);
+        return {7, 3};
     case 218:
-        return UV(8, 3);
+        return {8, 3};
     case  91:
-        return UV(7, 2);
+        return {7, 2};
     case  94:
-        return UV(8, 2);
+        return {8, 2};
 
     case  82:
     case  83:
     case 114:
     case 115:
-        return UV(7, 1);
+        return {7, 1};
     case  88:
     case  89:
     case  92:
     case  93:
-        return UV(8, 1);
+        return {8, 1};
     case  26:
     case  58:
     case 154:
     case 186:
-        return UV(7, 0);
+        return {7, 0};
     case  74:
     case  78:
     case 202:
     case 206:
-        return UV(8, 0);
+        return {8, 0};
 
     case 127:
-        return UV(11, 3);
+        return {11, 3};
     case 223:
-        return UV(12, 3);
+        return {12, 3};
     case 251:
-        return UV(11, 2);
+        return {11, 2};
     case 254:
-        return UV(12, 2);
+        return {12, 2};
 
     case  90:
-        return UV(10, 1);
+        return {10, 1};
 
     case  95:
-        return UV(9, 3);
+        return {9, 3};
     case 222:
-        return UV(10, 3);
+        return {10, 3};
     case 123:
-        return UV(9, 2);
+        return {9, 2};
     case 250:
-        return UV(10, 2);
+        return {10, 2};
 
     case 126:
-        return UV(9, 1);
+        return {9, 1};
     case 219:
-        return UV(9, 0);
+        return {9, 0};
     }
 
     // no need for a default case
