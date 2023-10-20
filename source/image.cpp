@@ -23,5 +23,6 @@ Image::Image
 
 Image::~Image()
 {
-    stbi_image_free(m_data);
+    if (m_data)
+        stbi_image_free(m_data);
 }
