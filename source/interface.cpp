@@ -533,6 +533,9 @@ namespace Asagao
             | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
 
         Begin(title, nullptr, flags);
+
+        DragFloat("Animation speed", &Application.animation_speed, 0.01f);  // will be obj-specific later
+
         End();
     }
 
@@ -543,6 +546,7 @@ namespace Asagao
         static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove
             | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
         static const f32 close_btn = CalcTextSize("   ").x;
+        static const ImVec2 row = {0.0f, FONT_SIZE};
 
         NEXT_WINDOW_DIM(Layout::inspector)
 
@@ -560,14 +564,31 @@ namespace Asagao
         // Objects
         case AsagaoType::GameObject:
         {
-            auto obj = *(static_cast<GameObject*>(selected));
+            auto& obj = Application.scene->assets.tile_sets[selected_tileset].game_objects[selected_i];
 
             const char* obj_ts = Application.scene->assets.tile_sets[selected_tileset].name.c_str();
             u16 ts_i = 0;
 
+            static int new_offset[2] = {0, 0};
+
             Text(obj.name.c_str());
 
+            SameLine(GetWindowContentRegionMax().x - close_btn);
+
+            if (Button(ICON_FA_XMARK))
+            {
+                selected = nullptr;
+
+                End();   // maybe a goto for all things like this? T_T
+                return;  //
+            }
+            CURSOR(ImGuiMouseCursor_Hand)
+
             Separator();
+
+            Text("Tileset");
+
+            SameLine();
 
             if (BeginCombo("##gameobj's ts", obj_ts))
             {
@@ -581,15 +602,59 @@ namespace Asagao
                         selected_i       = ts.game_objects.size();
                         selected_tileset = ts_i;
 
-                        obj.sprite_offsets = {{!ts_i * 12, 0}};  // more branchless code pls
-                        ts.game_objects.emplace_back(obj);       // maybe std::move?
-                        selected = &(ts.game_objects.back());
+                        ts.game_objects.emplace_back(obj);  // maybe std::move?
+                        selected = &(ts.game_objects.back());  // stop using this void* eventually
+                                                               // and just add AsagaoType::None
+                        obj = *(static_cast<GameObject*>(selected));
                     }
 
                     ++ts_i;
                 }
 
                 EndCombo();
+            }
+
+            Separator();
+
+            Text("Tile offsets");
+
+            SameLine();
+
+            if (Button("Reset"))
+            {
+                obj.sprite_offsets = {{!selected_tileset * 12, 0}};
+                obj.sprite_count   = 1;
+            }
+            
+            InputInt2("##new tile offset", new_offset);
+
+            SameLine();
+
+            if (Button("Append"))
+            {
+                obj.sprite_offsets.emplace_back(v2(new_offset[0], new_offset[1]));
+                ++obj.sprite_count;
+            }
+
+            Dummy(row);
+
+            if (BeginTable("lol tile offsets", 2, ImGuiTableFlags_RowBg))
+            {
+                TableSetupColumn("x##tile offset");
+                TableSetupColumn("y##tile offset");
+                TableHeadersRow();
+
+                for (const auto& offset : obj.sprite_offsets)
+                {
+                    TableNextRow();
+
+                    TableSetColumnIndex(0);
+                    Text("%g", offset.x);
+                    TableSetColumnIndex(1);
+                    Text("%g", offset.y);
+                }
+
+                EndTable();
             }
 
             break;
@@ -615,12 +680,6 @@ namespace Asagao
             End();
             return;
         }
-
-        SameLine(GetWindowContentRegionMax().x - close_btn);
-
-        if (Button(ICON_FA_XMARK))
-            selected = nullptr;
-        CURSOR(ImGuiMouseCursor_Hand)
 
         End();
     }
@@ -692,6 +751,10 @@ set_theme()
 
     colors[ImGuiCol_SliderGrab]           = GRAYSCALE(0.35f);
     colors[ImGuiCol_SliderGrabActive]     = GRAYSCALE(0.45f);
+
+    colors[ImGuiCol_TableHeaderBg]        = GRAYSCALE(0.20f);
+    colors[ImGuiCol_TableRowBg]           = GRAYSCALE(0.12f);
+    colors[ImGuiCol_TableRowBgAlt]        = GRAYSCALE(0.16f);
 }
 
 static void
