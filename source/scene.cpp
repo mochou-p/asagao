@@ -21,8 +21,7 @@ static void default_config();
 
 
 Scene::Scene()
-:        selected{nullptr}
-,            name{"Untitled scene"}
+: name{"Untitled scene"}
 {
     Asagao::Window.set_title(name);
 

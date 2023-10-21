@@ -38,8 +38,5 @@ public:
 
     Assets  assets;
 
-    void*      selected;
-    AsagaoType selected_type;
-
     str name;
 };

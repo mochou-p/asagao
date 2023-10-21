@@ -39,5 +39,10 @@ namespace Asagao
 
         u16 painting_tilemap;
         u16 painting_tileset;
+
+        void*      selected;
+        AsagaoType selected_type;
+        u16        selected_tileset;
+        u16        selected_i;
     };
 }  // Asagao::

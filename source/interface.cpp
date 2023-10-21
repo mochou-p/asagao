@@ -47,6 +47,7 @@ namespace Asagao
           [this]() { this->scene_view();   }
       }
     , painting_tilemap{0}
+    ,         selected{nullptr}
     {
         IMGUI_CHECKVERSION();
 
@@ -160,7 +161,7 @@ namespace Asagao
             | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
         static const ImVec2 row = {0.0f, FONT_SIZE};
         static bool is_selected;
-        static u16  i, j;
+        static u16  i, j, ts_i, go_i;
 
         NEXT_WINDOW_DIM(Layout::objects)
 
@@ -216,19 +217,24 @@ namespace Asagao
             EndPopup();
         }
 
-        i = 0;
+        i    = 0;
+        ts_i = 0;
 
         // temp sorted only by tile sets (later use pointers/indices)
         for (auto& ts : Application.scene->assets.tile_sets)
         {
+            go_i = 0;
+
             for (auto go_it = ts.game_objects.begin(); go_it != ts.game_objects.end(); /**/)
             {
-                is_selected = (&(*go_it) == Application.scene->selected);
+                is_selected = (&(*go_it) == selected);
 
                 if (SELECTABLE(ICON_FA_CUBE " " + go_it->name, is_selected))
                 {
-                    Application.scene->selected      = &(*go_it);
-                    Application.scene->selected_type = AsagaoType::GameObject;
+                    selected         = &(*go_it);
+                    selected_type    = AsagaoType::GameObject;
+                    selected_tileset = ts_i;
+                    selected_i       = go_i;
                 }
 
                 if (BeginPopupContextItem(("go" + std::to_string(i++)).c_str(), ImGuiPopupFlags_MouseButtonRight))
@@ -236,7 +242,7 @@ namespace Asagao
                     if (Button("Delete"))
                     {
                         if (is_selected)
-                            Application.scene->selected = nullptr;
+                            selected = nullptr;
 
                         go_it = ts.game_objects.erase(go_it);
 
@@ -249,7 +255,11 @@ namespace Asagao
                 }
                 else
                     ++go_it;
+
+                ++go_i;
             }
+
+            ++ts_i;
         }
 
         j = 0;
@@ -261,12 +271,12 @@ namespace Asagao
 
             for (auto tm_it = ts.tile_set_layers.begin(); tm_it != ts.tile_set_layers.end(); /**/)
             {
-                is_selected = (&(*tm_it) == Application.scene->selected);
+                is_selected = (&(*tm_it) == selected);
 
                 if (SELECTABLE(ICON_FA_TABLE_CELLS " " + tm_it->name, is_selected))
                 {
-                    Application.scene->selected      = &(*tm_it);
-                    Application.scene->selected_type = AsagaoType::TileSetLayer;
+                    selected      = &(*tm_it);
+                    selected_type = AsagaoType::TileSetLayer;
                 }
 
                 if (BeginPopupContextItem(("tm" + std::to_string(i++)).c_str(), ImGuiPopupFlags_MouseButtonRight))
@@ -283,7 +293,7 @@ namespace Asagao
                     if (Button("Delete"))
                     {
                         if (is_selected)
-                            Application.scene->selected = nullptr;
+                            selected = nullptr;
 
                         tm_it = ts.tile_set_layers.erase(tm_it);
 
@@ -345,12 +355,12 @@ namespace Asagao
             // same reason    vvvvvvvvv
             for (auto ts_it = std::next(Application.scene->assets.tile_sets.begin()); ts_it != Application.scene->assets.tile_sets.end(); /**/)
             {
-                is_selected = (&(*ts_it) == Application.scene->selected);
+                is_selected = (&(*ts_it) == selected);
 
                 if (SELECTABLE(ICON_FA_TABLE_CELLS " " + ts_it->name, is_selected))
                 {
-                    Application.scene->selected      = &(*ts_it);
-                    Application.scene->selected_type = AsagaoType::TileSet;
+                    selected      = &(*ts_it);
+                    selected_type = AsagaoType::TileSet;
                 }
 
                 if (BeginPopupContextItem(("ts" + std::to_string(i++)).c_str(), ImGuiPopupFlags_MouseButtonRight))
@@ -358,7 +368,7 @@ namespace Asagao
                     if (Button("Delete"))
                     {
                         if (is_selected)
-                            Application.scene->selected = nullptr;
+                            selected = nullptr;
 
                         ts_it = Application.scene->assets.tile_sets.erase(ts_it);
 
@@ -533,13 +543,10 @@ namespace Asagao
         static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove
             | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
         static const f32 close_btn = CalcTextSize("   ").x;
-        static void* obj;
-
-        obj = Application.scene->selected;
 
         NEXT_WINDOW_DIM(Layout::inspector)
 
-        if (!obj)
+        if (!selected)
         {
             settings();
             return;
@@ -547,22 +554,63 @@ namespace Asagao
 
         Begin(title, nullptr, flags);
 
-        switch (Application.scene->selected_type)
+        switch (selected_type)
         {
             // c++20: using enum AsagaoType;
+        // Objects
         case AsagaoType::GameObject:
-            Text(static_cast<GameObject*>(obj)->name.c_str());
+        {
+            auto obj = *(static_cast<GameObject*>(selected));
+
+            const char* obj_ts = Application.scene->assets.tile_sets[selected_tileset].name.c_str();
+            u16 ts_i = 0;
+
+            Text(obj.name.c_str());
+
+            Separator();
+
+            if (BeginCombo("##gameobj's ts", obj_ts))
+            {
+                for (auto& ts : Application.scene->assets.tile_sets)
+                {
+                    if (Selectable(ts.name.c_str()) && ts_i != selected_tileset)
+                    {
+                        auto& old = Application.scene->assets.tile_sets[selected_tileset].game_objects;
+                        old.erase(old.begin() + selected_i);
+
+                        selected_i       = ts.game_objects.size();
+                        selected_tileset = ts_i;
+
+                        obj.sprite_offsets = {{!ts_i * 12, 0}};  // more branchless code pls
+                        ts.game_objects.emplace_back(obj);       // maybe std::move?
+                        selected = &(ts.game_objects.back());
+                    }
+
+                    ++ts_i;
+                }
+
+                EndCombo();
+            }
+
             break;
+        }
         case AsagaoType::TileSetLayer:
-            Text(static_cast<TileSetLayer*>(obj)->name.c_str());
+        {
+            auto obj = static_cast<TileSetLayer*>(selected);
+            Text(obj->name.c_str());
             break;
+        }
+        // Assets
         case AsagaoType::TileSet:
-            Text(static_cast<TileSet*>(obj)->name.c_str());
+        {
+            auto obj = static_cast<TileSet*>(selected);
+            Text(obj->name.c_str());
             break;
+        }
         default:
             LOG_ERROR("unknown selected object type");
 
-            Application.scene->selected = nullptr;
+            selected = nullptr;
 
             End();
             return;
@@ -571,7 +619,7 @@ namespace Asagao
         SameLine(GetWindowContentRegionMax().x - close_btn);
 
         if (Button(ICON_FA_XMARK))
-            Application.scene->selected = nullptr;
+            selected = nullptr;
         CURSOR(ImGuiMouseCursor_Hand)
 
         End();
