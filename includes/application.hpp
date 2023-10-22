@@ -16,14 +16,13 @@ namespace Asagao
     SINGLETON(Application)
 
     public:
-        void run(const str& argv_scene = "");
+        void run();
 
-        const f32 rect_size = 100.0f;
-        f32  animation_speed = 1.0f;
+        const f32 rect_size  = 100.0f;
+        f32  animation_speed =   1.0f;
         bool is_painting_tiles;
 
-        std::unique_ptr<TileSet> tileset;
-        std::unique_ptr<Shader>  shader;
-        std::unique_ptr<Scene>   scene;
+        std::unique_ptr<Shader> shader;
+        std::unique_ptr<Scene>  scene;
     };
 }  // Asagao::

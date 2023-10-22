@@ -8,13 +8,11 @@
 #include "log.hpp"
 
 
-int main(int argc, const char* argv[])
+int main()
 {
     try
     {
-        argc == 2
-            ? Asagao::Application.run(argv[1])
-            : Asagao::Application.run();
+        Asagao::Application.run();
     }
     catch (const std::exception& error)
     {

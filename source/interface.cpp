@@ -174,6 +174,7 @@ namespace Asagao
 
             if (Button("Exit TileSet painting mode"))
                 painting_tilemap = 0;
+            CURSOR(ImGuiMouseCursor_Hand)
 
             End();
             return;
@@ -203,6 +204,8 @@ namespace Asagao
                 if (!io->KeyShift)
                     CloseCurrentPopup();
             }
+            CURSOR(ImGuiMouseCursor_Hand)
+
             if (Button("New TileSet"))
             {
                 Application.scene->assets.tile_sets[DEFAULT_TILESET].tile_set_layers.emplace_back
@@ -213,6 +216,7 @@ namespace Asagao
                 if (!io->KeyShift)
                     CloseCurrentPopup();
             }
+            CURSOR(ImGuiMouseCursor_Hand)
 
             EndPopup();
         }
@@ -250,6 +254,7 @@ namespace Asagao
                     }
                     else
                         ++go_it;
+                    CURSOR(ImGuiMouseCursor_Hand)
 
                     EndPopup();
                 }
@@ -289,6 +294,7 @@ namespace Asagao
 
                         CloseCurrentPopup();
                     }
+                    CURSOR(ImGuiMouseCursor_Hand)
 
                     if (Button("Delete"))
                     {
@@ -301,6 +307,7 @@ namespace Asagao
                     }
                     else
                         ++tm_it;
+                    CURSOR(ImGuiMouseCursor_Hand)
 
                     EndPopup();
                 }
@@ -343,6 +350,7 @@ namespace Asagao
                 if (!io->KeyShift)
                     CloseCurrentPopup();
             }
+            CURSOR(ImGuiMouseCursor_Hand)
 
             EndPopup();
         }
@@ -376,6 +384,7 @@ namespace Asagao
                     }
                     else
                         ++ts_it;
+                    CURSOR(ImGuiMouseCursor_Hand)
 
                     EndPopup();
                 }
@@ -542,7 +551,7 @@ namespace Asagao
     void
     Interface::inspector()
     {
-        static c_cstr title = " " ICON_FA_PUZZLE_PIECE "  Inspector";
+        static c_cstr title = " " ICON_FA_MAGNIFYING_GLASS "  Inspector";
         static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove
             | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
         static const f32 close_btn = CalcTextSize("   ").x;
@@ -564,6 +573,8 @@ namespace Asagao
         // Objects
         case AsagaoType::GameObject:
         {
+            static std::string tag;
+
             auto& obj = Application.scene->assets.tile_sets[selected_tileset].game_objects[selected_i];
 
             const char* obj_ts = Application.scene->assets.tile_sets[selected_tileset].name.c_str();
@@ -582,6 +593,16 @@ namespace Asagao
                 End();   // maybe a goto for all things like this? T_T
                 return;  //
             }
+            CURSOR(ImGuiMouseCursor_Hand)
+
+            Separator();
+
+            InputText("Tag", &tag);
+
+            SameLine();
+
+            if (Button("Save") && !tag.empty())
+                Application.scene->hashed_objects[tag.c_str()] = {selected_tileset, selected_i};
             CURSOR(ImGuiMouseCursor_Hand)
 
             Separator();
@@ -625,6 +646,7 @@ namespace Asagao
                 obj.sprite_offsets = {{!selected_tileset * 12, 0}};
                 obj.sprite_count   = 1;
             }
+            CURSOR(ImGuiMouseCursor_Hand)
             
             InputInt2("##new tile offset", new_offset);
 
@@ -635,6 +657,7 @@ namespace Asagao
                 obj.sprite_offsets.emplace_back(v2(new_offset[0], new_offset[1]));
                 ++obj.sprite_count;
             }
+            CURSOR(ImGuiMouseCursor_Hand)
 
             Dummy(row);
 
@@ -700,7 +723,6 @@ namespace Asagao
 
         inspector();
 
-        // todo
         if
         (
             painting_tilemap

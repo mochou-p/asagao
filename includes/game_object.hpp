@@ -48,4 +48,6 @@ struct GameObject
 
         return std::to_string(++i);
     }
+
+    void move(const v2& offset) { position.x += offset.x; position.y += offset.y; }
 };
