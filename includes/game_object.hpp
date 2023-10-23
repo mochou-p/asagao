@@ -4,42 +4,33 @@
 #pragma once
 
 
+struct Animation
+{
+    str             name           = "Idle";
+    u16             sprite_count   = 1;
+    std::vector<v2> sprite_offsets = {{12, 0}};
+};
+
 struct GameObject
 {
-    str  name;
-    v3   position;
-    f32  depth;
-    v3   scale;
-    f32  rotation;
-    bool visible;
-    u64  sprite_count;
+    str  name     = "GameObject " + get_new_number();
+    v3   position = {0.0f, 0.0f, 0.0f};
+    v3   scale    = {1.0f, 1.0f, 1.0f};
+    f32  rotation = 0.0f;
+    f32  depth    = 0.0f;
+    bool visible  = true;
 
-    std::vector<v2> sprite_offsets;
+    std::vector<Animation> animations = {Animation()};
+    u16 current_animation             = 0;
+    f32 animation_speed               = 1.0f;
 
-    inline const v2& get_uv(const u32 frame) const
-    { return sprite_offsets[frame % sprite_count]; }
+    inline const v2&
+    get_uv(const u32 frame) const
+    {
+        const auto& anim = animations[current_animation];
 
-    GameObject
-    (
-     const str& name,
-     const v3&  position,
-           f32  depth,
-     const v3&  scale,
-           f32  rotation,
-           bool visible,
-           u64  sprite_count,
-
-     const std::vector<v2>& sprite_offsets
-    )
-    :           name{name}
-    ,       position{position}
-    ,          depth{depth}
-    ,          scale{scale}
-    ,       rotation{rotation}
-    ,        visible{visible}
-    ,   sprite_count{sprite_count}
-    , sprite_offsets{sprite_offsets}
-    {}
+        return anim.sprite_offsets[(u32) (frame * animation_speed) % anim.sprite_count];
+    }
 
     static str
     get_new_number()
@@ -49,5 +40,10 @@ struct GameObject
         return std::to_string(++i);
     }
 
-    void move(const v2& offset) { position.x += offset.x; position.y += offset.y; }
+    void
+    move(const v2& offset)
+    {
+        position.x += offset.x;
+        position.y += offset.y;
+    }
 };

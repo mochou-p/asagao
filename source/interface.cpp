@@ -188,17 +188,7 @@ namespace Asagao
             {
                 Application.scene->assets.tile_sets[DEFAULT_TILESET].game_objects.emplace_back
                 (
-                    GameObject
-                    (
-                        "GameObject " + GameObject::get_new_number(),
-                        v3(0.0f),
-                        0.0f,
-                        v3(1.0f),
-                        0.0f,
-                        true,
-                        1,
-                        {{12, 0}}
-                    )
+                    GameObject()
                 );
 
                 if (!io->KeyShift)
@@ -344,7 +334,7 @@ namespace Asagao
                 Application.scene->assets.tile_sets.emplace_back
                 (
                     // temp, later from a filesystem dialog 
-                    TileSet("red-bubble.png", 8)
+                    TileSet("player.png", 16)
                 );
 
                 if (!io->KeyShift)
@@ -577,10 +567,13 @@ namespace Asagao
 
             auto& obj = Application.scene->assets.tile_sets[selected_tileset].game_objects[selected_i];
 
-            const char* obj_ts = Application.scene->assets.tile_sets[selected_tileset].name.c_str();
-            u16 ts_i = 0;
+            static const char* obj_ts = Application.scene->assets.tile_sets[selected_tileset].name.c_str();
+            static u16 i;
 
-            static int new_offset[2] = {0, 0};
+            static i32 new_offset[2] = {0, 0};
+            static u16 anim_i = 0;
+
+            static const char* anim_name = obj.animations[anim_i].name.c_str();
 
             Text(obj.name.c_str());
 
@@ -611,17 +604,20 @@ namespace Asagao
 
             SameLine();
 
-            if (BeginCombo("##gameobj's ts", obj_ts))
+            // fix crash
+            if (BeginCombo("##obj's tileset", obj_ts))
             {
+                i = 0;
+
                 for (auto& ts : Application.scene->assets.tile_sets)
                 {
-                    if (Selectable(ts.name.c_str()) && ts_i != selected_tileset)
+                    if (Selectable(ts.name.c_str()) && i != selected_tileset)
                     {
                         auto& old = Application.scene->assets.tile_sets[selected_tileset].game_objects;
                         old.erase(old.begin() + selected_i);
 
                         selected_i       = ts.game_objects.size();
-                        selected_tileset = ts_i;
+                        selected_tileset = i;
 
                         ts.game_objects.emplace_back(obj);  // maybe std::move?
                         selected = &(ts.game_objects.back());  // stop using this void* eventually
@@ -629,7 +625,7 @@ namespace Asagao
                         obj = *(static_cast<GameObject*>(selected));
                     }
 
-                    ++ts_i;
+                    ++i;
                 }
 
                 EndCombo();
@@ -637,37 +633,60 @@ namespace Asagao
 
             Separator();
 
-            Text("Tile offsets");
+            Text("Animations");
+
+            Dummy(row);
+
+            if (BeginCombo("##obj's animations", anim_name))
+            {
+                i = 0;
+
+                for (auto& anim : obj.animations)
+                {
+                    if (Selectable(anim.name.c_str()) && i != anim_i)
+                    {
+                        anim_name = anim.name.c_str();
+                        anim_i    = i;
+                    }
+
+                    ++i;
+                }
+
+                EndCombo();
+            }
 
             SameLine();
 
+            // on tilesets with more lines, reset isnt enough
+            // would be nice to make the table editable
+            // cause rn user cant get rid of the first default v2
             if (Button("Reset"))
             {
-                obj.sprite_offsets = {{!selected_tileset * 12, 0}};
-                obj.sprite_count   = 1;
+                obj.animations[anim_i].sprite_offsets = {{!selected_tileset * 12, 0}};
+                obj.animations[anim_i].sprite_count   = 1;
             }
-            CURSOR(ImGuiMouseCursor_Hand)
-            
-            InputInt2("##new tile offset", new_offset);
+
+            InputInt2("##new offset", new_offset);
 
             SameLine();
 
             if (Button("Append"))
             {
-                obj.sprite_offsets.emplace_back(v2(new_offset[0], new_offset[1]));
-                ++obj.sprite_count;
+                obj.animations[anim_i].sprite_offsets.emplace_back(v2(new_offset[0], new_offset[1]));
+                ++obj.animations[anim_i].sprite_count;
             }
-            CURSOR(ImGuiMouseCursor_Hand)
 
             Dummy(row);
 
-            if (BeginTable("lol tile offsets", 2, ImGuiTableFlags_RowBg))
+            Text(obj.animations[anim_i].name.c_str());
+
+            if (BeginTable("animation offsets", 2, ImGuiTableFlags_RowBg))
             {
-                TableSetupColumn("x##tile offset");
-                TableSetupColumn("y##tile offset");
+                TableSetupColumn("x");
+                TableSetupColumn("y");
                 TableHeadersRow();
 
-                for (const auto& offset : obj.sprite_offsets)
+                for (const auto& offset : obj.animations[anim_i].sprite_offsets)
                 {
                     TableNextRow();
 

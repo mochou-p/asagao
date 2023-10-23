@@ -54,25 +54,15 @@ TileSetLayer::paint
 void
 TileSetLayer::draw() const
 {
-    static GameObject obj
-    (
-        "----",
-        v3(0.0f),
-        0.0f,
-        v3(1.0f),
-        0.0f,
-        true,
-        1,
-        {{0, 0}}
-    );
+    static GameObject obj;
 
     for (const auto& kv : tiles)
     {
         obj.position.x = kv.first.first  *  Asagao::Application.rect_size;
         obj.position.y = kv.first.second * -Asagao::Application.rect_size;
 
-        obj.sprite_offsets[0].x = kv.second.x;
-        obj.sprite_offsets[0].y = kv.second.y;
+        obj.animations[obj.current_animation].sprite_offsets[0].x = kv.second.x;
+        obj.animations[obj.current_animation].sprite_offsets[0].y = kv.second.y;
 
         Asagao::Renderer.draw(obj);
     }
