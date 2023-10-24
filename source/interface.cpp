@@ -563,17 +563,18 @@ namespace Asagao
         // Objects
         case AsagaoType::GameObject:
         {
-            static std::string tag;
+            static str tag;
 
-            auto& obj = Application.scene->assets.tile_sets[selected_tileset].game_objects[selected_i];
+            static auto& obj = Application.scene->assets.tile_sets[selected_tileset].game_objects[selected_i];
 
-            static const char* obj_ts = Application.scene->assets.tile_sets[selected_tileset].name.c_str();
+            static str obj_ts = Application.scene->assets.tile_sets[selected_tileset].name;
             static u16 i;
 
             static i32 new_offset[2] = {0, 0};
             static u16 anim_i = 0;
 
-            static const char* anim_name = obj.animations[anim_i].name.c_str();
+            static str anim_name = obj.animations[anim_i].name;
+            static str new_anim;
 
             Text(obj.name.c_str());
 
@@ -605,24 +606,29 @@ namespace Asagao
             SameLine();
 
             // fix crash
-            if (BeginCombo("##obj's tileset", obj_ts))
+            if (BeginCombo("##obj's tileset", obj_ts.c_str()))
             {
                 i = 0;
 
                 for (auto& ts : Application.scene->assets.tile_sets)
                 {
+                    // :c
                     if (Selectable(ts.name.c_str()) && i != selected_tileset)
                     {
-                        auto& old = Application.scene->assets.tile_sets[selected_tileset].game_objects;
-                        old.erase(old.begin() + selected_i);
+                        auto& old_vec   = Application.scene->assets.tile_sets[selected_tileset].game_objects;
+                        auto  it        = old_vec.begin() + selected_i;
+                        auto& moved_obj = *it;
 
-                        selected_i       = ts.game_objects.size();
+                        old_vec.erase(it);
+                        ts.game_objects.push_back(moved_obj);
+
+                        obj    = ts.game_objects.back();
+                        obj_ts = ts.name;
+
                         selected_tileset = i;
-
-                        ts.game_objects.emplace_back(obj);  // maybe std::move?
-                        selected = &(ts.game_objects.back());  // stop using this void* eventually
-                                                               // and just add AsagaoType::None
-                        obj = *(static_cast<GameObject*>(selected));
+                        selected_i       = ts.game_objects.size() - 1;
+                        selected         = &(ts.game_objects.back());
+                        // stop using this void* eventually and just add AsagaoType::None
                     }
 
                     ++i;
@@ -637,7 +643,22 @@ namespace Asagao
 
             Dummy(row);
 
-            if (BeginCombo("##obj's animations", anim_name))
+            InputTextWithHint("##new animation", "Walk", &new_anim);
+
+            SameLine();
+
+            if (Button("Add") && !new_anim.empty())
+            {
+                auto& a = obj.animations.emplace_back(Animation());
+                a.name  = new_anim;
+
+                a.sprite_offsets[0].x = !selected_tileset * 12;
+
+                anim_name = new_anim;
+                anim_i    = obj.animations.size() - 1;
+            }
+
+            if (BeginCombo("##obj's animations", anim_name.c_str()))
             {
                 i = 0;
 
@@ -645,7 +666,7 @@ namespace Asagao
                 {
                     if (Selectable(anim.name.c_str()) && i != anim_i)
                     {
-                        anim_name = anim.name.c_str();
+                        anim_name = anim.name;
                         anim_i    = i;
                     }
 

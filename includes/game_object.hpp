@@ -9,6 +9,9 @@ struct Animation
     str             name           = "Idle";
     u16             sprite_count   = 1;
     std::vector<v2> sprite_offsets = {{12, 0}};
+
+    Animation() {}
+    Animation(const str& name): name{name} {}
 };
 
 struct GameObject
