@@ -4,21 +4,15 @@
 #pragma once
 
 
-namespace Asagao
+#include "shader.hpp"
+
+
+class Renderer
 {
-    class Renderer
-    {
-    SINGLETON(Renderer)
+public:
+    Renderer();
+    ~Renderer();
 
-    public:
-        static void init();
-
-        void clear() const;
-        void draw(const GameObject& obj) const;
-        void set_background_color(const v4& color) const;
-
-        f32 zoom = 1.0f;
-    private:
-        u32 m_id;
-    };
-}  // Asagao::
+private:
+    Shader m_shader;
+};

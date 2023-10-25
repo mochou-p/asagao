@@ -4,31 +4,19 @@
 #pragma once
 
 
-#define APP_TITLE     "Asagao"
-#define WINDOW_WIDTH  1600
-#define WINDOW_HEIGHT 900
+#include "renderer.hpp"
+#include "interface.hpp"
+
+#include <string>
 
 
-namespace Asagao
+class Window
 {
-    class Window
-    {
-    SINGLETON_CD(Window)
+public:
+    Window(const std::string& window_title, const unsigned short window_width, const unsigned short window_height);
+    ~Window();
 
-    public:
-        bool is_open()            const;
-        void poll_events()        const;
-        void swap_buffers()       const;
-        bool mouse_hovers_scene() const;
-        f64  get_time()           const;
-        void resize();
-        void set_title(const str& title);
-
-        GLFWwindow* handle;
-        v2          size;
-        v2          mouse_pos;
-        bool        moving_view;
-    private:
-        void init(const str& title, u16 width, u16 height);
-    };
-}  // Asagao::
+private:
+    Renderer  m_renderer;
+    Interface m_interface;
+};

@@ -1,22 +1,20 @@
 // asagao/source/main.cpp
 
 
-#include "stdafx.h"
+#include "engine.hpp"
 
-#include "asagao.hpp"
-
-#include "log.hpp"
+#include <iostream>
 
 
 int main()
 {
     try
     {
-        Asagao::Application.run();
+        Engine asagao("Asagao", 1600, 900);
     }
     catch (const std::exception& error)
     {
-        LOG_ERROR(error.what());
+        std::cerr << error.what() << std::endl;
 
         return EXIT_FAILURE;
     }
