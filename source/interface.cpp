@@ -3,12 +3,16 @@
 
 #include "interface.hpp"
 
+#include "window.hpp"
+
 #include <cstdio>
 
 
-Interface::Interface()
+Interface::Interface
+(Window& window)
+: r_window(window)
 {
-    std::printf("Interface\n");
+    std::printf("Interface (window = %s)\n", window.get_title().c_str());
 }
 
 Interface::~Interface()

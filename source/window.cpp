@@ -7,9 +7,13 @@
 
 
 Window::Window
-(const std::string& window_title, const unsigned short window_width, const unsigned short window_height)
+(const std::string& title, const unsigned short width, const unsigned short height)
+:     m_title(title)
+,     m_width(width)
+,    m_height(height)
+, m_interface(*this)
 {
-    std::printf("Window (%s, %hu, %hu)\n", window_title.c_str(), window_width, window_height);
+    std::printf("Window (%s, %hu, %hu)\n", m_title.c_str(), m_width, m_height);
 }
 
 Window::~Window()

@@ -13,6 +13,8 @@ public:
     Editor();
     ~Editor();
 
+    Editor(const Editor&) = delete;
+
 private:
     // std::unique_ptr<Camera> m_camera;
 };

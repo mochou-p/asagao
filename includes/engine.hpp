@@ -17,6 +17,8 @@ public:
     Engine(const std::string& window_title, const unsigned short window_width, const unsigned short window_height);
     ~Engine();
 
+    Engine(const Engine&) = delete;
+
 private:
     Window m_window;
     Editor m_editor;
