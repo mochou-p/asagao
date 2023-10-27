@@ -6,11 +6,13 @@
 #include <iostream>
 
 
-int main()
+int
+main()
 {
     try
     {
-        Engine asagao("Asagao", 1600, 900);
+        const auto asagao = Engine("Asagao", 1600, 900);
+        asagao.start();
     }
     catch (const std::exception& error)
     {

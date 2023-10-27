@@ -7,6 +7,8 @@
 #include "renderer.hpp"
 #include "interface.hpp"
 
+#include "glfw3.h"
+
 #include <string>
 
 
@@ -16,15 +18,23 @@ public:
     Window(const std::string& title, const unsigned short width, const unsigned short height);
     ~Window();
 
-    Window(const Window&) = delete;
+    void init();
 
-    std::string get_title() { return m_title; }
+    [[nodiscard]] inline auto is_open()      const noexcept { return !glfwWindowShouldClose(m_handle); }
+                  inline auto poll_events()  const noexcept { glfwPollEvents();                        }
+                  inline auto clear()        const noexcept { glClear(GL_COLOR_BUFFER_BIT);            }
+                  inline auto swap_buffers() const noexcept { glfwSwapBuffers(m_handle);               }
+
+    [[nodiscard]] inline auto get_handle() const noexcept { return m_handle; }
+    [[nodiscard]] inline auto get_title()  const noexcept { return m_title;  }
 
 private:
     std::string    m_title;
     unsigned short m_width;
     unsigned short m_height;
 
-    Renderer       m_renderer;
-    Interface      m_interface;
+    GLFWwindow* m_handle;
+
+    Renderer  m_renderer;
+    Interface m_interface;
 };

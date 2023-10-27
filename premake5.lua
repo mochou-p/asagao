@@ -14,13 +14,10 @@ project "Asagao"
     location  "build"
     targetdir "build/%{cfg.buildcfg}"
 
-    files       { "includes/*.hpp", "source/*.cpp" }  -- , "scripts/*.cpp" }
-    includedirs { "includes" } -- , "libraries/**" }
-    -- libdirs     { "libraries/**" }
-    -- links       { "opengl32", "glad", "glfw3", "gdi32", "imgui", "imgui_stdlib" }
-
-    -- pchheader    "stdafx.h"
-    -- pchsource    "stdafx.cpp"
+    files       { "includes/*.hpp", "source/*.cpp" }
+    includedirs { "includes", "libraries/**" }
+    libdirs     { "libraries/**" }
+    links       { "opengl32", "glfw3", "gdi32" }
 
     prebuildcommands { "windres -i ../resources/branding/icons.rc -o obj/icons.o" }
     links            { "build/obj/icons.o" }

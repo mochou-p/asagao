@@ -11,9 +11,22 @@ Engine::Engine
 : m_window(window_title, window_width, window_height)
 {
     std::printf("Engine\n");
+
+    m_window.init();
 }
 
 Engine::~Engine()
 {
     std::printf("~Engine\n");
+}
+
+void
+Engine::start() const
+{
+    while (m_window.is_open())
+    {
+        m_window.poll_events();
+        m_window.clear();
+        m_window.swap_buffers();
+    }
 }

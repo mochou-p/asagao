@@ -8,7 +8,6 @@
 #include "editor.hpp"
 
 #include <string>
-// #include <memory>
 
 
 class Engine
@@ -17,12 +16,9 @@ public:
     Engine(const std::string& window_title, const unsigned short window_width, const unsigned short window_height);
     ~Engine();
 
-    Engine(const Engine&) = delete;
+    void start() const;
 
 private:
     Window m_window;
     Editor m_editor;
-
-    // std::unique_ptr<Scene> m_scene;
-    // std::unique_ptr<Game>  m_game;
 };

@@ -13,8 +13,6 @@ public:
     Interface(Window& window);
     ~Interface();
 
-    Interface(const Interface&) = delete;
-
 private:
     Window& r_window;
 };
