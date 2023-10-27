@@ -17,7 +17,7 @@ project "Asagao"
     files       { "includes/*.hpp", "source/*.cpp" }
     includedirs { "includes", "libraries/**" }
     libdirs     { "libraries/**" }
-    links       { "opengl32", "glfw3", "gdi32" }
+    links       { "opengl32", "glfw3", "gdi32", "imgui" }
 
     prebuildcommands { "windres -i ../resources/branding/icons.rc -o obj/icons.o" }
     links            { "build/obj/icons.o" }

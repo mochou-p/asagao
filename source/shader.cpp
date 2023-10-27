@@ -9,7 +9,7 @@
 Shader::Shader
 (const std::string& name)
 {
-    std::printf("Shader (%s.glsl)\n", name.c_str());
+    std::printf("Shader\n");
 }
 
 Shader::~Shader()

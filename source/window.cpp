@@ -19,22 +19,30 @@ Window::Window
 ,    m_height(height)
 , m_interface(*this)
 {
+    std::printf("Window\n");
+
     if (!glfwInit())
         throw std::runtime_error("failed to initialise GLFW");
-
-    std::printf("Window (%s, %hu, %hu)\n", m_title.c_str(), m_width, m_height);
 }
 
 Window::~Window()
 {
+    std::printf("~Window\n");
+
     glfwDestroyWindow(m_handle);
     glfwTerminate();
-
-    std::printf("~Window\n");
 }
 
 void
 Window::init()
+{
+    create_main_window();
+
+    m_interface.init();
+}
+
+void
+Window::create_main_window()
 {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_VERSION_MAJOR);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_VERSION_MINOR);

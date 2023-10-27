@@ -27,6 +27,7 @@ Engine::start() const
     {
         m_window.poll_events();
         m_window.clear();
+        m_window.render_ui();
         m_window.swap_buffers();
     }
 }

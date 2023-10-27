@@ -24,17 +24,20 @@ public:
                   inline auto poll_events()  const noexcept { glfwPollEvents();                        }
                   inline auto clear()        const noexcept { glClear(GL_COLOR_BUFFER_BIT);            }
                   inline auto swap_buffers() const noexcept { glfwSwapBuffers(m_handle);               }
+                  inline auto render_ui()    const noexcept { m_interface.render();                    }
 
-    [[nodiscard]] inline auto get_handle() const noexcept { return m_handle; }
-    [[nodiscard]] inline auto get_title()  const noexcept { return m_title;  }
+    [[nodiscard]] inline auto get_handle()   const noexcept { return m_handle; }
+    [[nodiscard]] inline auto get_title()    const noexcept { return m_title;  }
 
 private:
+    void create_main_window();
+
     std::string    m_title;
     unsigned short m_width;
     unsigned short m_height;
 
-    GLFWwindow* m_handle;
+    GLFWwindow*    m_handle;
 
-    Renderer  m_renderer;
-    Interface m_interface;
+    Renderer       m_renderer;
+    Interface      m_interface;
 };
