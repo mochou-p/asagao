@@ -15,7 +15,7 @@
 class Window
 {
 public:
-    Window(const std::string& title, const unsigned short width, const unsigned short height);
+    Window(const std::string& title, const unsigned short width, const unsigned short height, Editor& editor);
     ~Window();
 
     void init();
@@ -28,6 +28,8 @@ public:
 
     [[nodiscard]] inline auto get_handle()   const noexcept { return m_handle; }
     [[nodiscard]] inline auto get_title()    const noexcept { return m_title;  }
+    [[nodiscard]] inline auto get_width()    const noexcept { return m_width;  }
+    [[nodiscard]] inline auto get_height()   const noexcept { return m_height; }
 
 private:
     void create_main_window();

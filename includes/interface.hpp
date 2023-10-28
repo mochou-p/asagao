@@ -5,12 +5,13 @@
 
 
 class Window;
+class Editor;
 
 
 class Interface
 {
 public:
-    Interface(Window& window);
+    Interface(Window& window, Editor& editor);
     ~Interface();
 
     void init()   const;
@@ -19,4 +20,5 @@ public:
 
 private:
     Window& r_window;
+    Editor& r_editor;
 };

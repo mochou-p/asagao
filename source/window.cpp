@@ -13,11 +13,11 @@
 
 
 Window::Window
-(const std::string& title, const unsigned short width, const unsigned short height)
+(const std::string& title, const unsigned short width, const unsigned short height, Editor& editor)
 :     m_title(title)
 ,     m_width(width)
 ,    m_height(height)
-, m_interface(*this)
+, m_interface(*this, editor)
 {
     std::printf("Window\n");
 

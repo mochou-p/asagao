@@ -4,8 +4,8 @@
 #include "interface.hpp"
 
 #include "window.hpp"
+#include "editor.hpp"
 
-#include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
@@ -17,8 +17,9 @@ static void render_draw_data();
 
 
 Interface::Interface
-(Window& window)
+(Window& window, Editor& editor)
 : r_window(window)
+, r_editor(editor)
 {
     std::printf("Interface\n");
 
@@ -52,9 +53,7 @@ Interface::render() const noexcept
 {
     new_frame();
 
-    if (ImGui::Begin("Hello", nullptr))
-        ImGui::Text("world");
-    ImGui::End();
+    r_editor.render();
 
     render_draw_data();
 }
