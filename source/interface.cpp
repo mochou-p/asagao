@@ -27,6 +27,8 @@ Interface::Interface
 
     ImGui::CreateContext();
     ImGui::StyleColorsDark();
+
+    ImGui::GetStyle().WindowPadding = {0.0f, 0.0f};
 }
 
 Interface::~Interface()

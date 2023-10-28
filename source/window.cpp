@@ -12,6 +12,9 @@
 #define VSYNC                1
 
 
+static void window_size_callback(GLFWwindow* handle, int width, int height);
+
+
 Window::Window
 (const std::string& title, const unsigned short width, const unsigned short height, Editor& editor)
 :     m_title(title)
@@ -58,12 +61,31 @@ Window::create_main_window()
 
     if (auto screen = glfwGetVideoMode(glfwGetPrimaryMonitor()))
     {
-        unsigned short x = (screen->width  - m_width)  * 0.5f;
-        unsigned short y = (screen->height - m_height) * 0.5f;
+        const int x = (screen->width  - m_width)  * 0.5f;
+        const int y = (screen->height - m_height) * 0.5f;
 
         glfwSetWindowPos(m_handle, x, y);
     }
 
+    glfwSetWindowUserPointer(m_handle, this);
+
+    glfwSetWindowSizeCallback(m_handle, window_size_callback);
+
     glfwMakeContextCurrent(m_handle);
     glfwSwapInterval(VSYNC);
+}
+
+
+static void
+window_size_callback
+(GLFWwindow* handle, int width, int height)
+{
+    auto window = static_cast<Window*>(glfwGetWindowUserPointer(handle));
+
+    window->set_width(width);
+    window->set_height(height);
+
+    window->clear();
+    window->render_ui();
+    window->swap_buffers();
 }

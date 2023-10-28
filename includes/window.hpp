@@ -20,16 +20,19 @@ public:
 
     void init();
 
-    [[nodiscard]] inline auto is_open()      const noexcept { return !glfwWindowShouldClose(m_handle); }
-                  inline auto poll_events()  const noexcept { glfwPollEvents();                        }
-                  inline auto clear()        const noexcept { glClear(GL_COLOR_BUFFER_BIT);            }
-                  inline auto swap_buffers() const noexcept { glfwSwapBuffers(m_handle);               }
-                  inline auto render_ui()    const noexcept { m_interface.render();                    }
+    [[nodiscard]] inline auto is_open      () const noexcept { return !glfwWindowShouldClose(m_handle); }
+                  inline auto poll_events  () const noexcept { glfwPollEvents();                        }
+                  inline auto clear        () const noexcept { glClear(GL_COLOR_BUFFER_BIT);            }
+                  inline auto swap_buffers () const noexcept { glfwSwapBuffers(m_handle);               }
+                  inline auto render_ui    () const noexcept { m_interface.render();                    }
 
-    [[nodiscard]] inline auto get_handle()   const noexcept { return m_handle; }
-    [[nodiscard]] inline auto get_title()    const noexcept { return m_title;  }
-    [[nodiscard]] inline auto get_width()    const noexcept { return m_width;  }
-    [[nodiscard]] inline auto get_height()   const noexcept { return m_height; }
+    [[nodiscard]] inline auto get_handle   () const noexcept { return m_handle; }
+    [[nodiscard]] inline auto get_title    () const noexcept { return m_title;  }
+    [[nodiscard]] inline auto get_width    () const noexcept { return m_width;  }
+    [[nodiscard]] inline auto get_height   () const noexcept { return m_height; }
+
+    inline auto set_width  (unsigned short value)   noexcept { m_width  = value; }
+    inline auto set_height (unsigned short value)   noexcept { m_height = value; }
 
 private:
     void create_main_window();

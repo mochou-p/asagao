@@ -36,7 +36,7 @@ Editor::render() const noexcept
         static ImVec2 region;
         region = ImGui::GetContentRegionAvail();
 
-        static const auto button_size = ImVec2(100.0f, 25.0f);
+        static const auto button_size = ImVec2(120.0f, 30.0f);
 
         ImGui::SetCursorPosX((region.x - button_size.x) * 0.5f);
         ImGui::SetCursorPosY((region.y - button_size.y) * 0.5f);
