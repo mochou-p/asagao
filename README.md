@@ -2,7 +2,7 @@
 
 
 # Asagao - 2D Game Engine
-###### *Under development, more features coming soon!*
+###### *Currently being restructured, under development, more features coming soon!*
 
 ![Asagao Icon](resources/branding/asagao-banner.png "Logo")
 &nbsp;

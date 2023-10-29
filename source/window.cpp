@@ -36,6 +36,7 @@ Window::~Window()
     glfwTerminate();
 }
 
+
 void
 Window::init()
 {
