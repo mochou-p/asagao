@@ -7,8 +7,6 @@
 
 #include <cstdio>
 
-#include "imgui.h"
-
 
 Editor::Editor
 (Window& window)
@@ -28,6 +26,8 @@ Editor::~Editor()
 void
 Editor::render() noexcept
 {
+    m_window_size = {r_window.get_width() * 1.0f, r_window.get_height() * 1.0f};
+
     switch (m_current_view)
     {
         // c++20: using enum
@@ -46,18 +46,17 @@ Editor::home() noexcept
 {
     static const auto window_flags = m_ui_window_flags | ImGuiWindowFlags_NoTitleBar;
 
-    static const auto window_pos = ImVec2(0.0f, 0.0f);
-    ImGui::SetNextWindowPos(window_pos);
-
-    const auto window_size = ImVec2(r_window.get_width(), r_window.get_height());
-    ImGui::SetNextWindowSize(window_size);
+    ImGui::SetNextWindowPos  ({m_window_size.x * Interface::HomeX,     m_window_size.y * Interface::HomeY     });
+    ImGui::SetNextWindowSize ({m_window_size.x * Interface::HomeWidth, m_window_size.y * Interface::HomeHeight});
 
 
     ImGui::Begin("## Home", nullptr, window_flags);
+        const auto region = ImGui::GetContentRegionAvail();
+
         static const auto button_size = ImVec2(120.0f, 30.0f);
 
-        ImGui::SetCursorPosX((window_size.x - button_size.x) * 0.5f);
-        ImGui::SetCursorPosY((window_size.y - button_size.y) * 0.5f);
+        ImGui::SetCursorPosX((region.x - button_size.x) * 0.5f);
+        ImGui::SetCursorPosY((region.y - button_size.y) * 0.5f);
 
         if (ImGui::Button("New scene", button_size))
             m_current_view = EditorView::Scene;
@@ -67,11 +66,8 @@ Editor::home() noexcept
 void
 Editor::scene() const noexcept
 {
-    static const auto window_pos = ImVec2(0.0f, 0.0f);
-    ImGui::SetNextWindowPos(window_pos);
-
-    const auto window_size = ImVec2(r_window.get_width() * 0.2f, r_window.get_height());
-    ImGui::SetNextWindowSize(window_size);
+    ImGui::SetNextWindowPos  ({m_window_size.x * Interface::ObjectsX,     m_window_size.y * Interface::ObjectsY     });
+    ImGui::SetNextWindowSize ({m_window_size.x * Interface::ObjectsWidth, m_window_size.y * Interface::ObjectsHeight});
 
 
     ImGui::Begin("Objects", nullptr, m_ui_window_flags);

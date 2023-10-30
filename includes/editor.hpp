@@ -4,10 +4,12 @@
 #pragma once
 
 
+#include "imgui.h"
+
+
 typedef int ImGuiWindowFlags;
 
-
-class Window;
+class       Window;
 
 
 enum class EditorView
@@ -31,6 +33,7 @@ private:
 
     const ImGuiWindowFlags m_ui_window_flags;
 
+    ImVec2     m_window_size;
     EditorView m_current_view;
 
     Window& r_window;
