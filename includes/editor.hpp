@@ -25,11 +25,13 @@ public:
     Editor(Window& window);
     ~Editor();
 
-    void render ()       noexcept;
+    void render() noexcept;
 
 private:
-    void home   ()       noexcept;
-    void scene  () const noexcept;
+    void home  ()       noexcept;
+    void scene () const noexcept;
+
+    inline void next_window_dimensions(const ImVec4& vector) const noexcept;
 
     const ImGuiWindowFlags m_ui_window_flags;
 

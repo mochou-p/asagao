@@ -46,19 +46,27 @@ Editor::home() noexcept
 {
     static const auto window_flags = m_ui_window_flags | ImGuiWindowFlags_NoTitleBar;
 
-    ImGui::SetNextWindowPos  ({m_window_size.x * Interface::HomeX,     m_window_size.y * Interface::HomeY     });
-    ImGui::SetNextWindowSize ({m_window_size.x * Interface::HomeWidth, m_window_size.y * Interface::HomeHeight});
-
+    next_window_dimensions(Interface::Home);
 
     ImGui::Begin("## Home", nullptr, window_flags);
-        const auto region = ImGui::GetContentRegionAvail();
+        static const auto text_width = ImGui::CalcTextSize("* Asagao").x;
+        static const auto text_color = ImVec4_div_float({0.0f, 145.0f, 255.0f, 255.0f}, 255.0f);
+        static const auto padding    = ImVec2(0.0f, 10.0f);
 
-        static const auto button_size = ImVec2(120.0f, 30.0f);
+        const auto region_x = ImGui::GetContentRegionAvailWidth();
 
-        ImGui::SetCursorPosX((region.x - button_size.x) * 0.5f);
-        ImGui::SetCursorPosY((region.y - button_size.y) * 0.5f);
+        ImGui::Dummy(padding);
+        ImGui::SetCursorPosX((region_x - text_width) * 0.5f);
+        ImGui::TextColored(text_color, "* Asagao");
+        ImGui::Dummy(padding);
+        ImGui::Separator();
+        ImGui::Dummy(padding);
 
-        if (ImGui::Button("New scene", button_size))
+        static const auto button_size = ImVec2(100.0f, 30.0f);
+
+        ImGui::SetCursorPosX((region_x - button_size.x) * 0.5f);
+
+        if (ImGui::Button("New Game", button_size))
             m_current_view = EditorView::Scene;
     ImGui::End();
 }
@@ -66,10 +74,16 @@ Editor::home() noexcept
 void
 Editor::scene() const noexcept
 {
-    ImGui::SetNextWindowPos  ({m_window_size.x * Interface::ObjectsX,     m_window_size.y * Interface::ObjectsY     });
-    ImGui::SetNextWindowSize ({m_window_size.x * Interface::ObjectsWidth, m_window_size.y * Interface::ObjectsHeight});
-
+    next_window_dimensions(Interface::Objects);
 
     ImGui::Begin("Objects", nullptr, m_ui_window_flags);
     ImGui::End();
+}
+
+void
+Editor::next_window_dimensions
+(const ImVec4& vector) const noexcept
+{
+    ImGui::SetNextWindowPos  (ImVec2_mul_ImVec2(m_window_size, {vector.x, vector.y}));
+    ImGui::SetNextWindowSize (ImVec2_mul_ImVec2(m_window_size, {vector.z, vector.w}));
 }

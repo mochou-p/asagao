@@ -12,8 +12,8 @@
 #include <cstdio>
 
 
-static void new_frame();
-static void render_draw_data();
+static void new_frame()        noexcept;
+static void render_draw_data() noexcept;
 
 
 Interface::Interface
@@ -63,7 +63,7 @@ Interface::render() const noexcept
 
 
 static void
-new_frame()
+new_frame() noexcept
 {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
@@ -72,7 +72,7 @@ new_frame()
 }
 
 static void
-render_draw_data()
+render_draw_data() noexcept
 {
     ImGui::EndFrame();
     ImGui::Render();

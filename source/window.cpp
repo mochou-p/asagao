@@ -12,7 +12,7 @@
 #define VSYNC                1
 
 
-static void window_size_callback(GLFWwindow* handle, int width, int height);
+static void window_size_callback(GLFWwindow* handle, int width, int height) noexcept;
 
 
 Window::Window
@@ -79,7 +79,7 @@ Window::create_main_window()
 
 static void
 window_size_callback
-(GLFWwindow* handle, int width, int height)
+(GLFWwindow* handle, int width, int height) noexcept
 {
     auto window = static_cast<Window*>(glfwGetWindowUserPointer(handle));
 
