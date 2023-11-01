@@ -14,6 +14,12 @@ Engine::Engine
     std::printf("Engine\n");
 
     m_window.init();
+
+    m_scene = std::make_unique<Scene>();
+    m_scene->new_object(std::make_unique<GameObject>());
+    m_scene->new_object(std::make_unique<TileMap>());
+
+    m_scene->do_something_with_objects();
 }
 
 Engine::~Engine()

@@ -6,9 +6,10 @@
 
 #include "window.hpp"
 #include "editor.hpp"
+#include "scene.hpp"
 
 #include <string>
-
+#include <memory>
 
 class Engine
 {
@@ -21,4 +22,6 @@ public:
 private:
     Window m_window;
     Editor m_editor;
+
+    std::unique_ptr<Scene> m_scene;
 };
