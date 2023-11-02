@@ -34,7 +34,7 @@ public:
     Scene();
     ~Scene();
 
-    inline auto new_object(std::unique_ptr<Object>&& object) { m_objects.push_back(std::move(object)); }
+    inline auto new_object(std::unique_ptr<Object>&& object) -> void { m_objects.push_back(std::move(object)); }
 
     void do_something_with_objects() const noexcept;
 

@@ -2,7 +2,7 @@
 
 
 # Asagao - 2D Game Engine
-###### *Currently being restructured, under development, more features coming soon!*
+###### 🚧 *Currently being restructured, under development, more features coming soon!* 👷🏻‍♂️
 
 ![Asagao Icon](resources/branding/asagao-banner.png "Logo")
 &nbsp;
@@ -33,4 +33,4 @@ $ make
 $ build/Debug/Asagao
 ```
 
-Premake documentation for [\[action\]](https://premake.github.io/docs/Using-Premake "How to use Premake")
+*Premake documentation for [\[action\]](https://premake.github.io/docs/Using-Premake "How to use Premake")
