@@ -5,6 +5,7 @@
 
 #include <cstdio>
 #include <stdexcept>
+#include <cmath>
 
 
 #define OPENGL_VERSION_MAJOR 4
@@ -42,6 +43,7 @@ Window::init()
 {
     create_main_window();
 
+    m_renderer.init();
     m_interface.init();
 }
 

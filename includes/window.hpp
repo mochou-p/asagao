@@ -7,8 +7,6 @@
 #include "renderer.hpp"
 #include "interface.hpp"
 
-#include "glfw3.h"
-
 #include <string>
 
 
@@ -22,14 +20,14 @@ public:
 
     [[nodiscard]] inline auto is_open      () const noexcept -> bool           { return !glfwWindowShouldClose(m_handle); }
                   inline auto poll_events  () const noexcept -> void           { glfwPollEvents();                        }
-                  inline auto clear        () const noexcept -> void           { glClear(GL_COLOR_BUFFER_BIT);            }
+                  inline auto clear        () const noexcept -> void           { m_renderer.clear();                      }
                   inline auto swap_buffers () const noexcept -> void           { glfwSwapBuffers(m_handle);               }
                   inline auto render_ui    () const noexcept -> void           { m_interface.render();                    }
 
-    [[nodiscard]] inline auto get_handle   () const noexcept -> GLFWwindow*    { return m_handle; }
-    [[nodiscard]] inline auto get_title    () const noexcept -> std::string    { return m_title;  }
-    [[nodiscard]] inline auto get_width    () const noexcept -> unsigned short { return m_width;  }
-    [[nodiscard]] inline auto get_height   () const noexcept -> unsigned short { return m_height; }
+    [[nodiscard]] inline auto get_handle   () const noexcept -> GLFWwindow*    { return m_handle;  }
+    [[nodiscard]] inline auto get_title    () const noexcept -> std::string    { return m_title;   }
+    [[nodiscard]] inline auto get_width    () const noexcept -> unsigned short { return m_width;   }
+    [[nodiscard]] inline auto get_height   () const noexcept -> unsigned short { return m_height;  }
 
     inline auto set_width  (unsigned short value)   noexcept -> void           { m_width  = value; }
     inline auto set_height (unsigned short value)   noexcept -> void           { m_height = value; }
