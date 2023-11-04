@@ -7,6 +7,7 @@
 #include "shader.hpp"
 
 #include "glad/glad.h"
+#define GLFW_INCLUDE_NONE
 #include "glfw3.h"
 
 
@@ -18,17 +19,20 @@ struct Vector3
 };
 
 
+class Window;
+
+
 class Renderer
 {
 public:
-    Renderer();
+    Renderer(Window& window);
     ~Renderer();
-
-    void init() const;
 
     inline auto clear  ()                     const noexcept -> void { glClear(GL_COLOR_BUFFER_BIT);                  }
     inline auto set_bg (const Vector3& color) const noexcept -> void { glClearColor(color.x, color.y, color.z, 1.0f); }
 
 private:
     Shader m_shader;
+
+    Window& r_window;
 };

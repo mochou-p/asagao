@@ -21,12 +21,10 @@ Window::Window
 :     m_title(title)
 ,     m_width(width)
 ,    m_height(height)
+,  m_renderer(*this)
 , m_interface(*this, editor)
 {
     std::printf("Window\n");
-
-    if (!glfwInit())
-        throw std::runtime_error("failed to initialise GLFW");
 }
 
 Window::~Window()
@@ -41,10 +39,10 @@ Window::~Window()
 void
 Window::init()
 {
-    create_main_window();
+    if (!glfwInit())
+        throw std::runtime_error("failed to initialise GLFW");
 
-    m_renderer.init();
-    m_interface.init();
+    create_main_window();
 }
 
 void

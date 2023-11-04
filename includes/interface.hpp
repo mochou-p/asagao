@@ -24,8 +24,6 @@ public:
     Interface(Window& window, Editor& editor);
     ~Interface();
 
-    void init()   const;
-
     void render() const noexcept;
 
 private:

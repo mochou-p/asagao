@@ -2,6 +2,7 @@
 
 
 #include "renderer.hpp"
+#include "window.hpp"
 
 #include <cstdio>
 #include <stdexcept>
@@ -18,20 +19,13 @@
 static void GLAPIENTRY debug_message_callback(unsigned int source, unsigned int type, unsigned int id, unsigned int severity, int length, const char* message, const void* param) noexcept;
 
 
-Renderer::Renderer()
+Renderer::Renderer
+(Window& window)
 : m_shader(DEFAULT_SHADER)
+, r_window(window)
 {
-    std::printf("Renderer\n");
-}
+    r_window.init();
 
-Renderer::~Renderer()
-{
-    std::printf("~Renderer\n");
-}
-
-void
-Renderer::init() const
-{
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
         throw std::runtime_error("failed to load OpenGL functions");
 
@@ -43,6 +37,13 @@ Renderer::init() const
     glEnable(GL_BLEND);
 
     glActiveTexture(GL_TEXTURE0);
+
+    std::printf("Renderer\n");
+}
+
+Renderer::~Renderer()
+{
+    std::printf("~Renderer\n");
 }
 
 

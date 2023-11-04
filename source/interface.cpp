@@ -28,6 +28,11 @@ Interface::Interface
     ImGui::CreateContext();
     ImGui::StyleColorsDark();
 
+    ImGui_ImplGlfw_InitForOpenGL(r_window.get_handle(), true);
+    ImGui_ImplOpenGL3_Init();
+
+    ImGui::GetIO().IniFilename = nullptr;
+
     ImGui::GetStyle().WindowPadding = {0.0f, 0.0f};
 }
 
@@ -41,15 +46,6 @@ Interface::~Interface()
     ImGui::DestroyContext();
 }
 
-
-void
-Interface::init() const
-{
-    ImGui_ImplGlfw_InitForOpenGL(r_window.get_handle(), true);
-    ImGui_ImplOpenGL3_Init();
-
-    ImGui::GetIO().IniFilename = nullptr;
-}
 
 void
 Interface::render() const noexcept
