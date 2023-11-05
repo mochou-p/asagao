@@ -9,10 +9,11 @@
 
 
 Editor::Editor
-(Window& window)
+(Window& window, std::unique_ptr<Scene>& scene)
 : m_ui_window_flags(ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse)
 ,    m_current_view(EditorView::Home)
 ,          r_window(window)
+,           r_scene(scene)
 {
     std::printf("Editor\n");
 }
@@ -77,6 +78,8 @@ Editor::scene() const noexcept
     next_window_dimensions(Interface::Objects);
 
     ImGui::Begin("Objects", nullptr, m_ui_window_flags);
+        for (const auto& obj : r_scene->m_objects)
+            ImGui::Text(obj->get_name().c_str());
     ImGui::End();
 }
 

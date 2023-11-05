@@ -4,7 +4,11 @@
 #pragma once
 
 
+#include "scene.hpp"
+
 #include "imgui.h"
+
+#include <memory>
 
 
 typedef int ImGuiWindowFlags;
@@ -22,7 +26,7 @@ enum class EditorView
 class Editor
 {
 public:
-    Editor(Window& window);
+    Editor(Window& window, std::unique_ptr<Scene>& scene);
     ~Editor();
 
     void render() noexcept;
@@ -38,5 +42,6 @@ private:
     ImVec2     m_window_size;
     EditorView m_current_view;
 
-    Window& r_window;
+    Window&                 r_window;
+    std::unique_ptr<Scene>& r_scene;
 };
