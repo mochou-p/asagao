@@ -7,7 +7,7 @@ workspace "Asagao"
     platforms      "Linux"
 
 project "Asagao"
-    kind          "ConsoleApp"
+    kind          "WindowedApp"
     language      "C++"
     cppdialect    "C++20"
 
@@ -16,5 +16,5 @@ project "Asagao"
 
     includedirs   "includes"
     files       { "source/*.cpp" }
-    links       { "glfw", "GL" }
+    links       { "GL", "glfw"   }
 
