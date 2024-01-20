@@ -7,13 +7,14 @@ workspace "Asagao"
     platforms      "Linux"
 
 project "Asagao"
-    kind         "ConsoleApp"
-    language     "C++"
-    cppdialect   "C++20"
+    kind          "ConsoleApp"
+    language      "C++"
+    cppdialect    "C++20"
 
-    location  "build"
-    targetdir "%{cfg.location}/%{cfg.system}/%{cfg.architecture}/%{cfg.buildcfg}"
+    location      "build"
+    targetdir     "%{cfg.location}/%{cfg.system}/%{cfg.architecture}/%{cfg.buildcfg}"
 
-    includedirs "includes"
-    files     { "source/*.cpp" }
+    includedirs   "includes"
+    files       { "source/*.cpp" }
+    links       { "glfw", "GL" }
 

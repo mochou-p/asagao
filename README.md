@@ -2,3 +2,7 @@
 
 # 🚧
 
+##### Dependencies
+###### GLFW
+###### premake
+
