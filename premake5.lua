@@ -4,23 +4,16 @@
 workspace "Asagao"
     architecture   "x64"
     configurations "Debug"
-    platforms      "Windows"
+    platforms      "Linux"
 
 project "Asagao"
-    kind       "ConsoleApp"
-    language   "C++"
-    cppdialect "C++17"
+    kind         "ConsoleApp"
+    language     "C++"
+    cppdialect   "C++20"
 
     location  "build"
-    targetdir "build/%{cfg.buildcfg}"
+    targetdir "%{cfg.location}/%{cfg.system}/%{cfg.architecture}/%{cfg.buildcfg}"
 
-    files       { "includes/*.hpp", "source/*.cpp" }
-    includedirs { "includes", "libraries/**" }
-    libdirs     { "libraries/**" }
-    links       { "opengl32", "glad", "glfw3", "gdi32", "imgui" }
+    includedirs "includes"
+    files     { "source/*.cpp" }
 
-    prebuildcommands { "windres -i ../resources/branding/icons.rc -o obj/icons.o" }
-    links            { "build/obj/icons.o" }
-    
-    filter "configurations:Debug"
-        symbols "On"
