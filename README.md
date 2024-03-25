@@ -1,12 +1,4 @@
 <!-- asagao/README.md -->
 
-
-# 🚧
-
-| Dependency | Version |
-| ---------: | ------- |
-| Premake    | 5.0     |
-| C++        | 20      |
-| OpenGL     | 4.6     |
-| GLFW       | 3.3     |
-
+# 🚧 DEVELOPMENT PAUSED
+Please check [the project before huge refactors](https://github.com/mochou-p/asagao/tree/99615cf9af9177d11ef41a9b29900a85055803da)
